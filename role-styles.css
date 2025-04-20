@@ -1,0 +1,44 @@
+.role-box {
+    display: none;
+}
+
+.role-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.role-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #6e8efb, #a777e3);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.3s;
+}
+
+.role-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.logout-btn:hover {
+    opacity: 0.9;
+}
