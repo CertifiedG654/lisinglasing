@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lising Lasing - Activity Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --warm-brown: #5c4033;
+            --soft-beige: #f5f0eb;
+            --beige-light: #e8d8c3;
+            --beige-accent: #e8d8c3;
+            --admin: #5d8bf4;
+            --auditor: #9a6ff0;
+            --cashier: #4cc9f0;
+            --success: #5cb85c;
+            --warning: #f0ad4e;
+            --danger: #d9534f;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--warm-brown);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--soft-beige);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .title i {
+            font-size: 1.8rem;
+            color: var(--soft-beige);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn-refresh {
+            background-color: var(--soft-beige);
+            color: var(--warm-brown);
+        }
+        
+        .btn-add {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .role-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .role-admin {
+            background-color: rgba(93, 139, 244, 0.1);
+            color: var(--admin);
+            border: 1px solid var(--admin);
+        }
+        
+        .role-auditor {
+            background-color: rgba(154, 111, 240, 0.1);
+            color: var(--auditor);
+            border: 1px solid var(--auditor);
+        }
+        
+        .role-cashier {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--cashier);
+            border: 1px solid var(--cashier);
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: rgba(92, 184, 92, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .status-pending {
+            background-color: rgba(240, 173, 78, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+        
+        .status-failed {
+            background-color: rgba(217, 83, 79, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .card {
+            background-color: var(--soft-beige);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid var(--beige-accent);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--beige-accent);
+        }
+        
+        th {
+            background-color: var(--beige-accent);
+            font-weight: 600;
+            color: var(--warm-brown);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr {
+            background-color: var(--soft-beige);
+        }
+        
+        tr:hover {
+            background-color: var(--beige-light);
+        }
+        
+        .action-cell {
+            max-width: 300px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--warm-brown);
+            opacity: 0.7;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--beige-accent);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: var(--soft-beige);
+        }
+        
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--beige-accent);
+            background-color: var(--soft-beige);
+            color: var(--warm-brown);
+            min-width: 150px;
+        }
+        
+        .timestamp {
+            color: #7a6b5e;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">
+                <i class="fas fa-clipboard-list"></i>
+                Activity Monitoring Dashboard
+            </h1>
+            <div class="controls">
+                <button class="btn btn-refresh" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+                <button class="btn btn-add" id="addActivityBtn">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Sample
+                </button>
+            </div>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <span class="filter-label">Role:</span>
+                <select id="roleFilter">
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="auditor">Auditor</option>
+                    <option value="cashier">Cashier</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Status:</span>
+                <select id="statusFilter">
+                    <option value="all">All Statuses</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="failed">Failed</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Role</th>
+                        <th>User</th>
+                        <th class="action-cell">Action</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="activityBody">
+                    <!-- Activities will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code remains exactly the same as previous version
+        // Initialize activities array in localStorage if empty
+        if (!localStorage.getItem('activityLog')) {
+            const sampleActivities = [
+                {
+                    id: generateId(),
+                    timestamp: new Date(Date.now() - 3600000).toISOString(),
+                    role: "admin",
+                    user: "Admin Ariel",
+                    action: "Updated product pricing",
+                    details: "Adjusted prices for 15 liquor products",
+                    status: "completed"
+                },
+                {
+                    id: generateId(),
+                    timestamp: new Date(Date.now() - 1800000).toISOString(),
+                    role: "cashier",
+                    user: "Cashier Juan",
+                    action: "Processed refund request",
+                    details: "Refunded ₱1,250.50 for damaged product (REQ-ABC123)",
+                    status: "completed"
+                },
+                {
+                    id: generateId(),
+                    timestamp: new Date().toISOString(),
+                    role: "auditor",
+                    user: "Auditor Maria",
+                    action: "Inventory audit",
+                    details: "Started monthly stock count",
+                    status: "pending"
+                }
+            ];
+            localStorage.setItem('activityLog', JSON.stringify(sampleActivities));
+        }
+
+        // DOM elements
+        const activityBody = document.getElementById('activityBody');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const addActivityBtn = document.getElementById('addActivityBtn');
+        const roleFilter = document.getElementById('roleFilter');
+        const statusFilter = document.getElementById('statusFilter');
+
+        // Generate unique ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
+        // Format timestamp
+        function formatTimestamp(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString();
+        }
+
+        // Load all activities with filters
+        function loadActivities() {
+            const activities = JSON.parse(localStorage.getItem('activityLog')) || [];
+            const roleFilterValue = roleFilter.value;
+            const statusFilterValue = statusFilter.value;
+            
+            activityBody.innerHTML = '';
+
+            // Filter activities
+            const filteredActivities = activities.filter(activity => {
+                const roleMatch = roleFilterValue === 'all' || activity.role === roleFilterValue;
+                const statusMatch = statusFilterValue === 'all' || activity.status === statusFilterValue;
+                return roleMatch && statusMatch;
+            });
+
+            if (filteredActivities.length === 0) {
+                activityBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No activities found matching your filters</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filteredActivities.forEach(activity => {
+                const row = document.createElement('tr');
+                
+                // Determine role badge
+                let roleBadge = '';
+                if (activity.role === 'admin') {
+                    roleBadge = `<span class="role-badge role-admin"><i class="fas fa-user-shield"></i> Admin</span>`;
+                } else if (activity.role === 'auditor') {
+                    roleBadge = `<span class="role-badge role-auditor"><i class="fas fa-search"></i> Auditor</span>`;
+                } else {
+                    roleBadge = `<span class="role-badge role-cashier"><i class="fas fa-cash-register"></i> Cashier</span>`;
+                }
+                
+                // Determine status badge
+                let statusBadge = '';
+                if (activity.status === 'completed') {
+                    statusBadge = `<span class="status-badge status-completed"><i class="fas fa-check-circle"></i> Completed</span>`;
+                } else if (activity.status === 'pending') {
+                    statusBadge = `<span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>`;
+                } else {
+                    statusBadge = `<span class="status-badge status-failed"><i class="fas fa-times-circle"></i> Failed</span>`;
+                }
+
+                row.innerHTML = `
+                    <td class="timestamp">${formatTimestamp(activity.timestamp)}</td>
+                    <td>${roleBadge}</td>
+                    <td>${activity.user}</td>
+                    <td class="action-cell">${activity.action}</td>
+                    <td>${activity.details}</td>
+                    <td>${statusBadge}</td>
+                `;
+                
+                activityBody.appendChild(row);
+            });
+        }
+
+        // Add sample activity
+        function addSampleActivity() {
+            const activities = JSON.parse(localStorage.getItem('activityLog')) || [];
+            
+            const sampleRoles = [
+                { type: "admin", users: ["Admin Ariel", "Admin Ben", "Admin Carla"] },
+                { type: "auditor", users: ["Auditor Maria", "Auditor Luis", "Auditor Sofia"] },
+                { type: "cashier", users: ["Cashier Juan", "Cashier Pedro", "Cashier Ana"] }
+            ];
+            
+            const sampleActions = {
+                admin: [
+                    "Updated system settings",
+                    "Added new user account",
+                    "Modified product inventory",
+                    "Generated financial report",
+                    "Configured POS settings"
+                ],
+                auditor: [
+                    "Started inventory audit",
+                    "Verified cash register",
+                    "Checked expiration dates",
+                    "Reviewed sales reports",
+                    "Conducted surprise inspection"
+                ],
+                cashier: [
+                    "Processed sale transaction",
+                    "Initiated refund request",
+                    "Voided incorrect transaction",
+                    "Redeemed customer loyalty",
+                    "Handled cash deposit"
+                ]
+            };
+            
+            const sampleDetails = {
+                admin: [
+                    "Changed tax rate to 12%",
+                    "Created account for new cashier",
+                    "Updated prices for 25 products",
+                    "Exported Q2 sales data",
+                    "Enabled barcode scanner option"
+                ],
+                auditor: [
+                    "Counting stock in liquor section",
+                    "Verified ₱15,250 in register 3",
+                    "Found 2 expired products",
+                    "Analyzed last week's discounts",
+                    "Checked 10 random receipts"
+                ],
+                cashier: [
+                    "Sold 3 bottles of whiskey (₱2,850)",
+                    "Refunded damaged vodka (₱750)",
+                    "Canceled incorrect beer purchase",
+                    "Applied 100 loyalty points",
+                    "Prepared ₱5,000 for bank deposit"
+                ]
+            };
+            
+            const statuses = ["completed", "pending", "failed"];
+            
+            // Select random role
+            const role = sampleRoles[Math.floor(Math.random() * sampleRoles.length)];
+            const user = role.users[Math.floor(Math.random() * role.users.length)];
+            const action = sampleActions[role.type][Math.floor(Math.random() * sampleActions[role.type].length)];
+            const detail = sampleDetails[role.type][Math.floor(Math.random() * sampleDetails[role.type].length)];
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            const newActivity = {
+                id: generateId(),
+                timestamp: new Date().toISOString(),
+                role: role.type,
+                user: user,
+                action: action,
+                details: detail,
+                status: status
+            };
+            
+            const updatedActivities = [newActivity, ...activities]; // Add new activity to top
+            localStorage.setItem('activityLog', JSON.stringify(updatedActivities));
+            loadActivities();
+        }
+
+        // Event listeners
+        refreshBtn.addEventListener('click', loadActivities);
+        addActivityBtn.addEventListener('click', addSampleActivity);
+        roleFilter.addEventListener('change', loadActivities);
+        statusFilter.addEventListener('change', loadActivities);
+
+        // Initial load
+        loadActivities();
+    </script>
+</body>
+</html>
