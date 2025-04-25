@@ -41,12 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Save to localStorage
         const customers = JSON.parse(localStorage.getItem('customers')) || [];
         
-        // Check if username or email already exists
+        // Check if username already exists
         if (customers.some(customer => customer.username === userData.username)) {
             showError('Username already exists!');
             return;
         }
         
+        // Check if email already exists
         if (customers.some(customer => customer.email === userData.email)) {
             showError('Email address already registered!');
             return;
@@ -59,8 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
         customers.push(userData);
         localStorage.setItem('customers', JSON.stringify(customers));
         
-        alert('Registration successful! Redirecting to dashboard...');
-        window.location.href = 'customer-dashboard.html';
+        // Show success message and redirect to login page
+        alert('Registration successful! Please login with your credentials.');
+        window.location.href = 'index.html';
     });
     
     function showError(message) {
