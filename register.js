@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
     const errorMsg = document.getElementById('reg-error-msg');
-    
+
     registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
             address: document.getElementById('reg-address').value.trim(),
             username: document.getElementById('reg-username').value.trim(),
             password: document.getElementById('reg-password').value,
-            confirmPassword: document.getElementById('reg-confirm-password').value
+            confirmPassword: document.getElementById('reg-confirm-password').value,
+            role: 'customer' // Add role field
         };
         
         // Validation
@@ -38,17 +39,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Save to localStorage
+        // Get existing data from BOTH storage locations
+        const users = JSON.parse(localStorage.getItem('users')) || [];
         const customers = JSON.parse(localStorage.getItem('customers')) || [];
         
-        // Check if username already exists
-        if (customers.some(customer => customer.username === userData.username)) {
+        // Check if username already exists in either storage
+        if (users.some(user => user.username === userData.username) || 
+            customers.some(customer => customer.username === userData.username)) {
             showError('Username already exists!');
             return;
         }
         
-        // Check if email already exists
-        if (customers.some(customer => customer.email === userData.email)) {
+        // Check if email already exists in either storage
+        if (users.some(user => user.email === userData.email) || 
+            customers.some(customer => customer.email === userData.email)) {
             showError('Email address already registered!');
             return;
         }
@@ -56,8 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove confirmPassword before saving
         delete userData.confirmPassword;
         
-        // Add new customer
+        // Add to both storage locations for compatibility
+        users.push(userData);
         customers.push(userData);
+        
+        // Save to localStorage
+        localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('customers', JSON.stringify(customers));
         
         // Show success message and redirect to login page

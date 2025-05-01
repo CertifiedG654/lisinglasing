@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management | Lising Lasing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="product-management.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <span>LISING</span>
+                <span>LASING</span>
+            </div>
+            <div class="header-buttons">
+                <button id="backToDashboardBtn" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+                </button>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> LOGOUT
+                </button>
+            </div>
+        </div>
+       
+        <div class="management-container">
+            <div class="product-form-container">
+                <h2 class="form-title">Product Details</h2>
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Whiskey">Whiskey</option>
+                            <option value="Vodka">Vodka</option>
+                            <option value="Rum">Rum</option>
+                            <option value="Tequila">Tequila</option>
+                            <option value="Gin">Gin</option>
+                            <option value="Brandy">Brandy</option>
+                            <option value="Wine">Wine</option>
+                            <option value="Beer">Beer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Price (₱)</label>
+                        <input type="number" id="productPrice" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productQuantity">Quantity</label>
+                        <input type="number" id="productQuantity" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage">Product Image</label>
+                        <input type="file" id="productImage" class="form-control" accept="image/*">
+                        <div id="imagePreview" style="margin-top: 10px; display: none;">
+                            <img id="previewImage" src="#" alt="Preview" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">SAVE</button>
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">CANCEL</button>
+                        <button type="button" id="clearBtn" class="btn btn-danger">CLEAR</button>
+                    </div>
+                </form>
+            </div>
+           
+            <div class="product-table-container">
+                <h2 class="table-title">Product Inventory</h2>
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+                </div>
+                <div class="table-responsive">
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="product-management.js"></script>
+</body>
+</html>
