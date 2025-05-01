@@ -1,10 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #5d4037; 
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .logo span:first-child {
+            color: #ffab91; /* Light orange */
+        }
+
+        .logo span:last-child {
+            color: #bcaaa4; /* Light brown */
+        }
+
+        .logout-btn {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dashboard-card {
+            background-color: #8d6e63; /* Medium brown */
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            opacity: 0.8;
+        }
+
+        .dashboard-icon {
+         width: 60px; 
+        height: 60px;
+         object-fit: contain; 
+        }
+        .userManagement-icon{
+         width: 60px; 
+        height: 60px;
+         object-fit: contain; 
+        }
+        .productmanagement-icon{
+         width: 60px; 
+        height: 60px;
+         object-fit: contain; 
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <p>Welcome, Admin!</p>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo">
+                <span>LISING</span>
+                <span>LASING</span>
+            </div>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card" onclick="location.href='inventory-management.html'">
+                <div class="card-icon">
+                    <img src="Pictures/INVENTORY.png" alt="Inventory Icon" class="dashboard-icon">
+                </div>
+                <h2 class="card-title">Inventory</h2>
+                <p class="card-description">Manage stock and products</p>
+            </div>
+
+            <div class="dashboard-card" onclick="location.href='user-management.html'">
+                <div class="card-icon">
+                    <img src="Pictures/user.png"User Management Icon" class="userManagement-icon">
+                </div>
+                <h2 class="card-title">User Accounts</h2>
+                <p class="card-description">Manage staff and customers</p>
+            </div>
+            
+            <div class="dashboard-card" onclick="location.href='product-management.html'">
+                <div class="card-icon">
+                    <img src="Pictures/product.png"User Management Icon" class="productmanagement-icon">
+                </div>
+                <h2 class="card-title">Products</h2>
+                <p class="card-description">Manage liquor products</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check admin role
+            const currentRole = localStorage.getItem('currentRole');
+            if (currentRole !== 'admin') {
+                alert('Access denied. Please login as admin.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('currentRole');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
 </body>
 </html>
