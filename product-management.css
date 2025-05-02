@@ -287,11 +287,6 @@ textarea.form-control {
     color: var(--primary-dark);
 }
 
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
 .action-btn:hover {
     opacity: 0.8;
     transform: translateY(-1px);

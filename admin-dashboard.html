@@ -1,165 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background-color: #5d4037; 
-            color: white;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    :root {
+      --primary-dark: #2c1b16;
+      --primary-medium: #5e4333;
+      --primary-light: #8d6e63;
+      --accent-gold: #ffd54f;
+      --accent-light: #bcaaa4;
+      --text-light: #f8f5f2;
+      --text-medium: #d7ccc8;
+      --shadow-dark: rgba(0, 0, 0, 0.4);
+      --shadow-light: rgba(255, 215, 128, 0.2);
+    }
 
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-        }
+    .dashboard-container {
+      max-width: 1400px;
+      margin: auto;
+      padding: 50px 30px;
+      animation: fadeIn 0.8s ease-out;
+    }
 
-        .logo span:first-child {
-            color: #ffab91; /* Light orange */
-        }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--shadow-light);
+      margin-bottom: 30px;
+    }
 
-        .logo span:last-child {
-            color: #bcaaa4; /* Light brown */
-        }
+    .logo {
+      font-size: 2.8rem;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .logout-btn {
-            background-color: #d32f2f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-dark);
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
+    .logo-text span:first-child {
+      color: var(--accent-gold);
+    }
 
-        .dashboard-card {
-            background-color: #8d6e63; /* Medium brown */
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+    .logo-text span:last-child {
+      color: var(--accent-light);
+    }
 
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
 
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--primary-dark);
+    }
 
-        .card-description {
-            opacity: 0.8;
-        }
+    .logout-btn {
+      background: linear-gradient(135deg, #7b1fa2, #d500f9);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(123, 31, 162, 0.3);
+    }
 
-        .dashboard-icon {
-         width: 60px; 
-        height: 60px;
-         object-fit: contain; 
-        }
-        .userManagement-icon{
-         width: 60px; 
-        height: 60px;
-         object-fit: contain; 
-        }
-        .productmanagement-icon{
-         width: 60px; 
-        height: 60px;
-         object-fit: contain; 
-        }
-    </style>
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #6a1b9a, #c51162);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .dashboard-card {
+      background: rgba(62, 39, 35, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 8px 32px var(--shadow-dark);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      border: 1px solid var(--shadow-light);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,213,79,0.1) 0%, rgba(255,213,79,0) 70%);
+      transform: scale(0);
+      transition: transform 0.6s ease-out;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      background: rgba(62, 39, 35, 0.9);
+    }
+
+    .dashboard-card:hover::before {
+      transform: scale(1);
+    }
+
+    .card-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+      background: rgba(255, 213, 79, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .dashboard-card:hover .card-icon {
+      background: rgba(255, 213, 79, 0.2);
+      transform: scale(1.1);
+    }
+
+    .card-icon img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .card-title {
+      font-size: 1.8rem;
+      margin: 15px 0;
+      font-family: 'Playfair Display', serif;
+      color: var(--accent-gold);
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background: var(--accent-gold);
+      transition: width 0.3s;
+    }
+
+    .dashboard-card:hover .card-title::after {
+      width: 80px;
+    }
+
+    .card-description {
+      font-size: 1rem;
+      opacity: 0.85;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--accent-gold);
+      color: var(--primary-dark);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .logo {
+        font-size: 2.2rem;
+      }
+      
+      .user-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="header">
-            <div class="logo">
-                <span>LISING</span>
-                <span>LASING</span>
-            </div>
-            <button id="logoutBtn" class="logout-btn">Logout</button>
+  <div class="dashboard-container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">LL</div>
+        <div class="logo-text">
+          <span>LISING</span>
+          <span>LASING</span>
         </div>
-
-        <div class="dashboard-grid">
-            <div class="dashboard-card" onclick="location.href='inventory-management.html'">
-                <div class="card-icon">
-                    <img src="Pictures/INVENTORY.png" alt="Inventory Icon" class="dashboard-icon">
-                </div>
-                <h2 class="card-title">Inventory</h2>
-                <p class="card-description">Manage stock and products</p>
-            </div>
-
-            <div class="dashboard-card" onclick="location.href='user-management.html'">
-                <div class="card-icon">
-                    <img src="Pictures/user.png"User Management Icon" class="userManagement-icon">
-                </div>
-                <h2 class="card-title">User Accounts</h2>
-                <p class="card-description">Manage staff and customers</p>
-            </div>
-            
-            <div class="dashboard-card" onclick="location.href='product-management.html'">
-                <div class="card-icon">
-                    <img src="Pictures/product.png"User Management Icon" class="productmanagement-icon">
-                </div>
-                <h2 class="card-title">Products</h2>
-                <p class="card-description">Manage liquor products</p>
-            </div>
+      </div>
+      
+      <div class="user-controls">
+        <div class="user-info">
+          <div class="user-avatar">AD</div>
+          <span>Admin Dashboard</span>
         </div>
+        <button id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check admin role
-            const currentRole = localStorage.getItem('currentRole');
-            if (currentRole !== 'admin') {
-                alert('Access denied. Please login as admin.');
-                window.location.href = 'index.html';
-                return;
-            }
+    <div class="dashboard-grid">
+      <div class="dashboard-card animate__animated animate__fadeInUp" onclick="location.href='inventory-management.html'">
+        <div class="card-icon">
+          <img src="Pictures/INVENTORY.png" alt="Inventory Icon">
+        </div>
+        <h2 class="card-title">Inventory</h2>
+        <p class="card-description">Manage stock levels, track products, and monitor inventory movements</p>
+        <div class="card-badge">CRUD Access</div>
+      </div>
 
-            // Logout functionality
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                localStorage.removeItem('currentRole');
-                window.location.href = 'index.html';
-            });
+      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-1s" onclick="location.href='user-management.html'">
+        <div class="card-icon">
+          <img src="Pictures/user.png" alt="User Management Icon">
+        </div>
+        <h2 class="card-title">User Accounts</h2>
+        <p class="card-description">Manage staff permissions, customer accounts, and access levels</p>
+        <div class="card-badge">Admin Only</div>
+      </div>
+
+      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-2s" onclick="location.href='product-management.html'">
+        <div class="card-icon">
+          <img src="Pictures/product.png" alt="Product Management Icon">
+        </div>
+        <h2 class="card-title">Products</h2>
+        <p class="card-description">Add new liquors, update pricing, and manage product categories</p>
+        <div class="card-badge">CRUD Access</div>
+      </div>
+
+      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-3s" onclick="location.href='reports-analytics.html'">
+        <div class="card-icon">
+          <img src="Pictures/analytics.png" alt="Analytics Icon">
+        </div>
+        <h2 class="card-title">Reports</h2>
+        <p class="card-description">View sales analytics, inventory reports, and business insights</p>
+        <div class="card-badge">New</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Font Awesome for icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check admin authentication
+      const currentRole = localStorage.getItem('currentRole');
+      if (currentRole !== 'admin') {
+        alert('Access denied. Please login with admin credentials.');
+        window.location.href = 'index.html';
+      }
+
+      // Logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        // Show confirmation dialog
+        if (confirm('Are you sure you want to logout?')) {
+          localStorage.removeItem('currentRole');
+          localStorage.removeItem('authToken');
+          window.location.href = 'index.html';
+        }
+      });
+
+      // Add ripple effect to cards
+      const cards = document.querySelectorAll('.dashboard-card');
+      cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Ripple effect creation
+          const ripple = document.createElement('span');
+          ripple.className = 'ripple-effect';
+          ripple.style.left = ${e.clientX - card.getBoundingClientRect().left}px;
+          ripple.style.top = ${e.clientY - card.getBoundingClientRect().top}px;
+          card.appendChild(ripple);
+          
+          // Remove ripple after animation
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
         });
-    </script>
+      });
+    });
+
+    // Add global click animation
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.dashboard-card')) {
+        // Add temporary active class for click feedback
+        const card = e.target.closest('.dashboard-card');
+        card.classList.add('active');
+        setTimeout(() => {
+          card.classList.remove('active');
+        }, 300);
+      }
+    });
+  </script>
+
+  <style>
+    /* Ripple effect styles */
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Active state for cards */
+    .dashboard-card.active {
+      transform: scale(0.98);
+    }
+  </style>
 </body>
 </html>

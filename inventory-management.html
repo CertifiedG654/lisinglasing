@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="inventory-management.css">
+  <style>
+    /* Your existing styles plus: */
+    .discrepancy-btn {
+      background-color: #ffc107;
+      color: #000;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .discrepancy-positive {
+      color: #28a745;
+      font-weight: bold;
+    }
+    
+    .discrepancy-negative {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    
+    .no-discrepancy {
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Delete Product</h3>
+      <p>Please state the reason for deleting this product:</p>
+      <textarea id="deleteReason" class="modal-input" rows="4" placeholder="Enter reason for deletion..." required></textarea>
+      <div class="modal-buttons">
+        <button id="cancelDelete" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button id="confirmDelete" class="modal-btn modal-btn-confirm">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discrepancy Remarks Modal -->
+  <div id="discrepancyModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Discrepancy Remarks</h3>
+      <div id="discrepancyDetails" style="margin-bottom: 20px;"></div>
+      <div class="form-group">
+        <label for="discrepancyNotes">Add/Update Remarks:</label>
+        <textarea id="discrepancyNotes" class="form-control" rows="3" placeholder="Enter remarks about this discrepancy..."></textarea>
+      </div>
+      <div class="modal-buttons">
+        <button id="closeDiscrepancyModal" class="modal-btn modal-btn-cancel">Close</button>
+        <button id="saveDiscrepancyRemarks" class="modal-btn btn-primary">Save Remarks</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <span>LISING</span>
+        <span>LASING</span>
+      </div>
+      <div class="header-buttons">
+        <button id="backToDashboardBtn" class="back-btn">
+          <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+        </button>
+        <button id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> LOGOUT
+        </button>
+      </div>
+    </div>
+   
+    <div class="management-container">
+      <div class="product-table-container">
+        <h2 class="table-title">Inventory Overview</h2>
+       
+        <div class="tab-container">
+          <div class="tab active" id="inventoryTab">Active Inventory</div>
+          <div class="tab" id="recycleBinTab">Recycle Bin</div>
+        </div>
+       
+        <div id="inventoryControls">
+          <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search inventory...">
+          </div>
+        </div>
+       
+        <div id="recycleBinControls" style="display: none;">
+          <button id="emptyRecycleBin" class="recycle-bin-btn">
+            <i class="fas fa-trash"></i> Empty Recycle Bin
+          </button>
+        </div>
+       
+        <div class="table-responsive centered-table-container">
+          <table class="product-table centered-table" id="inventoryTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Expected Stock</th>
+                <th>Actual Stock</th>
+                <th>Discrepancy</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <!-- Active inventory items will be loaded here -->
+            </tbody>
+          </table>
+         
+          <table class="product-table centered-table" id="recycleBinTable" style="display: none;">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Deleted On</th>
+                <th>Reason</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recycleBinTableBody">
+              <!-- Deleted items will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="inventory-management.js"></script>
+</body>
+</html>

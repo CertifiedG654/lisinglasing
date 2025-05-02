@@ -1,82 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .dashboard-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .welcome-message {
-            margin-bottom: 30px;
-        }
-        
-        .customer-info {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        .info-item {
-            margin-bottom: 10px;
-        }
-        
-        .info-label {
-            font-weight: bold;
-            color: #555;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Dashboard | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-dark: #1a1a1a;
+      --primary-light: #2d2d2d;
+      --accent-gold: #c0a062;
+      --text-light: #f5f5f5;
+      --text-gray: #cccccc;
+      --border-light: rgba(255,255,255,0.1);
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--primary-dark);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+    
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 240px;
+      background-color: var(--primary-light);
+      padding: 30px 20px;
+      border-right: 1px solid var(--border-light);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent-gold);
+      font-size: 22px;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .nav-item {
+      margin-bottom: 8px;
+    }
+    
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(192, 160, 98, 0.1);
+      color: var(--accent-gold);
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      max-width: 700px;
+    }
+    
+    .welcome-section {
+      margin-bottom: 25px;
+    }
+    
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--accent-gold);
+      margin: 0 0 5px 0;
+    }
+    
+    .welcome-subtitle {
+      color: var(--text-gray);
+      font-size: 13px;
+      margin: 0;
+    }
+    
+    /* Account Card */
+    .account-card {
+      background-color: var(--primary-light);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--accent-gold);
+      margin: 0 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .info-label {
+      color: var(--accent-gold);
+      font-size: 13px;
+    }
+    
+    .info-value {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    /* Order History */
+    .orders-section {
+      background-color: var(--primary-light);
+      border-radius: 6px;
+      padding: 20px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .order-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    
+    .order-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .order-number {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    
+    .order-date {
+      color: var(--text-gray);
+      font-size: 11px;
+    }
+    
+    .order-payment {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    
+    .order-total {
+      color: var(--accent-gold);
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    
+    .order-status {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      background-color: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      display: inline-block;
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-size: 13px;
+      margin-top: 15px;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    
+    .btn:hover {
+      opacity: 0.8;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .main-content {
+        padding: 20px;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .order-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .order-payment {
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container dashboard-container">
-        <div class="customer-info">
-            <h1 class="welcome-message">Welcome, <span id="customer-name"></span>!</h1>
-            <div class="info-item">
-                <span class="info-label">Username:</span> <span id="customer-username"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Email:</span> <span id="customer-email"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Phone:</span> <span id="customer-phone"></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Address:</span> <span id="customer-address"></span>
-            </div>
-        </div>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
-    </div>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo">Lising Lasing</div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-user"></i>
+            My Account
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-shopping-bag"></i>
+            My Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-heart"></i>
+            Wishlist
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-map-marker-alt"></i>
+            Address Book
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            Account Settings
+          </a>
+        </li>
+      </ul>
+    </aside>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the logged in customer from localStorage
-            const loggedInUsername = localStorage.getItem('loggedInCustomer');
-            const customers = JSON.parse(localStorage.getItem('customers')) || [];
-            const customer = customers.find(c => c.username === loggedInUsername);
-            
-            if (customer) {
-                document.getElementById('customer-name').textContent = `${customer.firstName} ${customer.lastName}`;
-                document.getElementById('customer-username').textContent = customer.username;
-                document.getElementById('customer-email').textContent = customer.email;
-                document.getElementById('customer-phone').textContent = customer.phone;
-                document.getElementById('customer-address').textContent = customer.address;
-            } else {
-                alert('Customer not found!');
-                window.location.href = 'index.html';
-            }
-            
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                localStorage.removeItem('loggedInCustomer');
-                window.location.href = 'index.html';
-            });
-        });
-    </script>
+        </div>
+        <button class="btn btn-outline">View All Orders</button>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

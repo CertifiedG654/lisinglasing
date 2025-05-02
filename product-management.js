@@ -88,29 +88,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button class="action-btn edit-btn" data-id="${product.id}">
                         <i class="fas fa-edit"></i> Edit
                     </button>
-                    <button class="action-btn delete-btn" data-id="${product.id}">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
                 </td>
             `;
            
             productTableBody.appendChild(row);
-        });
-       
-        // Add event listeners to edit and delete buttons
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', handleEdit);
-        });
-       
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', handleDelete);
+            
+            // Add event listener to edit button
+            row.querySelector('.edit-btn').addEventListener('click', handleEdit);
         });
     }
    
     // Handle form submission
     productForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+       
         let imageBase64 = '';
         if (productImageField.files[0]) {
             imageBase64 = await getBase64(productImageField.files[0]);
@@ -164,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             productPriceField.value = product.price;
             productQuantityField.value = product.quantity;
             productDescriptionField.value = product.description || '';
-            
+           
             // Show existing image if available
             if (product.image) {
                 previewImage.src = product.image;
@@ -172,30 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 imagePreview.style.display = 'none';
             }
-            
+           
             // Scroll to form
             document.querySelector('.product-form-container').scrollIntoView({
                 behavior: 'smooth'
             });
-        }
-    }
-   
-    // Handle delete
-    function handleDelete(e) {
-        if (confirm('Are you sure you want to delete this product?')) {
-            const productId = e.target.closest('button').getAttribute('data-id');
-            products = products.filter(p => p.id !== productId);
-           
-            // Save to localStorage
-            localStorage.setItem('products', JSON.stringify(products));
-           
-            // Reset form if editing the deleted product
-            if (productIdField.value === productId) {
-                resetForm();
-            }
-           
-            // Refresh table
-            renderProductTable();
         }
     }
    
