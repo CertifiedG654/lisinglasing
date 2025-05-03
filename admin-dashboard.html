@@ -6,17 +6,18 @@
   <title>Admin Dashboard | Lising Lasing</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --primary-dark: #2c1b16;
-      --primary-medium: #5e4333;
-      --primary-light: #8d6e63;
+      --primary-light: #d7ccc8;  /* Light brown background */
+      --primary-medium: #a1887f; /* Medium brown accents */
+      --primary-dark: #5d4037;   /* Dark brown text */
       --accent-gold: #ffd54f;
-      --accent-light: #bcaaa4;
+      --accent-light: #efebe9;
       --text-light: #f8f5f2;
-      --text-medium: #d7ccc8;
-      --shadow-dark: rgba(0, 0, 0, 0.4);
-      --shadow-light: rgba(255, 215, 128, 0.2);
+      --text-dark: #3e2723;
+      --shadow-dark: rgba(0, 0, 0, 0.1);
+      --shadow-light: rgba(255, 215, 128, 0.1);
     }
 
     * {
@@ -29,8 +30,8 @@
       margin: 0;
       padding: 0;
       font-family: 'Open Sans', sans-serif;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
-      color: var(--text-light);
+      background-color: var(--primary-light);
+      color: var(--text-dark);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -47,17 +48,18 @@
       justify-content: space-between;
       align-items: center;
       padding-bottom: 40px;
-      border-bottom: 1px solid var(--shadow-light);
+      border-bottom: 1px solid var(--primary-medium);
       margin-bottom: 30px;
     }
 
     .logo {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       font-family: 'Playfair Display', serif;
       letter-spacing: 2px;
       display: flex;
       align-items: center;
       gap: 10px;
+      color: var(--primary-dark);
     }
 
     .logo-icon {
@@ -74,11 +76,11 @@
     }
 
     .logo-text span:first-child {
-      color: var(--accent-gold);
+      color: var(--primary-dark);
     }
 
     .logo-text span:last-child {
-      color: var(--accent-light);
+      color: var(--primary-medium);
     }
 
     .user-controls {
@@ -91,22 +93,23 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      color: var(--primary-dark);
     }
 
     .user-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: var(--accent-light);
+      background: var(--primary-medium);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      color: var(--primary-dark);
+      color: var(--text-light);
     }
 
     .logout-btn {
-      background: linear-gradient(135deg, #7b1fa2, #d500f9);
+      background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
       color: white;
       border: none;
       padding: 12px 25px;
@@ -117,13 +120,13 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 15px rgba(123, 31, 162, 0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .logout-btn:hover {
-      background: linear-gradient(135deg, #6a1b9a, #c51162);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     .dashboard-grid {
@@ -134,8 +137,8 @@
     }
 
     .dashboard-card {
-      background: rgba(62, 39, 35, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
       border-radius: 20px;
       padding: 35px;
       box-shadow: 0 8px 32px var(--shadow-dark);
@@ -147,33 +150,17 @@
       overflow: hidden;
     }
 
-    .dashboard-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,213,79,0.1) 0%, rgba(255,213,79,0) 70%);
-      transform: scale(0);
-      transition: transform 0.6s ease-out;
-    }
-
     .dashboard-card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      background: rgba(62, 39, 35, 0.9);
-    }
-
-    .dashboard-card:hover::before {
-      transform: scale(1);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 1);
     }
 
     .card-icon {
       width: 80px;
       height: 80px;
       margin: 0 auto 25px;
-      background: rgba(255, 213, 79, 0.1);
+      background: rgba(255, 213, 79, 0.15);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -182,7 +169,7 @@
     }
 
     .dashboard-card:hover .card-icon {
-      background: rgba(255, 213, 79, 0.2);
+      background: rgba(255, 213, 79, 0.25);
       transform: scale(1.1);
     }
 
@@ -190,14 +177,14 @@
       width: 50px;
       height: 50px;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .card-title {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin: 15px 0;
       font-family: 'Playfair Display', serif;
-      color: var(--accent-gold);
+      color: var(--primary-dark);
       position: relative;
       display: inline-block;
     }
@@ -210,7 +197,7 @@
       transform: translateX(-50%);
       width: 40px;
       height: 2px;
-      background: var(--accent-gold);
+      background: var(--primary-medium);
       transition: width 0.3s;
     }
 
@@ -220,6 +207,7 @@
 
     .card-description {
       font-size: 1rem;
+      color: var(--primary-dark);
       opacity: 0.85;
       line-height: 1.6;
       margin-bottom: 15px;
@@ -235,7 +223,7 @@
       border-radius: 20px;
       font-size: 0.7rem;
       font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     @keyframes fadeIn {
@@ -249,11 +237,11 @@
         flex-direction: column;
         gap: 20px;
       }
-      
+     
       .logo {
-        font-size: 2.2rem;
+        font-size: 2rem;
       }
-      
+     
       .user-controls {
         width: 100%;
         justify-content: space-between;
@@ -271,7 +259,7 @@
           <span>LASING</span>
         </div>
       </div>
-      
+     
       <div class="user-controls">
         <div class="user-info">
           <div class="user-avatar">AD</div>
@@ -324,7 +312,7 @@
 
   <!-- Font Awesome for icons -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-  
+ 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Check admin authentication
@@ -351,10 +339,10 @@
           // Ripple effect creation
           const ripple = document.createElement('span');
           ripple.className = 'ripple-effect';
-          ripple.style.left = ${e.clientX - card.getBoundingClientRect().left}px;
-          ripple.style.top = ${e.clientY - card.getBoundingClientRect().top}px;
+          ripple.style.left = `${e.clientX - card.getBoundingClientRect().left}px`;
+          ripple.style.top = `${e.clientY - card.getBoundingClientRect().top}px`;
           card.appendChild(ripple);
-          
+         
           // Remove ripple after animation
           setTimeout(() => {
             ripple.remove();
