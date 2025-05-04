@@ -1,10 +1,333 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Supervisor Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervisor Dashboard | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    :root {
+      --primary-dark: #1a1a2e;
+      --primary-light: #16213e;
+      --accent-gold: #d4af37;
+      --accent-light: #e6d5b8;
+      --text-light: #f1f1f1;
+      --text-dark: #333;
+      --success-green: #28a745;
+      --warning-orange: #fd7e14;
+      --error-red: #dc3545;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f9f5f0;
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .logo span:last-child {
+      color: var(--accent-gold);
+    }
+
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary-dark);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--accent-gold);
+    }
+
+    .logout-btn {
+      background-color: var(--primary-dark);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout-btn:hover {
+      background-color: var(--accent-gold);
+      color: var(--primary-dark);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .dashboard-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid var(--accent-light);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary-dark);
+      font-size: 1.4rem;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background-color: rgba(212, 175, 55, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      font-size: 1.5rem;
+    }
+
+    .inventory-summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .summary-item {
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+    }
+
+    .summary-item h3 {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 5px;
+    }
+
+    .summary-item p {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .team-performance {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .team-member {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .member-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .member-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .login-status {
+      font-size: 0.85rem;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+
+    .status-online {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-green);
+    }
+
+    .status-offline {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--error-red);
+    }
+
+    .sales-chart-container {
+      height: 250px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .sales-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .sales-tab {
+      padding: 8px 15px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .sales-tab.active {
+      border-bottom: 3px solid var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .sales-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 20px;
+      }
+     
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Supervisor Dashboard</h1>
-    <p>Welcome, Supervisor!</p>
+  <div class="dashboard-container">
+    <div class="header">
+      <div class="logo">
+        <span>LISING</span>
+        <span>LASING</span>
+      </div>
+     
+      <div class="user-controls">
+        <div class="user-info">
+          <div class="user-avatar">SV</div>
+          <span>Supervisor Dashboard</span>
+        </div>
+        <button id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          // Check supervisor authentication
+          const currentRole = localStorage.getItem('currentRole');
+          if (currentRole !== 'supervisor') {
+            alert('Access denied. Please login with supervisor credentials.');
+            window.location.href = 'index.html';
+          }
+      
+          // Logout functionality
+          const logoutBtn = document.getElementById('logoutBtn');
+          if (logoutBtn) {
+            logoutBtn.addEventListener('click', function () {
+              if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentRole');
+                window.location.href = 'index.html';
+              }
+            });
+          }
+        });
+      </script>      
 </body>
 </html>

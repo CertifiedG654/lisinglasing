@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Inventory | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="product-management.css">
+  <style>
+    /* Additional styles specific to audit inventory */
+    .audit-notes-container {
+      margin-top: 30px;
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid var(--accent-light);
+    }
+    
+    .audit-notes-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--accent-light);
+    }
+    
+    .audit-notes-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+    }
+    
+    .save-notes-btn {
+      background-color: var(--accent-gold);
+      color: var(--primary-dark);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+    
+    .save-notes-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    /* Read-only styles */
+    .read-only-badge {
+      background-color: var(--primary-dark);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    
+    .action-btn {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <span>LISING</span>
+        <span>LASING</span>
+      </div>
+      <div class="header-buttons">
+        <button id="backToDashboardBtn" class="back-btn">
+          <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+        </button>
+        <button id="logoutBtn" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> LOGOUT
+        </button>
+      </div>
+    </div>
+   
+    <div class="management-container">
+      <div class="product-table-container">
+        <h2 class="table-title">Inventory Audit <span class="read-only-badge">LOGS</span></h2>
+        
+        <div class="search-container">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search inventory...">
+        </div>
+        
+        <div class="table-responsive">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Expected Stock</th>
+                <th>Actual Stock</th>
+                <th>Discrepancy</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <!-- Inventory items will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="audit-notes-container">
+          <h3 class="audit-notes-title">Audit Notes</h3>
+          <p>Audit notes</p>
+          <textarea id="auditNotes" class="audit-notes-textarea" placeholder="Enter your audit findings and notes here..."></textarea>
+          <button id="saveNotesBtn" class="save-notes-btn">
+            <i class="fas fa-save"></i> Save Notes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="audit-inventory.js"></script>
+</body>
+</html>
