@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const customers = JSON.parse(localStorage.getItem('customers')) || [];
         const allUsers = [...users, ...customers];
-        
+       
         const user = allUsers.find(user => {
             return user.username === username && user.password === password;
         });
@@ -83,8 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // If neither matches
         errorMsg.textContent = 'Invalid username or password';
         errorMsg.style.display = 'block';
-       
-        // Clear password field
         document.getElementById('password').value = '';
     });
 

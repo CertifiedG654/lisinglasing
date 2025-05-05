@@ -15,7 +15,7 @@
       --text-gray: #cccccc;
       --border-light: rgba(255,255,255,0.1);
     }
-    
+   
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: var(--primary-dark);
@@ -24,12 +24,12 @@
       padding: 0;
       line-height: 1.5;
     }
-    
+   
     .dashboard-container {
       display: flex;
       min-height: 100vh;
     }
-    
+   
     /* Sidebar Navigation */
     .sidebar {
       width: 240px;
@@ -37,7 +37,7 @@
       padding: 30px 20px;
       border-right: 1px solid var(--border-light);
     }
-    
+   
     .logo {
       font-family: 'Playfair Display', serif;
       color: var(--accent-gold);
@@ -46,17 +46,17 @@
       text-align: center;
       letter-spacing: 1px;
     }
-    
+   
     .nav-menu {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-    
+   
     .nav-item {
       margin-bottom: 8px;
     }
-    
+   
     .nav-link {
       color: var(--text-light);
       text-decoration: none;
@@ -67,43 +67,43 @@
       transition: all 0.2s;
       font-size: 14px;
     }
-    
+   
     .nav-link:hover, .nav-link.active {
       background-color: rgba(192, 160, 98, 0.1);
       color: var(--accent-gold);
     }
-    
+   
     .nav-link i {
       margin-right: 10px;
       font-size: 14px;
       width: 18px;
       text-align: center;
     }
-    
+   
     /* Main Content */
     .main-content {
       flex: 1;
       padding: 30px;
       max-width: 700px;
     }
-    
+   
     .welcome-section {
       margin-bottom: 25px;
     }
-    
+   
     .welcome-title {
       font-family: 'Playfair Display', serif;
       font-size: 24px;
       color: var(--accent-gold);
       margin: 0 0 5px 0;
     }
-    
+   
     .welcome-subtitle {
       color: var(--text-gray);
       font-size: 13px;
       margin: 0;
     }
-    
+   
     /* Account Card */
     .account-card {
       background-color: var(--primary-light);
@@ -112,7 +112,7 @@
       margin-bottom: 25px;
       border: 1px solid var(--border-light);
     }
-    
+   
     .section-title {
       font-family: 'Playfair Display', serif;
       font-size: 18px;
@@ -121,24 +121,24 @@
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border-light);
     }
-    
+   
     .info-grid {
       display: grid;
       grid-template-columns: 150px 1fr;
       gap: 12px;
       align-items: center;
     }
-    
+   
     .info-label {
       color: var(--accent-gold);
       font-size: 13px;
     }
-    
+   
     .info-value {
       font-size: 13px;
       color: var(--text-light);
     }
-    
+   
     /* Order History */
     .orders-section {
       background-color: var(--primary-light);
@@ -146,7 +146,7 @@
       padding: 20px;
       border: 1px solid var(--border-light);
     }
-    
+   
     .order-item {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -154,40 +154,40 @@
       padding: 12px 0;
       border-bottom: 1px solid var(--border-light);
     }
-    
+   
     .order-item:last-child {
       border-bottom: none;
     }
-    
+   
     .order-info {
       display: flex;
       flex-direction: column;
     }
-    
+   
     .order-number {
       font-weight: 600;
       font-size: 13px;
       margin-bottom: 3px;
     }
-    
+   
     .order-date {
       color: var(--text-gray);
       font-size: 11px;
     }
-    
+   
     .order-payment {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
     }
-    
+   
     .order-total {
       color: var(--accent-gold);
       font-weight: 600;
       font-size: 13px;
       margin-bottom: 3px;
     }
-    
+   
     .order-status {
       padding: 2px 8px;
       border-radius: 10px;
@@ -198,7 +198,7 @@
       color: #28a745;
       display: inline-block;
     }
-    
+   
     /* Buttons */
     .btn {
       padding: 8px 16px;
@@ -210,42 +210,42 @@
       font-size: 13px;
       margin-top: 15px;
     }
-    
+   
     .btn-outline {
       background-color: transparent;
       border: 1px solid var(--accent-gold);
       color: var(--accent-gold);
     }
-    
+   
     .btn:hover {
       opacity: 0.8;
     }
-    
+   
     /* Responsive */
     @media (max-width: 768px) {
       .dashboard-container {
         flex-direction: column;
       }
-      
+     
       .sidebar {
         width: 100%;
         padding: 15px;
       }
-      
+     
       .main-content {
         padding: 20px;
       }
-      
+     
       .info-grid {
         grid-template-columns: 1fr;
         gap: 8px;
       }
-      
+     
       .order-item {
         grid-template-columns: 1fr;
         gap: 8px;
       }
-      
+     
       .order-payment {
         align-items: flex-start;
       }
@@ -258,11 +258,11 @@
     <aside class="sidebar">
       <div class="logo">Lising Lasing</div>
       <ul class="nav-menu">
-        <li class="nav-item"> 
-          <a href="product.html" class="nav-link active"> 
-            <i class="fas fa-box"></i> 
-            <span>Product</span> 
-          </a> 
+        <li class="nav-item">
+          <a href="product.html" class="nav-link active">
+            <i class="fas fa-box"></i>
+            <span>Product</span>
+          </a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
@@ -283,24 +283,77 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="fas fa-map-marker-alt"></i>
-            Address Book
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="fas fa-cog"></i>
-            Account Settings
-          </a>
+          <button id="logoutBtn" class="nav-link" style="background: none; border: none; width: 100%; text-align: left;">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
         </li>
       </ul>
     </aside>
 
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="welcome-section">
+        <h1 class="welcome-title">Welcome Back!</h1>
+        <p class="welcome-subtitle">Here's what's happening with your account today</p>
+      </div>
+
+      <div class="account-card">
+        <h2 class="section-title">Account Overview</h2>
+        <div class="info-grid" id="accountInfo">
+          <!-- Account info will be loaded here -->
         </div>
-        <button class="btn btn-outline">View All Orders</button>
+      </div>
+
+      <div class="orders-section">
+        <h2 class="section-title">Recent Orders</h2>
+        <div id="orderHistory">
+          <!-- Order history will be loaded here -->
+          <div class="order-item">
+            <div class="order-info">
+              <span class="order-number">No recent orders</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-outline">View All Recent Orders</button>
       </div>
     </main>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check customer authentication
+      const loggedInCustomer = localStorage.getItem('loggedInCustomer');
+      if (!loggedInCustomer) {
+        alert('Please login first');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Load customer data
+      const customer = JSON.parse(loggedInCustomer);
+      
+      // Display account info
+      const accountInfo = document.getElementById('accountInfo');
+      accountInfo.innerHTML = `
+        <span class="info-label">Full Name:</span>
+        <span class="info-value">${customer.firstName} ${customer.lastName}</span>
+        <span class="info-label">Email:</span>
+        <span class="info-value">${customer.email}</span>
+        <span class="info-label">Phone:</span>
+        <span class="info-value">${customer.phone}</span>
+        <span class="info-label">Address:</span>
+        <span class="info-value">${customer.address}</span>
+      `;
+
+      // Logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+          localStorage.removeItem('loggedInCustomer');
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
