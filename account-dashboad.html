@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Dashboard | Lising Lasing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-dark: #1a1a1a;
+      --primary-light: #2d2d2d;
+      --accent-gold: #c0a062;
+      --text-light: #f5f5f5;
+      --text-gray: #cccccc;
+      --border-light: rgba(255,255,255,0.1);
+      --focus-outline: 2px solid var(--accent-gold);
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--primary-dark);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+    
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 240px;
+      background-color: var(--primary-light);
+      padding: 30px 20px;
+      border-right: 1px solid var(--border-light);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent-gold);
+      font-size: 22px;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .nav-item {
+      margin-bottom: 8px;
+    }
+    
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(192, 160, 98, 0.1);
+      color: var(--accent-gold);
+    }
+    
+    .nav-link i {
+      margin-right: 10px;
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      max-width: 700px;
+    }
+    
+    .welcome-section {
+      margin-bottom: 25px;
+    }
+    
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--accent-gold);
+      margin: 0 0 5px 0;
+    }
+    
+    .welcome-subtitle {
+      color: var(--text-gray);
+      font-size: 13px;
+      margin: 0;
+    }
+    
+    /* Account Card */
+    .account-card {
+      background-color: var(--primary-light);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--accent-gold);
+      margin: 0 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .info-label {
+      color: var(--accent-gold);
+      font-size: 13px;
+    }
+    
+    .info-value {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    
+    /* Edit Form Styles */
+    .edit-form {
+      display: none;
+      margin-top: 20px;
+    }
+    
+    .edit-form.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .form-group label {
+      color: var(--accent-gold);
+      font-size: 13px;
+    }
+    
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-light);
+      color: var(--text-light);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    
+    .form-control:focus {
+      outline: var(--focus-outline);
+      border-color: var(--accent-gold);
+    }
+    
+    /* Payment History */
+    .payment-history {
+      background-color: var(--primary-light);
+      border-radius: 6px;
+      padding: 20px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .payment-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    
+    .payment-table th {
+      text-align: left;
+      padding: 8px 0;
+      color: var(--accent-gold);
+      border-bottom: 1px solid var(--border-light);
+      font-weight: 600;
+    }
+    
+    .payment-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .payment-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .status-completed {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+    }
+    
+    .status-pending {
+      background-color: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+    }
+    
+    .status-failed {
+      background-color: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+    }
+    
+    .edit-btn {
+      background-color: transparent;
+      color: var(--accent-gold);
+      border: 1px solid var(--accent-gold);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .edit-btn:hover, .edit-btn:focus {
+      background-color: rgba(192, 160, 98, 0.1);
+      outline: var(--focus-outline);
+    }
+    
+    .save-btn {
+      background-color: var(--accent-gold);
+      color: var(--primary-dark);
+      border: 1px solid var(--accent-gold);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-right: 10px;
+    }
+    
+    .save-btn:hover, .save-btn:focus {
+      background-color: rgba(192, 160, 98, 0.8);
+      outline: var(--focus-outline);
+    }
+    
+    .cancel-btn {
+      background-color: transparent;
+      color: var(--text-gray);
+      border: 1px solid var(--text-gray);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .cancel-btn:hover, .cancel-btn:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      outline: var(--focus-outline);
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    
+    /* Accessibility Improvements */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    [aria-hidden="true"] {
+      display: none;
+    }
+    
+    /* Focus styles for better keyboard navigation */
+    a:focus, button:focus, input:focus, select:focus, textarea:focus {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="logo">Lising Lasing</div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-user" aria-hidden="true"></i>
+            <span>Account Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+            <span>Bookings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-credit-card" aria-hidden="true"></i>
+            <span>Payment Methods</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog" aria-hidden="true"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
+            <span>Help Center</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="welcome-section">
+        <h1 class="welcome-title">Welcome, Jhonny Sins</h1>
+        <p class="welcome-subtitle">Last login: Today at 10:30 AM from Pasig City, Philippines</p>
+      </div>
+      
+      <!-- Account Overview -->
+      <div class="account-card">
+        <h2 class="section-title">Profile Details</h2>
+        <div class="info-grid" id="profile-display">
+          <span class="info-label">Full Name:</span>
+          <span class="info-value" id="display-name">Jhonny Sins</span>
+          
+          <span class="info-label">Email Address:</span>
+          <span class="info-value" id="display-email">jhonnysins@example.com</span>
+          
+          <span class="info-label">Phone Number:</span>
+          <span class="info-value" id="display-phone">(212) 555-0187</span>
+          
+          <span class="info-label">Date of Birth:</span>
+          <span class="info-value" id="display-dob">March 15, 1985</span>
+          
+          <span class="info-label">Member Since:</span>
+          <span class="info-value">June 12, 2018</span>
+          
+          <span class="info-label">Loyalty Points:</span>
+          <span class="info-value">1,250 points (Gold Tier)</span>
+        </div>
+        
+        <!-- Edit Profile Form (Initially Hidden) -->
+        <form class="edit-form" id="profile-edit-form" aria-labelledby="edit-profile-heading">
+          <h3 id="edit-profile-heading" class="sr-only">Edit Profile Form</h3>
+          <div class="form-group">
+            <label for="edit-name">Full Name:</label>
+            <input type="text" id="edit-name" class="form-control" value="Jhonny Sins" aria-required="true">
+          </div>
+          <div class="form-group">
+            <label for="edit-email">Email Address:</label>
+            <input type="email" id="edit-email" class="form-control" value="jhonnysins@example.com" aria-required="true">
+          </div>
+          <div class="form-group">
+            <label for="edit-phone">Phone Number:</label>
+            <input type="tel" id="edit-phone" class="form-control" value="(212) 555-0187">
+          </div>
+          <div class="form-group">
+            <label for="edit-dob">Date of Birth:</label>
+            <input type="text" id="edit-dob" class="form-control" value="March 15, 1985">
+          </div>
+          
+          <div class="action-buttons">
+            <button type="button" class="save-btn" id="save-profile">Save Changes</button>
+            <button type="button" class="cancel-btn" id="cancel-edit">Cancel</button>
+          </div>
+        </form>
+        
+        <div class="action-buttons">
+          <button class="edit-btn" id="edit-profile-btn" aria-expanded="false" aria-controls="profile-edit-form">
+            Edit Profile
+          </button>
+        </div>
+      </div>
+      
+      <!-- Payment History -->
+      <div class="payment-history">
+        <h2 class="section-title">Payment History</h2>
+        <div class="table-responsive" tabindex="0">
+          <table class="payment-table" aria-label="Payment history">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>May 15, 2023</td>
+                <td>Premium Wine Tasting Event</td>
+                <td>$125.00</td>
+                <td><span class="payment-status status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>April 28, 2023</td>
+                <td>Monthly Membership Fee</td>
+                <td>$29.99</td>
+                <td><span class="payment-status status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>April 10, 2023</td>
+                <td>Wine Club Subscription</td>
+                <td>$89.00</td>
+                <td><span class="payment-status status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>March 22, 2023</td>
+                <td>VIP Dinner Reservation</td>
+                <td>$75.00</td>
+                <td><span class="payment-status status-failed">Failed</span></td>
+              </tr>
+              <tr>
+                <td>March 15, 2023</td>
+                <td>Monthly Membership Fee</td>
+                <td>$29.99</td>
+                <td><span class="payment-status status-completed">Completed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const editBtn = document.getElementById('edit-profile-btn');
+      const cancelBtn = document.getElementById('cancel-edit');
+      const saveBtn = document.getElementById('save-profile');
+      const editForm = document.getElementById('profile-edit-form');
+      const profileDisplay = document.getElementById('profile-display');
+      
+      // Toggle edit form visibility
+      editBtn.addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
+        editForm.classList.toggle('active');
+        profileDisplay.classList.toggle('sr-only');
+        
+        if (!isExpanded) {
+          // Focus first field when opening form
+          document.getElementById('edit-name').focus();
+        } else {
+          // Focus edit button when closing form
+          this.focus();
+        }
+      });
+      
+      // Cancel edit
+      cancelBtn.addEventListener('click', function() {
+        editBtn.setAttribute('aria-expanded', 'false');
+        editForm.classList.remove('active');
+        profileDisplay.classList.remove('sr-only');
+        editBtn.focus();
+      });
+      
+      // Save changes
+      saveBtn.addEventListener('click', function() {
+        // Get values from form
+        const name = document.getElementById('edit-name').value;
+        const email = document.getElementById('edit-email').value;
+        const phone = document.getElementById('edit-phone').value;
+        const dob = document.getElementById('edit-dob').value;
+        
+        // Update display values
+        document.getElementById('display-name').textContent = name;
+        document.getElementById('display-email').textContent = email;
+        document.getElementById('display-phone').textContent = phone;
+        document.getElementById('display-dob').textContent = dob;
+        
+        // Close form
+        editBtn.setAttribute('aria-expanded', 'false');
+        editForm.classList.remove('active');
+        profileDisplay.classList.remove('sr-only');
+        
+        // Show success message (would be better as a proper alert in production)
+        alert('Profile updated successfully!');
+        editBtn.focus();
+      });
+      
+      // Handle form submission with Enter key
+      editForm.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveBtn.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
