@@ -9,6 +9,12 @@
 </head>
 <body>
     <div class="container">
+        <button class="back-button" onclick="window.location.href='front-page.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/>
+            </svg>
+            Back
+        </button>
         <div class="login-box" id="loginBox">
             <h1>Login</h1>
             <form id="loginForm">
@@ -39,7 +45,6 @@
 
 
     <script src="auth.js"></script>
-
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();

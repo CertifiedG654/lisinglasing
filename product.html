@@ -878,10 +878,14 @@
           <input type="text" class="search-box" placeholder="Search products..." id="searchInput">
           <select class="filter-select" id="categoryFilter">
             <option value="">All Categories</option>
+            <option value="whiskey">Whiskey</option>
+            <option value="vodka">Vodka</option>
+            <option value="rum">Rum</option>
+            <option value="tequila">Tequila</option>
+            <option value="gin">Gin</option>
+            <option value="brandy">Brandy</option>
             <option value="wine">Wine</option>
             <option value="beer">Beer</option>
-            <option value="spirits">Spirits</option>
-            <option value="cocktails">Cocktails</option>
           </select>
           <select class="filter-select" id="sortBy">
             <option value="default">Sort by</option>
@@ -991,7 +995,7 @@
             const rating = (Math.random() * 1 + 4).toFixed(1); // Between 4.0 and 5.0
             
             // Add random category for demo
-            const categories = ['wine', 'beer', 'spirits', 'cocktails'];
+            const categories = ['whiskey', 'vodka', 'rum', 'tequila', 'gin', 'brandy', 'wine', 'beer'];
             const category = categories[Math.floor(Math.random() * categories.length)];
             
             return {

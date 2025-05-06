@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com">
   </script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto+Mono&display=swap" rel="stylesheet"/>
   <style>
    body {
       font-family: "Playfair Display", serif;
@@ -75,6 +75,34 @@
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
+    /* Image load animation */
+    #carousel-inner img,
+    .category-card img {
+      opacity: 0;
+      transform: scale(0.9);
+      animation: fadeInScale 0.8s ease-out forwards;
+    }
+    /* Staggered animation for carousel images */
+    #carousel-inner img:nth-child(1) { animation-delay: 0.2s; }
+    #carousel-inner img:nth-child(2) { animation-delay: 0.3s; }
+    #carousel-inner img:nth-child(3) { animation-delay: 0.4s; }
+    #carousel-inner img:nth-child(4) { animation-delay: 0.5s; }
+    #carousel-inner img:nth-child(5) { animation-delay: 0.6s; }
+    #carousel-inner img:nth-child(6) { animation-delay: 0.7s; }
+    /* Staggered animation for category card images */
+    .category-card:nth-child(1) img { animation-delay: 0.8s; }
+    .category-card:nth-child(2) img { animation-delay: 0.9s; }
+    .category-card:nth-child(3) img { animation-delay: 1.0s; }
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
   </style>
  </head>
  <body>
@@ -101,7 +129,7 @@
     <i class="fas fa-globe-americas text-[16px]"></i>
     <span>EN</span>
     <i class="fas fa-chevron-down text-[10px]"></i>
-  </div>
+   </div>
   </header>
   <!-- Carousel -->
   <section class="w-full max-w-7xl mx-auto mt-4 px-4 sm:px-6 md:px-10 relative select-none">
@@ -110,7 +138,7 @@
      <div class="flex transition-transform duration-500 ease-in-out" id="carousel-inner" style="width: 1120px;">
       <img alt="1" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-l-lg" height="160" src="Pictures/teq.webp" width="320"/>
       <img alt="2" class="w-[480px] h-[160px] object-cover flex-shrink-0" height="160" src="Pictures/rum.jpg" width="480"/>
-      <img alt="3" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="https://storage.googleapis.com/a1aa/image/130cea78-6527-46b6-a93d-42b959103a03.jpg" width="320"/>
+      <img alt="3" class="w-[320px] h-[160px] object  object-cover flex-shrink-0 rounded-r-lg" height="160" src="https://storage.googleapis.com/a1aa/image/130cea78-6527-46b6-a93d-42b959103a03.jpg" width="320"/>
       <img alt="4" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/whiskey.webp" width="320"/>
       <img alt="5" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/wis.jpg" width="320"/>
       <img alt="6" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/teq.webp" width="320"/>
@@ -180,7 +208,7 @@
     </div>
    </div>
    <div class="relative rounded-lg overflow-hidden cursor-pointer category-card">
-    <img alt="Closeup of rum bottle label with wooden background" class="w-full h-60 object-cover rounded-lg transition-transform duration-300 hover:scale-105" height="240" src="Pictures/beer.webp" width="320"/>
+    <img alt="Closeipelvis of rum bottle label with wooden background" class="w-full h-60 object-cover rounded-lg transition-transform duration-300 hover:scale-105" height="240" src="Pictures/beer.webp" width="320"/>
     <div class="absolute bottom-2 left-2 text-[#d9c1b0] font-mono-custom text-xs bg-[#3a2416]/70 rounded px-2 py-0.5 select-none transition-all duration-300 group-hover:bg-[#3a2416]">
      Beer
     </div>
@@ -287,128 +315,128 @@
 
       // Initialize
       updateCarousel();
+
       // Language changer functionality
-const languageSelector = document.querySelector('.flex.items-center.space-x-2.cursor-pointer');
-const languageOptions = document.createElement('div');
-languageOptions.className = 'absolute top-full right-0 mt-2 w-32 bg-[#3a2416] border border-[#4a3420] rounded-md shadow-lg z-20 hidden';
-languageOptions.innerHTML = `
-  <div class="py-1">
-    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="en">English</div>
-    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="fil">Filipino</div>
-    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ko">한국어 (Korean)</div>
-    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ja">日本語 (Japanese)</div>
-  </div>
-`;
+      const languageSelector = document.querySelector('.flex.items-center.space-x-2.cursor-pointer');
+      const languageOptions = document.createElement('div');
+      languageOptions.className = 'absolute top-full right-0 mt-2 w-32 bg-[#3a2416] border border-[#4a3420] rounded-md shadow-lg z-20 hidden';
+      languageOptions.innerHTML = `
+        <div class="py-1">
+          <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="en">English</div>
+          <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="fil">Filipino</div>
+          <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ko">한국어 (Korean)</div>
+          <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ja">日本語 (Japanese)</div>
+        </div>
+      `;
 
-// Insert the language options dropdown into the DOM
-languageSelector.parentNode.appendChild(languageOptions);
-languageSelector.parentNode.style.position = 'relative';
+      // Insert the language options dropdown into the DOM
+      languageSelector.parentNode.appendChild(languageOptions);
+      languageSelector.parentNode.style.position = 'relative';
 
-// Toggle dropdown visibility
-languageSelector.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const isHidden = languageOptions.classList.contains('hidden');
-  if (isHidden) {
-    languageOptions.classList.remove('hidden');
-  } else {
-    languageOptions.classList.add('hidden');
-  }
-});
+      // Toggle dropdown visibility
+      languageSelector.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = languageOptions.classList.contains('hidden');
+        if (isHidden) {
+          languageOptions.classList.remove('hidden');
+        } else {
+          languageOptions.classList.add('hidden');
+        }
+      });
 
-// Close dropdown when clicking elsewhere
-document.addEventListener('click', () => {
-  languageOptions.classList.add('hidden');
-});
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', () => {
+        languageOptions.classList.add('hidden');
+      });
 
-// Language translations
-const translations = {
-  en: {
-    notification: "Notif/Shipping Info",
-    guide: "Guide for Users",
-    inquiries: "Inquiries",
-    login: "Login",
-    categories: "C A T E G O R I E S",
-    searchPlaceholder: "Search Anything",
-    searchButton: "Search",
-    bannerText1: "至福の一杯を味わいましょう",
-    bannerText2: "MAG LASING ANG WILLING",
-    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
-  },
-  fil: {
-    notification: "Abiso/Impormasyon sa Pagpapadala",
-    guide: "Gabay para sa Mga Gumagamit",
-    inquiries: "Mga Tanong",
-    login: "Mag-login",
-    categories: "M G A  K A T E G O R I Y A",
-    searchPlaceholder: "Maghanap ng Kahit Ano",
-    searchButton: "Maghanap",
-    bannerText1: "至福の一杯を味わいましょう",
-    bannerText2: "MAG LASING ANG WILLING",
-    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
-  },
-  ko: {
-    notification: "알림/배송 정보",
-    guide: "사용자 가이드",
-    inquiries: "문의",
-    login: "로그인",
-    categories: "카 테 고 리",
-    searchPlaceholder: "아무거나 검색",
-    searchButton: "검색",
-    bannerText1: "至福の一杯を味わいましょう",
-    bannerText2: "MAG LASING ANG WILLING",
-    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
-  },
-  ja: {
-    notification: "通知/配送情報",
-    guide: "ユーザーガイド",
-    inquiries: "お問い合わせ",
-    login: "ログイン",
-    categories: "カ テ ゴ リ",
-    searchPlaceholder: "何でも検索",
-    searchButton: "検索",
-    bannerText1: "至福の一杯を味わいましょう",
-    bannerText2: "MAG LASING ANG WILLING",
-    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
-  }
-};
+      // Language translations
+      const translations = {
+        en: {
+          notification: "Notif/Shipping Info",
+          guide: "Guide for Users",
+          inquiries: "Inquiries",
+          login: "Login",
+          categories: "C A T E G O R I E S",
+          searchPlaceholder: "Search Anything",
+          searchButton: "Search",
+          bannerText1: "至福の一杯を味わいましょう",
+          bannerText2: "MAG LASING ANG WILLING",
+          bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+        },
+        fil: {
+          notification: "Abiso/Impormasyon sa Pagpapadala",
+          guide: "Gabay para sa Mga Gumagamit",
+          inquiries: "Mga Tanong",
+          login: "Mag-login",
+          categories: "M G A  K A T E G O R I Y A",
+          searchPlaceholder: "Maghanap ng Kahit Ano",
+          searchButton: "Maghanap",
+          bannerText1: "至福の一杯を味わいましょう",
+          bannerText2: "MAG LASING ANG WILLING",
+          bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+        },
+        ko: {
+          notification: "알림/배송 정보",
+          guide: "사용자 가이드",
+          inquiries: "문의",
+          login: "로그인",
+          categories: "카 테 고 리",
+          searchPlaceholder: "아무거나 검색",
+          searchButton: "검색",
+          bannerText1: "至福の一杯を味わいましょう",
+          bannerText2: "MAG LASING ANG WILLING",
+          bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+        },
+        ja: {
+          notification: "通知/配送情報",
+          guide: "ユーザーガイド",
+          inquiries: "お問い合わせ",
+          login: "ログイン",
+          categories: "カ テ ゴ リ",
+          searchPlaceholder: "何でも検索",
+          searchButton: "検索",
+          bannerText1: "至福の一杯を味わいましょう",
+          bannerText2: "MAG LASING ANG WILLING",
+          bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+        }
+      };
 
-// Change language
-languageOptions.querySelectorAll('[data-lang]').forEach(option => {
-  option.addEventListener('click', (e) => {
-    const lang = e.target.dataset.lang;
-    document.querySelector('.flex.items-center.space-x-2.cursor-pointer span').textContent = 
-      lang === 'en' ? 'EN' : 
-      lang === 'fil' ? 'FIL' : 
-      lang === 'ko' ? 'KO' : 'JA';
-    
-    // Update all text elements
-    document.querySelector('a[href="index.html"] span').textContent = translations[lang].login;
-    document.querySelector('h2').textContent = translations[lang].categories;
-    document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
-    document.querySelector('#searchForm button').textContent = translations[lang].searchButton;
-    
-    // Update banner text if needed (keeping the original non-translated phrases)
-    const bannerSpans = document.querySelectorAll('.banner-text span');
-    bannerSpans[0].textContent = translations[lang].bannerText1;
-    bannerSpans[1].textContent = translations[lang].bannerText2;
-    bannerSpans[2].textContent = translations[lang].bannerText3;
-    
-    // Close dropdown
-    languageOptions.classList.add('hidden');
-    
-    // Store language preference
-    localStorage.setItem('preferredLanguage', lang);
-  });
-});
+      // Change language
+      languageOptions.querySelectorAll('[data-lang]').forEach(option => {
+        option.addEventListener('click', (e) => {
+          const lang = e.target.dataset.lang;
+          document.querySelector('.flex.items-center.space-x-2.cursor-pointer span').textContent = 
+            lang === 'en' ? 'EN' : 
+            lang === 'fil' ? 'FIL' : 
+            lang === 'ko' ? 'KO' : 'JA';
+          
+          // Update all text elements
+          document.querySelector('a[href="index.html"] span').textContent = translations[lang].login;
+          document.querySelector('h2').textContent = translations[lang].categories;
+          document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+          document.querySelector('#searchForm button').textContent = translations[lang].searchButton;
+          
+          // Update banner text if needed (keeping the original non-translated phrases)
+          const bannerSpans = document.querySelectorAll('.banner-text span');
+          bannerSpans[0].textContent = translations[lang].bannerText1;
+          bannerSpans[1].textContent = translations[lang].bannerText2;
+          bannerSpans[2].textContent = translations[lang].bannerText3;
+          
+          // Close dropdown
+          languageOptions.classList.add('hidden');
+          
+          // Store language preference
+          localStorage.setItem('preferredLanguage', lang);
+        });
+      });
 
-// Load preferred language from localStorage
-const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
-if (preferredLanguage !== 'en') {
-  const langEvent = { target: { dataset: { lang: preferredLanguage } } };
-  languageOptions.querySelector(`[data-lang="${preferredLanguage}"]`).dispatchEvent(new Event('click'));
-}
+      // Load preferred language from localStorage
+      const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+      if (preferredLanguage !== 'en') {
+        const langEvent = { target: { dataset: { lang: preferredLanguage } } };
+        languageOptions.querySelector(`[data-lang="${preferredLanguage}"]`).dispatchEvent(new Event('click'));
+      }
     })();
   </script>
-  
  </body>
 </html>

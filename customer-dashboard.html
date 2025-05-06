@@ -34,7 +34,6 @@
       overflow: hidden;
     }
    
-    /* Sidebar Navigation */
     .sidebar {
       width: 240px;
       background-color: var(--primary-light);
@@ -89,6 +88,7 @@
     .nav-item:nth-child(2) { animation-delay: 0.2s; }
     .nav-item:nth-child(3) { animation-delay: 0.3s; }
     .nav-item:nth-child(4) { animation-delay: 0.4s; }
+    .nav-item:nth-child(5) { animation-delay: 0.5s; }
    
     .nav-link {
       color: var(--text-light);
@@ -140,7 +140,6 @@
       transform: scale(1.1);
     }
    
-    /* Main Content */
     .main-content {
       flex: 1;
       padding: 40px;
@@ -180,7 +179,6 @@
       animation: fadeIn 0.5s 0.3s forwards;
     }
    
-    /* Account Card */
     .account-card {
       background-color: var(--primary-light);
       border-radius: 8px;
@@ -239,7 +237,6 @@
       border-bottom: 1px dashed var(--border-light);
     }
     
-    /* Stats Cards */
     .stats-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -284,7 +281,6 @@
       letter-spacing: 1px;
     }
    
-    /* Buttons */
     .btn {
       padding: 10px 20px;
       border-radius: 6px;
@@ -325,7 +321,6 @@
       box-shadow: 0 4px 12px rgba(192, 160, 98, 0.2);
     }
     
-    /* Floating action button */
     .fab {
       position: fixed;
       bottom: 30px;
@@ -353,7 +348,94 @@
       box-shadow: 0 10px 25px rgba(192, 160, 98, 0.5);
     }
     
-    /* Animations */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal-content {
+      background-color: var(--primary-light);
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.3s 0.1s forwards;
+    }
+    
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    
+    .modal-message {
+      margin-bottom: 25px;
+      color: var(--text-gray);
+    }
+    
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: var(--transition);
+    }
+    
+    .modal-btn:hover::after {
+      left: 100%;
+    }
+    
+    .modal-btn-confirm {
+      background-color: var(--accent-gold);
+      color: var(--primary-dark);
+    }
+    
+    .modal-btn-cancel {
+      background-color: transparent;
+      color: var(--text-gray);
+      border: 1px solid var(--border-light);
+    }
+    
+    .modal-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -392,7 +474,6 @@
       }
     }
     
-    /* Pulse animation for notifications */
     .pulse {
       animation: pulse 2s infinite;
     }
@@ -409,7 +490,6 @@
       }
     }
     
-    /* Responsive */
     @media (max-width: 992px) {
       .sidebar {
         position: fixed;
@@ -472,7 +552,6 @@
 </head>
 <body>
   <div class="dashboard-container">
-    <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div class="logo">Lising Lasing</div>
       <ul class="nav-menu">
@@ -509,7 +588,6 @@
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
       <div class="welcome-section">
         <h1 class="welcome-title">Welcome Back!</h1>
@@ -519,7 +597,6 @@
       <div class="account-card">
         <h2 class="section-title">Account Overview</h2>
         <div class="info-grid" id="accountInfo">
-          <!-- Account info will be loaded here -->
         </div>
       </div>
       
@@ -539,9 +616,19 @@
       </div>
     </main>
     
-    <!-- Floating Action Button -->
     <div class="fab" title="Need help?">
       <i class="fas fa-question"></i>
+    </div>
+  </div>
+
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirm Logout</h3>
+      <p class="modal-message">Are you sure you want to logout from your account?</p>
+      <div class="modal-buttons">
+        <button id="confirmLogout" class="modal-btn modal-btn-confirm">Yes, Logout</button>
+        <button id="cancelLogout" class="modal-btn modal-btn-cancel">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -577,15 +664,33 @@
       
       // Calculate membership years
       const joinDate = new Date();
-      joinDate.setFullYear(joinDate.getFullYear() - 2); // Example: member for 2 years
+      joinDate.setFullYear(joinDate.getFullYear() - 2);
       const yearsAsMember = new Date().getFullYear() - joinDate.getFullYear();
       animateValue(document.getElementById('memberSince'), 0, yearsAsMember, 1500);
 
       // Logout functionality
-      document.getElementById('logoutBtn').addEventListener('click', function() {
-        if (confirm('Are you sure you want to logout?')) {
-          localStorage.removeItem('loggedInCustomer');
-          window.location.href = 'index.html';
+      const logoutBtn = document.getElementById('logoutBtn');
+      const logoutModal = document.getElementById('logoutModal');
+      const confirmLogout = document.getElementById('confirmLogout');
+      const cancelLogout = document.getElementById('cancelLogout');
+      
+      logoutBtn.addEventListener('click', function() {
+        logoutModal.style.display = 'flex';
+      });
+      
+      confirmLogout.addEventListener('click', function() {
+        localStorage.removeItem('loggedInCustomer');
+        window.location.href = 'index.html';
+      });
+      
+      cancelLogout.addEventListener('click', function() {
+        logoutModal.style.display = 'none';
+      });
+      
+      // Close modal when clicking outside the content
+      window.addEventListener('click', function(event) {
+        if (event.target === logoutModal) {
+          logoutModal.style.display = 'none';
         }
       });
       
@@ -621,5 +726,4 @@
     }
   </script>
 </body>
-
 </html>
