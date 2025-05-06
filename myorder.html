@@ -147,140 +147,6 @@
       animation: fadeIn 0.8s ease-out;
     }
    
-    .welcome-section {
-      margin-bottom: 30px;
-      position: relative;
-    }
-   
-    .welcome-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--accent-gold);
-      margin: 0 0 8px 0;
-      position: relative;
-      display: inline-block;
-    }
-    
-    .welcome-title::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 60px;
-      height: 2px;
-      background: var(--accent-gold);
-    }
-   
-    .welcome-subtitle {
-      color: var(--text-gray);
-      font-size: 14px;
-      margin: 0;
-      opacity: 0;
-      animation: fadeIn 0.5s 0.3s forwards;
-    }
-   
-    .account-card {
-      background-color: var(--primary-light);
-      border-radius: 8px;
-      padding: 25px;
-      margin-bottom: 30px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s 0.4s forwards;
-    }
-    
-    .account-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-   
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      color: var(--accent-gold);
-      margin: 0 0 20px 0;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-light);
-      position: relative;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 40px;
-      height: 2px;
-      background: var(--accent-gold);
-    }
-   
-    .info-grid {
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 15px;
-      align-items: center;
-    }
-   
-    .info-label {
-      color: var(--accent-gold);
-      font-size: 14px;
-      font-weight: 600;
-    }
-   
-    .info-value {
-      font-size: 14px;
-      color: var(--text-light);
-      padding: 8px 0;
-      border-bottom: 1px dashed var(--border-light);
-    }
-    
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-    
-    .stat-card {
-      background-color: var(--primary-light);
-      border-radius: 8px;
-      padding: 20px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s 0.6s forwards;
-      text-align: center;
-    }
-    
-    .stat-card:nth-child(1) { animation-delay: 0.5s; }
-    .stat-card:nth-child(2) { animation-delay: 0.7s; }
-    .stat-card:nth-child(3) { animation-delay: 0.9s; }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-    
-    .stat-value {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--accent-gold);
-      margin-bottom: 5px;
-      font-family: 'Playfair Display', serif;
-    }
-    
-    .stat-label {
-      font-size: 13px;
-      color: var(--text-gray);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-   
     .btn {
       padding: 10px 20px;
       border-radius: 6px;
@@ -556,7 +422,7 @@
       <div class="logo">Lising Lasing</div>
       <ul class="nav-menu">
         <li class="nav-item">
-          <a href="#" class="nav-link active">
+          <a href="customer-dashboard.html" class="nav-link">
             <i class="fas fa-user"></i>
             My Account
           </a>
@@ -568,7 +434,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="myorder.html" class="nav-link">
+          <a href="myorder.html" class="nav-link active">
             <i class="fas fa-shopping-bag"></i>
             My Orders
           </a>
@@ -589,31 +455,6 @@
     </aside>
 
     <main class="main-content">
-      <div class="welcome-section">
-        <h1 class="welcome-title">Welcome Back!</h1>
-        <p class="welcome-subtitle">Here's what's happening with your account today</p>
-      </div>
-
-      <div class="account-card">
-        <h2 class="section-title">Account Overview</h2>
-        <div class="info-grid" id="accountInfo">
-        </div>
-      </div>
-      
-      <div class="stats-container">
-        <div class="stat-card">
-          <div class="stat-value" id="totalOrders">0</div>
-          <div class="stat-label">Total Orders</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="wishlistItems">0</div>
-          <div class="stat-label">Wishlist Items</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="memberSince">0</div>
-          <div class="stat-label">Years as Member</div>
-        </div>
-      </div>
     </main>
     
     <div class="fab" title="Need help?">
@@ -641,32 +482,6 @@
         window.location.href = 'index.html';
         return;
       }
-
-      // Load customer data
-      const customer = JSON.parse(loggedInCustomer);
-      
-      // Display account info
-      const accountInfo = document.getElementById('accountInfo');
-      accountInfo.innerHTML = `
-        <span class="info-label">Full Name:</span>
-        <span class="info-value">${customer.firstName} ${customer.lastName}</span>
-        <span class="info-label">Email:</span>
-        <span class="info-value">${customer.email}</span>
-        <span class="info-label">Phone:</span>
-        <span class="info-value">${customer.phone || 'Not provided'}</span>
-        <span class="info-label">Address:</span>
-        <span class="info-value">${customer.address || 'Not provided'}</span>
-      `;
-      
-      // Animate stats counting
-      animateValue(document.getElementById('totalOrders'), 0, 12, 1500);
-      animateValue(document.getElementById('wishlistItems'), 0, 5, 1500);
-      
-      // Calculate membership years
-      const joinDate = new Date();
-      joinDate.setFullYear(joinDate.getFullYear() - 2);
-      const yearsAsMember = new Date().getFullYear() - joinDate.getFullYear();
-      animateValue(document.getElementById('memberSince'), 0, yearsAsMember, 1500);
 
       // Logout functionality
       const logoutBtn = document.getElementById('logoutBtn');
@@ -710,20 +525,6 @@
         sidebar.classList.toggle('active');
       });
     });
-    
-    // Animate value counting
-    function animateValue(element, start, end, duration) {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        element.innerHTML = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      };
-      window.requestAnimationFrame(step);
-    }
   </script>
 </body>
 </html>
