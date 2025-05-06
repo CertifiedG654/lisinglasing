@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    background-image: url("Pictures/bg-login.png");
 }
 
 .container {
