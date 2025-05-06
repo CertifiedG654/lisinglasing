@@ -1,0 +1,414 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Lising Lasing
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&amp;family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: "Playfair Display", serif;
+      background-image: url("Pictures/bg-front.png");
+      color: #d9c1b0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+    .font-mono-custom {
+      font-family: "Roboto Mono", monospace;
+    }
+    .banner-text span {
+      letter-spacing: 0.3em;
+    }
+    /* Hide scrollbar for carousel container */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Button animations */
+    .btn-animate {
+      transition: all 0.3s ease;
+      transform: translateY(0);
+    }
+    .btn-animate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .btn-animate:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .nav-btn {
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 8px rgba(217, 193, 176, 0.6);
+    }
+    .carousel-btn {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .carousel-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .carousel-btn:active {
+      transform: scale(0.95);
+    }
+    .dot-btn {
+      transition: all 0.2s ease;
+    }
+    .dot-btn:hover {
+      transform: scale(1.3);
+    }
+    .category-card {
+      transition: all 0.3s ease;
+    }
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+ </head>
+ <body>
+  <!-- Header -->
+  <header class="flex items-center justify-between bg-[#3a2416] border-b border-[#4a3420] h-16 px-4 sm:px-6 md:px-10 select-none">
+   <div class="flex items-center space-x-2">
+    <img alt="Lising Lasing logo with beer mug icon in gold on dark brown background" class="w-10 h-10" height="40" src="Pictures/logo.png" width="40"/>
+    <div class="text-[#d9c1b0] font-mono-custom text-[10px] leading-none tracking-widest">
+     LISING
+     <br/>
+     LASING
+    </div>
+   </div>
+   <nav class="hidden md:flex items-center space-x-6 text-[10px] font-mono-custom text-[#d9c1b0]">
+    <a href="index.html" class="flex items-center space-x-1 cursor-pointer hover:text-[#f0d8c0] transition-colors nav-btn">
+     <i class="fas fa-user text-[14px]">
+     </i>
+     <span>
+      Login
+     </span>
+    </a>
+   </nav>
+   <div class="flex items-center space-x-2 cursor-pointer text-[#d9c1b0] text-xs font-mono-custom select-none nav-btn">
+    <i class="fas fa-globe-americas text-[16px]"></i>
+    <span>EN</span>
+    <i class="fas fa-chevron-down text-[10px]"></i>
+  </div>
+  </header>
+  <!-- Carousel -->
+  <section class="w-full max-w-7xl mx-auto mt-4 px-4 sm:px-6 md:px-10 relative select-none">
+   <div class="relative">
+    <div class="overflow-hidden rounded-lg" id="carousel">
+     <div class="flex transition-transform duration-500 ease-in-out" id="carousel-inner" style="width: 1120px;">
+      <img alt="Beer bottle and glass with green grapes on wooden table with barrel background" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-l-lg" height="160" src="Pictures/teq.webp" width="320"/>
+      <img alt="Three green decorative glass bottles on blurred background" class="w-[480px] h-[160px] object-cover flex-shrink-0" height="160" src="Pictures/rum.jpg" width="480"/>
+      <img alt="Various decorative glass bottles on bar counter with warm lighting" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="https://storage.googleapis.com/a1aa/image/130cea78-6527-46b6-a93d-42b959103a03.jpg" width="320"/>
+      <img alt="Various decorative glass bottles on bar counter with warm lighting" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/whiskey.webp" width="320"/>
+      <img alt="Various decorative glass bottles on bar counter with warm lighting" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/wis.jpg" width="320"/>
+      <img alt="Various decorative glass bottles on bar counter with warm lighting" class="w-[320px] h-[160px] object-cover flex-shrink-0 rounded-r-lg" height="160" src="Pictures/wiss.jpg" width="320"/>
+     </div>
+    </div>
+    <!-- Prev/Next Buttons -->
+    <button aria-label="Previous" class="absolute top-1/2 left-2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#7a5a52] text-[#d9c1b0] flex items-center justify-center z-10 carousel-btn" id="prevBtn">
+     <i class="fas fa-chevron-left">
+     </i>
+    </button>
+    <button aria-label="Next" class="absolute top-1/2 right-2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#7a5a52] text-[#d9c1b0] flex items-center justify-center z-10 carousel-btn" id="nextBtn">
+     <i class="fas fa-chevron-right">
+     </i>
+    </button>
+   </div>
+   <!-- Dots -->
+   <div aria-label="Carousel navigation dots" class="flex justify-center space-x-1 mt-2 select-none" id="dots">
+    <button aria-label="Slide 1" class="w-3 h-3 rounded-full bg-[#7a5a52] focus:outline-none dot-btn" data-index="0">
+    </button>
+    <button aria-label="Slide 2" class="w-3 h-3 rounded-full bg-[#7a5a52]/50 hover:bg-[#7a5a52] focus:outline-none dot-btn" data-index="1">
+    </button>
+    <button aria-label="Slide 3" class="w-3 h-3 rounded-full bg-[#7a5a52]/50 hover:bg-[#7a5a52] focus:outline-none dot-btn" data-index="2">
+    </button>
+   </div>
+  </section>
+  <!-- Banner text below carousel -->
+  <div class="bg-[#b98f89] text-[#3a2416] text-[10px] font-mono-custom tracking-widest text-center py-1 mt-2 select-none banner-text">
+   <div class="max-w-7xl mx-auto flex justify-between px-4 sm:px-6 md:px-10" style="font-weight: 600;">
+    <span>
+     至福の一杯を味わいましょう
+    </span>
+    <span>
+     MAG LASING ANG WILLING
+    </span>
+    <span>
+     행복한 한 잔으로 자신을 대접하세요
+    </span>
+   </div>
+  </div>
+  <!-- Search bar -->
+  <div class="w-full max-w-7xl mx-auto mt-2 px-4 sm:px-6 md:px-10">
+   <form class="max-w-md mx-auto relative" id="searchForm">
+    <input class="w-full rounded-full bg-[#d9c1b0] text-[#3a2416] placeholder-[#a18a85] font-mono-custom text-xs py-2 pl-10 pr-20 focus:outline-none focus:ring-2 focus:ring-[#7a5a52] transition-all duration-200" placeholder="Search Anything" type="search" id="searchInput" name="q"/>
+    <button class="absolute right-1 top-1/2 -translate-y-1/2 bg-[#3a2416] text-[#d9c1b0] font-mono-custom text-xs rounded-full px-4 py-1 border border-[#a18a85] hover:bg-[#7a5a52] transition-all duration-300 btn-animate" type="submit">
+     Search
+    </button>
+    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-[#a18a85] text-xs pointer-events-none transition-transform duration-200 group-hover:scale-110">
+    </i>
+   </form>
+  </div>
+  <!-- Categories Title -->
+  <h2 class="text-center text-[#d9c1b0] font-serif text-lg tracking-widest mt-10 select-none">
+   C A T E G O R I E S
+  </h2>
+  <!-- Categories grid -->
+  <section class="w-full max-w-7xl mx-auto mt-6 px-4 sm:px-6 md:px-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+   <div class="relative rounded-lg overflow-hidden cursor-pointer category-card">
+    <img alt="Tequila bottles lined up on bar shelf with warm lighting" class="w-full h-60 object-cover rounded-lg transition-transform duration-300 hover:scale-105" height="240" src="Pictures/alcohol4.jpg" width="320"/>
+    <div class="absolute bottom-2 left-2 text-[#d9c1b0] font-mono-custom text-xs bg-[#3a2416]/70 rounded px-2 py-0.5 select-none transition-all duration-300 group-hover:bg-[#3a2416]">
+     Tequila
+    </div>
+   </div>
+   <div class="relative rounded-lg overflow-hidden cursor-pointer category-card">
+    <img alt="Two glasses of rum with bottle in background on wooden table" class="w-full h-60 object-cover rounded-lg transition-transform duration-300 hover:scale-105" height="240" src="Pictures/alcohol5.jpg" width="320"/>
+    <div class="absolute bottom-2 left-2 text-[#d9c1b0] font-mono-custom text-xs bg-[#3a2416]/70 rounded px-2 py-0.5 select-none transition-all duration-300 group-hover:bg-[#3a2416]">
+     Rum
+    </div>
+   </div>
+   <div class="relative rounded-lg overflow-hidden cursor-pointer category-card">
+    <img alt="Closeup of rum bottle label with wooden background" class="w-full h-60 object-cover rounded-lg transition-transform duration-300 hover:scale-105" height="240" src="Pictures/beer.webp" width="320"/>
+    <div class="absolute bottom-2 left-2 text-[#d9c1b0] font-mono-custom text-xs bg-[#3a2416]/70 rounded px-2 py-0.5 select-none transition-all duration-300 group-hover:bg-[#3a2416]">
+     Beer
+    </div>
+   </div>
+  </section>
+  <script>
+   (() => {
+      const carouselInner = document.getElementById("carousel-inner");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const dots = document.querySelectorAll("#dots button");
+      const slideWidths = [320, 480, 320];
+      const totalSlides = slideWidths.length;
+      let currentIndex = 0;
+
+      // Calculate cumulative widths for translateX
+      const cumulativeWidths = slideWidths.reduce(
+        (acc, w) => {
+          acc.push(acc[acc.length - 1] + w);
+          return acc;
+        },
+        [0]
+      );
+
+      function updateCarousel() {
+        // Calculate translateX to show current slide fully left aligned
+        const translateX = -cumulativeWidths[currentIndex];
+        carouselInner.style.transform = `translateX(${translateX}px)`;
+        dots.forEach((dot, i) => {
+          if (i === currentIndex) {
+            dot.classList.remove("bg-[#7a5a52]/50");
+            dot.classList.add("bg-[#7a5a52]");
+          } else {
+            dot.classList.add("bg-[#7a5a52]/50");
+            dot.classList.remove("bg-[#7a5a52]");
+          }
+        });
+      }
+
+      prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+        // Add click animation
+        prevBtn.classList.add("animate-pulse");
+        setTimeout(() => prevBtn.classList.remove("animate-pulse"), 300);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateCarousel();
+        // Add click animation
+        nextBtn.classList.add("animate-pulse");
+        setTimeout(() => nextBtn.classList.remove("animate-pulse"), 300);
+      });
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          currentIndex = Number(dot.dataset.index);
+          updateCarousel();
+          // Add click animation
+          dot.classList.add("animate-ping");
+          setTimeout(() => dot.classList.remove("animate-ping"), 500);
+        });
+      });
+
+      // Make login button clickable (alternative to href)
+      document.querySelector('a[href="index.html"]').addEventListener('click', (e) => {
+        // You can replace this with actual login logic
+        console.log('Login clicked');
+        // Or uncomment to navigate to login page
+        // window.location.href = '/login';
+      });
+
+      // Google Search functionality
+      const searchForm = document.getElementById('searchForm');
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim();
+        
+        if (query) {
+          // Add button click animation
+          const searchBtn = this.querySelector('button[type="submit"]');
+          searchBtn.classList.add('animate-bounce');
+          setTimeout(() => {
+            searchBtn.classList.remove('animate-bounce');
+            // Redirect to Google search with the query
+            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}+site:lisinglasing.com`;
+          }, 500);
+        }
+      });
+
+      // Add hover effect to category cards
+      document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.querySelector('img').classList.add('scale-105');
+          card.querySelector('div').classList.add('bg-[#3a2416]');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.querySelector('img').classList.remove('scale-105');
+          card.querySelector('div').classList.remove('bg-[#3a2416]');
+        });
+      });
+
+      // Initialize
+      updateCarousel();
+      // Language changer functionality
+const languageSelector = document.querySelector('.flex.items-center.space-x-2.cursor-pointer');
+const languageOptions = document.createElement('div');
+languageOptions.className = 'absolute top-full right-0 mt-2 w-32 bg-[#3a2416] border border-[#4a3420] rounded-md shadow-lg z-20 hidden';
+languageOptions.innerHTML = `
+  <div class="py-1">
+    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="en">English</div>
+    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="fil">Filipino</div>
+    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ko">한국어 (Korean)</div>
+    <div class="px-4 py-2 text-xs text-[#d9c1b0] hover:bg-[#4a3420] cursor-pointer" data-lang="ja">日本語 (Japanese)</div>
+  </div>
+`;
+
+// Insert the language options dropdown into the DOM
+languageSelector.parentNode.appendChild(languageOptions);
+languageSelector.parentNode.style.position = 'relative';
+
+// Toggle dropdown visibility
+languageSelector.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isHidden = languageOptions.classList.contains('hidden');
+  if (isHidden) {
+    languageOptions.classList.remove('hidden');
+  } else {
+    languageOptions.classList.add('hidden');
+  }
+});
+
+// Close dropdown when clicking elsewhere
+document.addEventListener('click', () => {
+  languageOptions.classList.add('hidden');
+});
+
+// Language translations
+const translations = {
+  en: {
+    notification: "Notif/Shipping Info",
+    guide: "Guide for Users",
+    inquiries: "Inquiries",
+    login: "Login",
+    categories: "C A T E G O R I E S",
+    searchPlaceholder: "Search Anything",
+    searchButton: "Search",
+    bannerText1: "至福の一杯を味わいましょう",
+    bannerText2: "MAG LASING ANG WILLING",
+    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+  },
+  fil: {
+    notification: "Abiso/Impormasyon sa Pagpapadala",
+    guide: "Gabay para sa Mga Gumagamit",
+    inquiries: "Mga Tanong",
+    login: "Mag-login",
+    categories: "M G A  K A T E G O R I Y A",
+    searchPlaceholder: "Maghanap ng Kahit Ano",
+    searchButton: "Maghanap",
+    bannerText1: "至福の一杯を味わいましょう",
+    bannerText2: "MAG LASING ANG WILLING",
+    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+  },
+  ko: {
+    notification: "알림/배송 정보",
+    guide: "사용자 가이드",
+    inquiries: "문의",
+    login: "로그인",
+    categories: "카 테 고 리",
+    searchPlaceholder: "아무거나 검색",
+    searchButton: "검색",
+    bannerText1: "至福の一杯を味わいましょう",
+    bannerText2: "MAG LASING ANG WILLING",
+    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+  },
+  ja: {
+    notification: "通知/配送情報",
+    guide: "ユーザーガイド",
+    inquiries: "お問い合わせ",
+    login: "ログイン",
+    categories: "カ テ ゴ リ",
+    searchPlaceholder: "何でも検索",
+    searchButton: "検索",
+    bannerText1: "至福の一杯を味わいましょう",
+    bannerText2: "MAG LASING ANG WILLING",
+    bannerText3: "행복한 한 잔으로 자신을 대접하세요"
+  }
+};
+
+// Change language
+languageOptions.querySelectorAll('[data-lang]').forEach(option => {
+  option.addEventListener('click', (e) => {
+    const lang = e.target.dataset.lang;
+    document.querySelector('.flex.items-center.space-x-2.cursor-pointer span').textContent = 
+      lang === 'en' ? 'EN' : 
+      lang === 'fil' ? 'FIL' : 
+      lang === 'ko' ? 'KO' : 'JA';
+    
+    // Update all text elements
+    document.querySelector('a[href="index.html"] span').textContent = translations[lang].login;
+    document.querySelector('h2').textContent = translations[lang].categories;
+    document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+    document.querySelector('#searchForm button').textContent = translations[lang].searchButton;
+    
+    // Update banner text if needed (keeping the original non-translated phrases)
+    const bannerSpans = document.querySelectorAll('.banner-text span');
+    bannerSpans[0].textContent = translations[lang].bannerText1;
+    bannerSpans[1].textContent = translations[lang].bannerText2;
+    bannerSpans[2].textContent = translations[lang].bannerText3;
+    
+    // Close dropdown
+    languageOptions.classList.add('hidden');
+    
+    // Store language preference
+    localStorage.setItem('preferredLanguage', lang);
+  });
+});
+
+// Load preferred language from localStorage
+const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+if (preferredLanguage !== 'en') {
+  const langEvent = { target: { dataset: { lang: preferredLanguage } } };
+  languageOptions.querySelector(`[data-lang="${preferredLanguage}"]`).dispatchEvent(new Event('click'));
+}
+    })();
+  </script>
+  
+ </body>
+</html>

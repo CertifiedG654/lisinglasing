@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     :root {
-      --primary-light: #d7ccc8;  /* Light brown background */
-      --primary-medium: #a1887f; /* Medium brown accents */
-      --primary-dark: #5d4037;   /* Dark brown text */
+      --primary-light: #d7ccc8;
+      --primary-medium: #a1887f;
+      --primary-dark: #5d4037;
       --accent-gold: #ffd54f;
       --accent-light: #efebe9;
       --text-light: #f8f5f2;
@@ -50,6 +50,16 @@
       padding-bottom: 40px;
       border-bottom: 1px solid var(--primary-medium);
       margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: slideDownFadeIn 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes slideDownFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .logo {
@@ -60,6 +70,12 @@
       align-items: center;
       gap: 10px;
       color: var(--primary-dark);
+      transition: all 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.02);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .logo-icon {
@@ -73,14 +89,12 @@
       color: var(--primary-dark);
       font-weight: bold;
       font-size: 1.5rem;
+      transition: all 0.3s ease;
     }
 
-    .logo-text span:first-child {
-      color: var(--primary-dark);
-    }
-
-    .logo-text span:last-child {
-      color: var(--primary-medium);
+    .logo:hover .logo-icon {
+      transform: rotate(15deg);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     .user-controls {
@@ -94,6 +108,11 @@
       align-items: center;
       gap: 10px;
       color: var(--primary-dark);
+      transition: all 0.3s ease;
+    }
+
+    .user-info:hover {
+      transform: translateX(5px);
     }
 
     .user-avatar {
@@ -106,6 +125,12 @@
       justify-content: center;
       font-weight: bold;
       color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+
+    .user-info:hover .user-avatar {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     .logout-btn {
@@ -116,17 +141,34 @@
       border-radius: 30px;
       cursor: pointer;
       font-weight: 600;
-      transition: all 0.3s;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
     }
 
     .logout-btn:hover {
       background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .logout-btn:hover::before {
+      left: 100%;
     }
 
     .dashboard-grid {
@@ -134,6 +176,7 @@
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
       margin-top: 40px;
+      perspective: 1000px;
     }
 
     .dashboard-card {
@@ -143,17 +186,57 @@
       padding: 35px;
       box-shadow: 0 8px 32px var(--shadow-dark);
       text-align: center;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
       border: 1px solid var(--shadow-light);
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
+      opacity: 0;
+      transform: translateY(30px) rotateX(15deg);
+    }
+
+    .dashboard-card:nth-child(1) {
+      animation: cardEntrance 0.8s ease-out 0.2s forwards;
+    }
+    .dashboard-card:nth-child(2) {
+      animation: cardEntrance 0.8s ease-out 0.4s forwards;
+    }
+    .dashboard-card:nth-child(3) {
+      animation: cardEntrance 0.8s ease-out 0.6s forwards;
+    }
+    .dashboard-card:nth-child(4) {
+      animation: cardEntrance 0.8s ease-out 0.8s forwards;
+    }
+
+    @keyframes cardEntrance {
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+    }
+
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,213,79,0.1), transparent);
+      transform: translateY(100%);
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      z-index: 0;
     }
 
     .dashboard-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
       background: rgba(255, 255, 255, 1);
+    }
+
+    .dashboard-card:hover::before {
+      transform: translateY(0);
     }
 
     .card-icon {
@@ -165,12 +248,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s;
+      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      z-index: 1;
     }
 
     .dashboard-card:hover .card-icon {
       background: rgba(255, 213, 79, 0.25);
-      transform: scale(1.1);
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     .card-icon img {
@@ -178,6 +264,12 @@
       height: 50px;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .card-icon img {
+      transform: scale(1.1);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
     }
 
     .card-title {
@@ -187,6 +279,7 @@
       color: var(--primary-dark);
       position: relative;
       display: inline-block;
+      transition: all 0.3s ease;
     }
 
     .card-title::after {
@@ -198,11 +291,17 @@
       width: 40px;
       height: 2px;
       background: var(--primary-medium);
-      transition: width 0.3s;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .dashboard-card:hover .card-title {
+      letter-spacing: 0.5px;
     }
 
     .dashboard-card:hover .card-title::after {
       width: 80px;
+      height: 3px;
+      background: var(--accent-gold);
     }
 
     .card-description {
@@ -211,6 +310,12 @@
       opacity: 0.85;
       line-height: 1.6;
       margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .card-description {
+      opacity: 1;
+      transform: translateY(-3px);
     }
 
     .card-badge {
@@ -224,11 +329,158 @@
       font-size: 0.7rem;
       font-weight: bold;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .card-badge {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Ripple effect styles */
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Page transition overlay */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-dark);
+      z-index: 9999;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    /* Confirmation Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .confirmation-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active .confirmation-modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--primary-medium);
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      transform: rotate(90deg);
+      color: var(--primary-dark);
+    }
+
+    .modal-body {
+      margin-bottom: 25px;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .modal-btn-cancel {
+      background: var(--accent-light);
+      color: var(--primary-dark);
+    }
+
+    .modal-btn-cancel:hover {
+      background: #e0d8d5;
+      transform: translateY(-2px);
+    }
+
+    .modal-btn-confirm {
+      background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .modal-btn-confirm:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     /* Responsive adjustments */
@@ -246,10 +498,38 @@
         width: 100%;
         justify-content: space-between;
       }
+      
+      .dashboard-card {
+        padding: 25px;
+      }
+      
+      .confirmation-modal {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Page transition overlay -->
+  <div class="page-transition" id="pageTransition"></div>
+  
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="confirmation-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Logout</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to logout from the admin dashboard?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
+        <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
+      </div>
+    </div>
+  </div>
+
   <div class="dashboard-container">
     <div class="header">
       <div class="logo">
@@ -272,7 +552,7 @@
     </div>
 
     <div class="dashboard-grid">
-      <div class="dashboard-card animate__animated animate__fadeInUp" onclick="location.href='inventory-management.html'">
+      <div class="dashboard-card" onclick="navigateTo('inventory-management.html')">
         <div class="card-icon">
           <img src="Pictures/INVENTORY.png" alt="Inventory Icon">
         </div>
@@ -280,7 +560,7 @@
         <p class="card-description">Manage stock levels, track products, and monitor inventory movements</p>
       </div>
 
-      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-1s" onclick="location.href='user-management.html'">
+      <div class="dashboard-card" onclick="navigateTo('user-management.html')">
         <div class="card-icon">
           <img src="Pictures/user.png" alt="User Management Icon">
         </div>
@@ -288,7 +568,7 @@
         <p class="card-description">Manage staff permissions, customer accounts, and access levels</p>
       </div>
 
-      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-2s" onclick="location.href='product-management.html'">
+      <div class="dashboard-card" onclick="navigateTo('product-management.html')">
         <div class="card-icon">
           <img src="Pictures/product.png" alt="Product Management Icon">
         </div>
@@ -296,7 +576,7 @@
         <p class="card-description">Add new liquors, update pricing, and manage product categories</p>
       </div>
 
-      <div class="dashboard-card animate__animated animate__fadeInUp animate__delay-3s" onclick="location.href='reports-analytics.html'">
+      <div class="dashboard-card" onclick="navigateTo('reports-analytics.html')">
         <div class="card-icon">
           <img src="Pictures/sales.png" alt="Analytics Icon">
         </div>
@@ -306,9 +586,6 @@
     </div>
   </div>
 
-  <!-- Font Awesome for icons -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
- 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Check admin authentication
@@ -318,27 +595,72 @@
         window.location.href = 'index.html';
       }
 
-      // Logout functionality
-      document.getElementById('logoutBtn').addEventListener('click', function() {
-        // Show confirmation dialog
-        if (confirm('Are you sure you want to logout?')) {
-          localStorage.removeItem('currentRole');
-          localStorage.removeItem('authToken');
-          window.location.href = 'index.html';
+      // Modal elements
+      const logoutModal = document.getElementById('logoutModal');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const closeModal = document.getElementById('closeModal');
+      const cancelLogout = document.getElementById('cancelLogout');
+      const confirmLogout = document.getElementById('confirmLogout');
+
+      // Show modal when logout button is clicked
+      logoutBtn.addEventListener('click', function() {
+        logoutModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+      });
+
+      // Close modal when X is clicked
+      closeModal.addEventListener('click', function() {
+        closeModalHandler();
+      });
+
+      // Close modal when cancel is clicked
+      cancelLogout.addEventListener('click', function() {
+        closeModalHandler();
+      });
+
+      // Close modal when clicking outside
+      logoutModal.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+          closeModalHandler();
         }
       });
+
+      // Handle logout confirmation
+      confirmLogout.addEventListener('click', function() {
+        // Start page transition
+        document.getElementById('pageTransition').style.transform = 'scaleY(1)';
+        
+        // Add a slight delay to allow the modal to animate out
+        setTimeout(() => {
+          logoutModal.classList.remove('active');
+          document.body.style.overflow = ''; // Re-enable scrolling
+          
+          // Perform logout after transition completes
+          setTimeout(() => {
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('authToken');
+            window.location.href = 'index.html';
+          }, 600);
+        }, 300);
+      });
+
+      // Function to handle modal closing
+      function closeModalHandler() {
+        logoutModal.classList.remove('active');
+        document.body.style.overflow = ''; // Re-enable scrolling
+      }
 
       // Add ripple effect to cards
       const cards = document.querySelectorAll('.dashboard-card');
       cards.forEach(card => {
         card.addEventListener('click', function(e) {
-          // Ripple effect creation
+          // Create ripple
           const ripple = document.createElement('span');
           ripple.className = 'ripple-effect';
           ripple.style.left = `${e.clientX - card.getBoundingClientRect().left}px`;
           ripple.style.top = `${e.clientY - card.getBoundingClientRect().top}px`;
           card.appendChild(ripple);
-         
+          
           // Remove ripple after animation
           setTimeout(() => {
             ripple.remove();
@@ -347,41 +669,23 @@
       });
     });
 
-    // Add global click animation
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.dashboard-card')) {
-        // Add temporary active class for click feedback
-        const card = e.target.closest('.dashboard-card');
-        card.classList.add('active');
-        setTimeout(() => {
-          card.classList.remove('active');
-        }, 300);
-      }
-    });
+    // Enhanced navigation with transition
+    function navigateTo(url) {
+      const transition = document.getElementById('pageTransition');
+      transition.style.transformOrigin = 'top';
+      transition.style.transform = 'scaleY(1)';
+      
+      setTimeout(() => {
+        window.location.href = url;
+      }, 600);
+    }
+
+    // Initialize page transition on load
+    window.onload = function() {
+      const transition = document.getElementById('pageTransition');
+      transition.style.transformOrigin = 'bottom';
+      transition.style.transform = 'scaleY(0)';
+    };
   </script>
-
-  <style>
-    /* Ripple effect styles */
-    .ripple-effect {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-      pointer-events: none;
-    }
-
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-
-    /* Active state for cards */
-    .dashboard-card.active {
-      transform: scale(0.98);
-    }
-  </style>
 </body>
 </html>

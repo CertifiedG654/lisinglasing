@@ -20,14 +20,69 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter password" required>
                 </div>
-                <button type="submit" class="login-btn">Login</button>
+                <button type="submit" class="login-btn">
+                    <span id="btnText">Login</span>
+                    <div class="loading" id="loading"></div>
+                </button>
+                <div class="success-checkmark" id="successCheck">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                    </div>
+                </div>
                 <p id="errorMsg" class="error-message"></p>
             </form>
-        <p class="register-link">New customer? 
-            <a href="register.html">Register here</a></p>
+            <p class="register-link">New customer? 
+                <a href="register.html">Register here</a></p>
         </div>
+    </div>
 
 
     <script src="auth.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const btnText = document.getElementById('btnText');
+            const loading = document.getElementById('loading');
+            const successCheck = document.getElementById('successCheck');
+            
+            // Show loading animation
+            btnText.style.display = 'none';
+            loading.style.display = 'block';
+            errorMsg.style.display = 'none';
+            
+            // Simulate login process
+            setTimeout(() => {
+                // For demo purposes - replace with actual authentication
+                if(username === 'demo' && password === 'demo') {
+                    // Login success
+                    loading.style.display = 'none';
+                    successCheck.style.display = 'block';
+                    
+                    // Redirect after animation
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    // Login failed
+                    loading.style.display = 'none';
+                    btnText.style.display = 'block';
+                    errorMsg.textContent = 'Invalid username or password';
+                    errorMsg.style.display = 'block';
+                    
+                    // Shake animation for error
+                    const loginBox = document.getElementById('loginBox');
+                    loginBox.style.animation = 'none';
+                    void loginBox.offsetWidth; // Trigger reflow
+                    loginBox.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97)';
+                }
+            }, 1500);
+        });
+    </script>
 </body>
 </html>

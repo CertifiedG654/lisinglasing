@@ -1,48 +1,3 @@
-.role-box {
-    display: none;
-}
-
-.role-options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.role-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(to right, #6e8efb, #a777e3);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, opacity 0.3s;
-}
-
-.role-btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-
-.logout-btn {
-    width: 100%;
-    padding: 10px;
-    background: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: opacity 0.3s;
-}
-
-.logout-btn:hover {
-    opacity: 0.9;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -51,42 +6,61 @@
 }
 
 body {
-    background-color: #f5f5f5; /* Fallback color */
+    background-color: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-image: url("Pictures/bg-login.png");
-    background-size: cover; /* Make the background image cover the entire viewport */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-
 
 .container {
     width: 100%;
     max-width: 400px;
     padding: 20px;
+    animation: fadeIn 0.8s ease-out;
 }
 
-.login-box, .role-box {
-    background: rgb(218, 196, 196);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-box {
+    background: rgba(218, 196, 196, 0.9);
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     text-align: center;
     transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
 h1 {
     color: #333;
     margin-bottom: 30px;
     font-size: 24px;
+    animation: textFocusIn 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
+@keyframes textFocusIn {
+    0% { filter: blur(12px); opacity: 0; }
+    100% { filter: blur(0); opacity: 1; }
 }
 
 .input-group {
     margin-bottom: 20px;
     text-align: left;
+    animation: fadeIn 0.8s ease-out 0.2s both;
 }
 
 label {
@@ -94,6 +68,13 @@ label {
     margin-bottom: 5px;
     color: #555;
     font-weight: 600;
+    transform: translateX(-10px);
+    opacity: 0;
+    animation: slideRight 0.5s ease-out 0.3s forwards;
+}
+
+@keyframes slideRight {
+    to { transform: translateX(0); opacity: 1; }
 }
 
 input {
@@ -102,29 +83,68 @@ input {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
-    transition: border 0.3s;
+    transition: all 0.3s;
+    transform: scale(0.95);
+    opacity: 0;
+    animation: scaleIn 0.5s ease-out 0.4s forwards;
+}
+
+@keyframes scaleIn {
+    to { transform: scale(1); opacity: 1; }
 }
 
 input:focus {
     border-color: #6e8efb;
     outline: none;
+    box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+    transform: scale(1.02);
 }
 
 .login-btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(#5e3d3d);
+    background: linear-gradient(45deg, #5e3d3d, #7a5a52);
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.3s;
+    transition: all 0.3s;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUpBtn 0.6s ease-out 0.6s forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes slideUpBtn {
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .login-btn:hover {
-    opacity: 0.9;
+    background: linear-gradient(45deg, #7a5a52, #5e3d3d);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-btn:active {
+    transform: translateY(1px);
+}
+
+.login-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.login-btn:hover::after {
+    left: 100%;
 }
 
 .error-message {
@@ -132,70 +152,139 @@ input:focus {
     margin-top: 15px;
     font-size: 14px;
     display: none;
-}
-/* Add these to the existing styles.css */
-.register-box {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-.register-btn {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(to right, #4CAF50, #2E8B57);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.3s;
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
 }
 
-.register-btn:hover {
-    opacity: 0.9;
-}
-
-.login-link, .register-link {
+.register-link {
     margin-top: 20px;
     color: #555;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.8s forwards;
 }
 
-.login-link a, .register-link a {
+.register-link a {
     color: #6e8efb;
     text-decoration: none;
     font-weight: 600;
+    position: relative;
 }
 
-.login-link a:hover, .register-link a:hover {
-    text-decoration: underline;
-}
-/* Add these to the existing styles.css */
-.register-box {
-    max-width: 600px;
+.register-link a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #6e8efb;
+    transition: width 0.3s ease;
 }
 
-.input-group textarea {
+.register-link a:hover::after {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    resize: vertical;
-    min-height: 80px;
-    font-family: 'Arial', sans-serif;
 }
 
-/* Add responsive design */
-@media (max-width: 600px) {
-    .register-box {
-        padding: 20px;
-    }
-    
-    .input-group {
-        margin-bottom: 15px;
-    }
+/* Loading animation */
+.loading {
+    display: none;
+    width: 25px;
+    height: 25px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Success animation */
+.success-checkmark {
+    display: none;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.check-icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    box-sizing: content-box;
+    border: 4px solid #4CAF50;
+}
+
+.check-icon::before {
+    top: 3px;
+    left: -2px;
+    width: 30px;
+    transform-origin: 100% 50%;
+    border-radius: 100px 0 0 100px;
+}
+
+.check-icon::after {
+    top: 0;
+    left: 30px;
+    width: 60px;
+    transform-origin: 0 50%;
+    border-radius: 0 100px 100px 0;
+    animation: rotate-circle 4.25s ease-in;
+}
+
+.check-icon::before, .check-icon::after {
+    content: '';
+    height: 100px;
+    position: absolute;
+    background: transparent;
+    transform: rotate(-45deg);
+}
+
+.check-icon .icon-line {
+    height: 5px;
+    background-color: #4CAF50;
+    display: block;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 10;
+}
+
+.icon-line.line-tip {
+    top: 46px;
+    left: 14px;
+    width: 25px;
+    transform: rotate(45deg);
+    animation: icon-line-tip 0.75s;
+}
+
+.icon-line.line-long {
+    top: 38px;
+    right: 8px;
+    width: 47px;
+    transform: rotate(-45deg);
+    animation: icon-line-long 0.75s;
+}
+
+@keyframes icon-line-tip {
+    0% { width: 0; left: 1px; top: 19px; }
+    54% { width: 0; left: 1px; top: 19px; }
+    70% { width: 50px; left: -8px; top: 37px; }
+    84% { width: 17px; left: 21px; top: 48px; }
+    100% { width: 25px; left: 14px; top: 46px; }
+}
+
+@keyframes icon-line-long {
+    0% { width: 0; right: 46px; top: 54px; }
+    65% { width: 0; right: 46px; top: 54px; }
+    84% { width: 55px; right: 0px; top: 35px; }
+    100% { width: 47px; right: 8px; top: 38px; }
 }
