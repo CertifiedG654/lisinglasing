@@ -190,7 +190,7 @@
 
         .btn-primary {
             background: linear-gradient(45deg, var(--accent-gold), #e6c84f);
-            color: var(--primary-dark);
+            color: var(---simple-dark);
         }
 
         .btn:hover {
@@ -234,7 +234,7 @@
             visibility: visible;
         }
 
-        .confirmation-modal {
+        .confirmation-modal, .receipt-modal {
             background: white;
             border-radius: 12px;
             padding: 30px;
@@ -246,7 +246,7 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .modal-overlay.active .confirmation-modal {
+        .modal-overlay.active .confirmation-modal, .modal-overlay.active .receipt-modal {
             transform: translateY(0) scale(1);
             opacity: 1;
         }
@@ -325,7 +325,7 @@
         .modal-btn-cancel:hover {
             background-color: #d9c8a0;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow:  sixteenpx 12px rgba(0,0,0,0.1);
         }
 
         .modal-btn-confirm {
@@ -338,6 +338,38 @@
             color: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Receipt Modal Styles */
+        .receipt-modal {
+            max-width: 500px;
+        }
+
+        .receipt-content {
+            font-size: 0.9rem;
+        }
+
+        .receipt-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .receipt-content th, .receipt-content td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .receipt-content th {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .receipt-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         /* Toast Notification */
@@ -422,6 +454,23 @@
         </div>
     </div>
 
+    <!-- Receipt Modal -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="receipt-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Transaction Receipt</h3>
+                <button class="modal-close" id="closeReceiptModal">×</button>
+            </div>
+            <div class="modal-body receipt-content" id="receiptContent">
+                <!-- Receipt content will be dynamically inserted here -->
+            </div>
+            <div class="modal-footer receipt-footer">
+                <button class="modal-btn modal-btn-cancel" id="closeReceipt">Close</button>
+                <button class="modal-btn modal-btn-confirm" id="printReceipt">Print</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">
         <i class="fas fa-check-circle"></i>
@@ -498,6 +547,10 @@
             const closeModal = document.getElementById('closeModal');
             const cancelLogout = document.getElementById('cancelLogout');
             const confirmLogout = document.getElementById('confirmLogout');
+            const receiptModal = document.getElementById('receiptModal');
+            const closeReceiptModal = document.getElementById('closeReceiptModal');
+            const closeReceipt = document.getElementById('closeReceipt');
+            const printReceipt = document.getElementById('printReceipt');
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
 
@@ -505,7 +558,7 @@
             backToDashboardBtn.addEventListener('click', function() {
                 document.getElementById('pageTransition').style.transform = 'scaleY(1)';
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'cashier-dashboard.html';
                 }, 600);
             });
 
@@ -546,9 +599,59 @@
                 }, 300);
             });
 
-            // Function to handle modal closing
+            // Close receipt modal when X is clicked
+            closeReceiptModal.addEventListener('click', function() {
+                closeReceiptModalHandler();
+            });
+
+            // Close receipt modal when Close button is clicked
+            closeReceipt.addEventListener('click', function() {
+                closeReceiptModalHandler();
+            });
+
+            // Close receipt modal when clicking outside
+            receiptModal.addEventListener('click', function(e) {
+                if (e.target === receiptModal) {
+                    closeReceiptModalHandler();
+                }
+            });
+
+            // Print receipt
+            printReceipt.addEventListener('click', function() {
+                const receiptContent = document.getElementById('receiptContent').innerHTML;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Receipt</title>
+                            <style>
+                                body { font-family: 'Montserrat', sans-serif; padding: 20px; }
+                                table { width: 100%; border-collapse: collapse; }
+                                th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+                                th { background: #16213e; color: white; }
+                                .text-right { text-align: right; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2>Lising Lasing Receipt</h2>
+                            ${receiptContent}
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.print();
+                closeReceiptModalHandler();
+            });
+
+            // Function to handle logout modal closing
             function closeModalHandler() {
                 logoutModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Function to handle receipt modal closing
+            function closeReceiptModalHandler() {
+                receiptModal.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
@@ -664,12 +767,48 @@
                 localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
                 localStorage.setItem('auditLog', JSON.stringify(auditLog));
 
+                // Generate receipt
+                const receiptModal = document.getElementById('receiptModal');
+                const receiptContent = document.getElementById('receiptContent');
+                const change = paymentAmount - selectedOrder.total;
+                receiptContent.innerHTML = `
+                    <h3>Lising Lasing</h3>
+                    <p>Order ID: ${selectedOrder.id}</p>
+                    <p>Date: ${new Date().toLocaleString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${selectedOrder.items.map(item => `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>₱${item.price.toFixed(2)}</td>
+                                    <td>₱${(item.price * item.quantity).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <p><strong>Total: ₱${selectedOrder.total.toFixed(2)}</strong></p>
+                    <p>Payment: ₱${paymentAmount.toFixed(2)}</p>
+                    <p>Change: ₱${change.toFixed(2)}</p>
+                `;
+                receiptModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
                 // Reset payment section
                 document.getElementById('payment-amount').value = '';
                 document.getElementById('payment-details').innerHTML = '';
+                const completedOrderId = selectedOrder.id;
                 selectedOrder = null;
                 renderApprovedOrders();
-                showToast(`Order #${selectedOrder.id} payment completed!`, 'success');
+                showToast(`Order #${completedOrderId} payment completed!`, 'success');
             } catch (e) {
                 console.error('Error processing payment:', e);
                 showToast('Failed to process payment.', 'error');
