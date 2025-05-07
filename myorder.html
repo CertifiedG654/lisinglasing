@@ -302,6 +302,127 @@
       transform: translateY(-2px);
     }
     
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--accent-gold);
+      color: var(--primary-dark);
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { background: var(--accent-gold); }
+    .toast.error { background: #d32f2f; }
+    
+    /* Orders Section */
+    .orders-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--accent-gold);
+    }
+
+    .order-card {
+      background-color: var(--primary-light);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: var(--transition);
+    }
+
+    .order-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(192, 160, 98, 0.2);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .order-id {
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .order-status {
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: rgba(192, 160, 98, 0.2);
+      color: var(--accent-gold);
+    }
+
+    .order-items {
+      margin-bottom: 15px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-gray);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .order-total {
+      font-weight: 600;
+      color: var(--text-light);
+      text-align: right;
+      margin-bottom: 15px;
+    }
+
+    .order-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .no-orders {
+      text-align: center;
+      padding: 20px;
+      background: var(--primary-light);
+      border-radius: 8px;
+      color: var(--text-gray);
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -396,19 +517,6 @@
       .dashboard-container {
         flex-direction: column;
       }
-     
-      .info-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      
-      .stats-container {
-        grid-template-columns: 1fr;
-      }
-      
-      .welcome-title {
-        font-size: 24px;
-      }
       
       .section-title {
         font-size: 18px;
@@ -430,7 +538,7 @@
         <li class="nav-item">
           <a href="product.html" class="nav-link">
             <i class="fas fa-box"></i>
-            <span>Product</span>
+            Product
           </a>
         </li>
         <li class="nav-item">
@@ -446,6 +554,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="settings.html" class="nav-link settings-link">
+            <i class="fas fa-cog"></i>
+            Settings
+          </a>
+        </li>
+        <li class="nav-item">
           <button id="logoutBtn" class="nav-link" style="background: none; border: none; width: 100%; text-align: left;">
             <i class="fas fa-sign-out-alt"></i>
             Logout
@@ -455,6 +569,10 @@
     </aside>
 
     <main class="main-content">
+      <section class="orders-section">
+        <h2 class="section-title">Your Pending Orders</h2>
+        <div id="ordersContainer"></div>
+      </section>
     </main>
     
     <div class="fab" title="Need help?">
@@ -462,6 +580,7 @@
     </div>
   </div>
 
+  <!-- Logout Confirmation Modal -->
   <div id="logoutModal" class="modal">
     <div class="modal-content">
       <h3 class="modal-title">Confirm Logout</h3>
@@ -473,22 +592,58 @@
     </div>
   </div>
 
+  <!-- Approve Order Confirmation Modal -->
+  <div id="approveOrderModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirm Order Approval</h3>
+      <p class="modal-message">Are you sure you want to approve this order? It will be sent to the cashier for processing.</p>
+      <div class="modal-buttons">
+        <button id="confirmApproveOrder" class="modal-btn modal-btn-confirm">Yes, Approve</button>
+        <button id="cancelApproveOrder" class="modal-btn modal-btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Action completed!</span>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Check customer authentication
-      const loggedInCustomer = localStorage.getItem('loggedInCustomer');
-      if (!loggedInCustomer) {
-        alert('Please login first');
-        window.location.href = 'index.html';
+      try {
+        const loggedInCustomer = localStorage.getItem('loggedInCustomer');
+        if (!loggedInCustomer) {
+          alert('Please login first');
+          window.location.href = 'index.html';
+          return;
+        }
+      } catch (e) {
+        console.error('Error checking authentication:', e);
+        showToast('Authentication error', 'error');
         return;
       }
 
-      // Logout functionality
+      // DOM Elements
+      const ordersContainer = document.getElementById('ordersContainer');
       const logoutBtn = document.getElementById('logoutBtn');
       const logoutModal = document.getElementById('logoutModal');
       const confirmLogout = document.getElementById('confirmLogout');
       const cancelLogout = document.getElementById('cancelLogout');
-      
+      const approveOrderModal = document.getElementById('approveOrderModal');
+      const confirmApproveOrder = document.getElementById('confirmApproveOrder');
+      const cancelApproveOrder = document.getElementById('cancelApproveOrder');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      let selectedOrderId = null;
+
+      // Load pending orders
+      loadPendingOrders();
+
+      // Logout functionality
       logoutBtn.addEventListener('click', function() {
         logoutModal.style.display = 'flex';
       });
@@ -502,18 +657,32 @@
         logoutModal.style.display = 'none';
       });
       
-      // Close modal when clicking outside the content
+      // Close logout modal when clicking outside
       window.addEventListener('click', function(event) {
         if (event.target === logoutModal) {
           logoutModal.style.display = 'none';
         }
+        if (event.target === approveOrderModal) {
+          approveOrderModal.style.display = 'none';
+        }
       });
-      
+
+      // Approve order modal handlers
+      confirmApproveOrder.addEventListener('click', function() {
+        approveOrder(selectedOrderId);
+        approveOrderModal.style.display = 'none';
+      });
+
+      cancelApproveOrder.addEventListener('click', function() {
+        approveOrderModal.style.display = 'none';
+        selectedOrderId = null;
+      });
+
       // Floating action button click
       document.querySelector('.fab').addEventListener('click', function() {
         alert('Contact our support team at support@lisinglasing.com for assistance.');
       });
-      
+
       // Responsive menu toggle
       const menuToggle = document.createElement('div');
       menuToggle.className = 'menu-toggle';
@@ -524,6 +693,115 @@
       menuToggle.addEventListener('click', function() {
         sidebar.classList.toggle('active');
       });
+
+      // Load pending orders for the customer
+      function loadPendingOrders() {
+        try {
+          const customer = JSON.parse(localStorage.getItem('loggedInCustomer'));
+          const customerId = customer ? customer.id : 'guest';
+          const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+          const pendingOrders = orders.filter(o => o.customerId === customerId && o.status === 'pending');
+
+          if (pendingOrders.length === 0) {
+            ordersContainer.innerHTML = `
+              <div class="no-orders">
+                <i class="fas fa-shopping-bag" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>No pending orders found.</p>
+              </div>
+            `;
+            return;
+          }
+
+          ordersContainer.innerHTML = '';
+          pendingOrders.forEach(order => {
+            const orderCard = document.createElement('div');
+            orderCard.className = 'order-card';
+            orderCard.innerHTML = `
+              <div class="order-header">
+                <span class="order-id">Order #${order.id}</span>
+                <span class="order-status status-pending">Pending</span>
+              </div>
+              <div class="order-items">
+                ${order.items.map(item => `
+                  <div class="order-item">
+                    <span>${item.name} (x${item.quantity})</span>
+                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="order-total">
+                Total: ₱${order.total.toFixed(2)}
+              </div>
+              <div class="order-actions">
+                <button class="btn btn-outline approve-order-btn" data-order-id="${order.id}">
+                  Approve Order
+                </button>
+              </div>
+            `;
+            ordersContainer.appendChild(orderCard);
+          });
+
+          // Add event listeners to approve buttons
+          document.querySelectorAll('.approve-order-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              selectedOrderId = button.dataset.orderId;
+              approveOrderModal.style.display = 'flex';
+            });
+          });
+        } catch (e) {
+          console.error('Error loading orders:', e);
+          showToast('Failed to load orders', 'error');
+        }
+      }
+
+      // Approve order and send to cashier
+      function approveOrder(orderId) {
+        try {
+          const orders = JSON.parse(localStorage.getItem('orders')) || [];
+          const order = orders.find(o => o.id === orderId);
+          if (!order) {
+            showToast('Order not found', 'error');
+            return;
+          }
+
+          // Update order status to approved
+          order.status = 'approved';
+          order.approvedTimestamp = new Date().toISOString();
+
+          // Save updated orders
+          localStorage.setItem('orders', JSON.stringify(orders));
+
+          // Add to cashier queue
+          let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
+          cashierQueue.push({
+            ...order,
+            cashierProcessed: false // Flag for cashier to track processing
+          });
+          localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
+
+          // Show success toast and reload orders
+          showToast(`Order #${orderId} approved and sent to cashier!`, 'success');
+          loadPendingOrders();
+        } catch (e) {
+          console.error('Error approving order:', e);
+          showToast('Failed to approve order', 'error');
+        }
+      }
+
+      // Show toast notification
+      function showToast(message, type = 'success') {
+        toastMessage.textContent = message;
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+          <span id="toastMessage">${message}</span>
+        `;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
     });
   </script>
 </body>
