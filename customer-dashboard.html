@@ -14,9 +14,8 @@
       --text-color: #333;
       --bg-color: #f8f9fa;
       --card-bg: #ffffff;
-      --shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
-      --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -27,7 +26,7 @@
     }
 
     body {
-      background: linear-gradient(to bottom, var(--bg-color), #ebedef);
+      background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
     }
@@ -45,17 +44,15 @@
       padding: 2rem 1rem;
       position: fixed;
       height: 100%;
-      transition: width 0.3s ease, transform 0.3s ease;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      transition: width 0.3s ease;
     }
 
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      margin-bottom: 2.5rem;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
       text-align: center;
-      letter-spacing: 2px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
     }
 
     .nav-menu {
@@ -63,201 +60,113 @@
     }
 
     .nav-item {
-      margin: 0.75rem 0;
+      margin: 0.5rem 0;
     }
 
     .nav-link {
       display: flex;
       align-items: center;
-      padding: 0.85rem 1.2rem;
+      padding: 0.75rem 1rem;
       color: #fff;
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: 8px;
       transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.15);
-      transition: left 0.3s ease;
-    }
-
-    .nav-link:hover::before, .nav-link.active::before {
-      left: 0;
     }
 
     .nav-link:hover, .nav-link.active {
       background: rgba(255, 255, 255, 0.1);
-      transform: translateX(8px);
+      transform: translateX(5px);
     }
 
     .nav-link i {
-      margin-right: 0.85rem;
-      font-size: 1.3rem;
-      transition: transform 0.3s ease;
-    }
-
-    .nav-link:hover i {
-      transform: scale(1.2);
+      margin-right: 0.75rem;
+      font-size: 1.2rem;
     }
 
     /* Main Content */
     .main-content {
       margin-left: 250px;
-      padding: 3rem;
+      padding: 2rem;
       flex: 1;
       background-color: var(--bg-color);
-      transition: margin-left 0.3s ease;
     }
 
-    .welcome-section {
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 2rem;
-      text-align: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--secondary-color);
     }
 
-    .welcome-title {
+    .page-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       color: var(--primary-color);
-      margin-bottom: 0.5rem;
       position: relative;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
 
-    .welcome-title::after {
+    .page-title::after {
       content: '';
       position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
       background: var(--accent-color);
-      border-radius: 2px;
-    }
-
-    .welcome-subtitle {
-      font-size: 1rem;
-      color: #666;
-      font-weight: 300;
     }
 
     /* Account Card */
     .account-card {
       background: var(--card-bg);
-      border-radius: 15px;
-      padding: 2rem;
+      border-radius: 12px;
+      padding: 1.5rem;
       box-shadow: var(--shadow);
-      margin-bottom: 2.5rem;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .account-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--hover-shadow);
-    }
-
-    .account-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: var(--primary-color);
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--secondary-color);
-      position: relative;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 40px;
-      height: 2px;
-      background: var(--accent-color);
+      margin-bottom: 2rem;
     }
 
     .info-grid {
       display: grid;
       grid-template-columns: 150px 1fr;
-      gap: 1.2rem;
+      gap: 1rem;
       align-items: center;
     }
 
     .info-label {
       font-weight: 600;
       color: var(--primary-color);
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0.9rem;
     }
 
     .info-value {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-color);
-      background: #f8f9fa;
-      padding: 0.5rem;
-      border-radius: 8px;
-      transition: var(--transition);
-    }
-
-    .info-value:hover {
-      background: #ebedef;
     }
 
     /* Orders Section */
     .orders-section {
       background: var(--card-bg);
-      border-radius: 15px;
-      padding: 2rem;
+      border-radius: 12px;
+      padding: 1.5rem;
       box-shadow: var(--shadow);
-      transition: var(--transition);
-    }
-
-    .orders-section:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--hover-shadow);
     }
 
     .order-item {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 1.2rem;
-      padding: 1.2rem;
+      gap: 1rem;
+      padding: 1rem 0;
       border-bottom: 1px solid #eee;
-      border-radius: 10px;
       transition: var(--transition);
-      background: #f8f9fa;
-      margin-bottom: 0.5rem;
     }
 
     .order-item:hover {
-      background: #ebedef;
-      transform: translateX(5px);
+      background: #f9f9f9;
     }
 
     .order-item:last-child {
       border-bottom: none;
-      margin-bottom: 0;
     }
 
     .order-info {
@@ -315,54 +224,22 @@
 
     /* Buttons */
     .btn {
-      padding: 0.85rem 1.75rem;
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 25px;
       cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 0.9rem;
       transition: var(--transition);
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       background: var(--secondary-color);
       color: #fff;
-      margin-top: 1.5rem;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
+      margin-top: 1rem;
     }
 
     .btn:hover {
       background: #d4a41f;
-      transform: translateY(-2px);
-      box-shadow: var(--hover-shadow);
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: left 0.3s ease;
-    }
-
-    .btn:hover::before {
-      left: 0;
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--secondary-color);
-      color: var(--secondary-color);
-    }
-
-    .btn-outline:hover {
-      background: var(--secondary-color);
-      color: #fff;
     }
 
     /* Modal */
@@ -373,7 +250,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       align-items: center;
       justify-content: center;
       z-index: 1000;
@@ -381,25 +258,13 @@
 
     .modal-content {
       background: #fff;
-      padding: 2.5rem;
-      border-radius: 15px;
-      max-width: 450px;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
       width: 90%;
       text-align: center;
       box-shadow: var(--shadow);
       animation: slideIn 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .modal-content::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--accent-color);
     }
 
     @keyframes slideIn {
@@ -409,33 +274,29 @@
 
     .modal-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: var(--primary-color);
-      margin-bottom: 1.2rem;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
     }
 
     .modal-message {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       color: #666;
-      font-size: 1rem;
     }
 
     .modal-buttons {
       display: flex;
-      gap: 1.2rem;
+      gap: 1rem;
       justify-content: center;
     }
 
     .modal-btn {
-      padding: 0.85rem 1.75rem;
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 25px;
       cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 0.9rem;
       transition: var(--transition);
-      box-shadow: var(--shadow);
     }
 
     .modal-btn-confirm {
@@ -445,7 +306,6 @@
 
     .modal-btn-confirm:hover {
       background: #7a1b35;
-      transform: translateY(-2px);
     }
 
     .modal-btn-cancel {
@@ -455,26 +315,24 @@
 
     .modal-btn-cancel:hover {
       background: #e0e0e0;
-      transform: translateY(-2px);
     }
 
     /* Toast */
     .toast {
       position: fixed;
-      bottom: 30px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
       background: var(--primary-color);
       color: #fff;
-      padding: 1rem 2rem;
-      border-radius: 30px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
       opacity: 0;
       transition: var(--transition);
       box-shadow: var(--shadow);
-      font-size: 0.95rem;
     }
 
     .toast.show {
@@ -498,11 +356,10 @@
 
       .main-content {
         margin-left: 80px;
-        padding: 2rem;
       }
 
       .logo {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
       }
     }
 
@@ -515,26 +372,27 @@
         width: 100%;
         height: auto;
         position: static;
-        padding: 1.5rem;
+        padding: 1rem;
       }
 
       .main-content {
         margin-left: 0;
-        padding: 1.5rem;
+        padding: 1rem;
       }
 
-      .welcome-section {
-        text-align: left;
+      .page-header {
+        flex-direction: column;
+        gap: 1rem;
       }
 
       .info-grid {
         grid-template-columns: 1fr;
-        gap: 0.75rem;
+        gap: 0.5rem;
       }
 
       .order-item {
         grid-template-columns: 1fr;
-        gap: 0.75rem;
+        gap: 0.5rem;
       }
 
       .order-payment {
@@ -574,6 +432,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="settings.html" class="nav-link settings-link">
+            <i class="fas fa-cog"></i>
+            <span class="nav-text">Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <button id="logoutBtn" class="nav-link" style="background: none; border: none; width: 100%; text-align: left;">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
@@ -584,9 +448,8 @@
 
     <!-- Main Content -->
     <main class="main-content">
-      <div class="welcome-section">
-        <h1 class="welcome-title">Welcome Back!</h1>
-        <p class="welcome-subtitle">Here's what's happening with your account today</p>
+      <div class="page-header">
+        <h1 class="page-title">My Account</h1>
       </div>
 
       <div class="account-card">
@@ -606,7 +469,7 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-outline"><i class="fas fa-eye"></i> View All Recent Orders</button>
+        <button class="btn"><i class="fas fa-eye"></i> View All Recent Orders</button>
       </div>
     </main>
   </div>
