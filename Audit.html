@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Audit Dashboard | Lising Lasing</title>
+  <title>Audit Dashboard | AmoraLise</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -523,8 +523,7 @@
       <div class="logo">
         <div class="logo-icon">LL</div>
         <div class="logo-text">
-          <span>LISING</span>
-          <span>LASING</span>
+          <span>AMORALISE</span>
         </div>
       </div>
      
@@ -548,13 +547,22 @@
         <p class="card-description">View stock levels, track products, and monitor inventory movements</p>
       </div>
     
-      <div class="dashboard-card" onclick="navigateTo('sales-records.html')">
+      <div class="dashboard-card" onclick="navigateTo('audit-history.html')">
+        <div class="card-icon">
+          <img src="Pictures/sales.png" alt="Sales Icon">
+        </div>
+        <h2 class="card-title">History</h2>
+        <p class="card-description">View sales analytics, inventory reports, and business insights</p>
+      </div>
+
+            <div class="dashboard-card" onclick="navigateTo('sales-records.html')">
         <div class="card-icon">
           <img src="Pictures/sales.png" alt="Sales Icon">
         </div>
         <h2 class="card-title">Sales Records</h2>
         <p class="card-description">View sales analytics, inventory reports, and business insights</p>
       </div>
+
     </div>
   </div>
 
@@ -570,7 +578,7 @@
       const currentRole = localStorage.getItem('currentRole');
       if (currentRole !== 'audit') {
         alert('Access denied. Please login with audit credentials.');
-        window.location.href = 'index.html';
+        window.location.href = 'front-page.html';
         return;
       }
 
@@ -618,7 +626,7 @@
           setTimeout(() => {
             localStorage.removeItem('currentRole');
             localStorage.removeItem('authToken');
-            window.location.href = 'index.html';
+            window.location.href = 'front-page.html';
           }, 600);
         }, 300);
       });

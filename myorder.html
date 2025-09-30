@@ -3,217 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Dashboard | Lising Lasing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>My Orders | AmoraLise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-dark: #1a1a1a;
-      --primary-light: #2d2d2d;
-      --accent-gold: #c0a062;
-      --accent-gold-light: #d4b87a;
+      --primary-dark: #1a3c34;
+      --primary-light: #2a5a4e;
+      --secondary: #e8b923;
+      --accent: #8b1e3f;
+      --text-dark: #333;
       --text-light: #f5f5f5;
-      --text-gray: #cccccc;
-      --border-light: rgba(255,255,255,0.1);
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --bg-light: #f8f9fa;
+      --card-bg: #ffffff;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --border-radius: 12px;
+      --sidebar-width: 280px;
     }
-   
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--primary-dark);
-      color: var(--text-light);
+
+    * {
       margin: 0;
       padding: 0;
-      line-height: 1.6;
+      box-sizing: border-box;
     }
-   
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
     .dashboard-container {
       display: flex;
       min-height: 100vh;
-      overflow: hidden;
+      position: relative;
     }
-   
+
     .sidebar {
-      width: 240px;
-      background-color: var(--primary-light);
-      padding: 30px 20px;
-      border-right: 1px solid var(--border-light);
-      transform: translateX(0);
-      transition: var(--transition);
-      z-index: 10;
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      color: var(--text-light);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100%;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
     }
-   
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
     .logo {
       font-family: 'Playfair Display', serif;
-      color: var(--accent-gold);
-      font-size: 24px;
-      margin-bottom: 30px;
+      font-size: 1.8rem;
       text-align: center;
       letter-spacing: 1px;
-      position: relative;
-      padding-bottom: 15px;
+      color: var(--secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    
-    .logo::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 2px;
-      background: var(--accent-gold);
-      transition: var(--transition);
+
+    .logo span:first-child {
+      font-weight: 700;
+      margin-bottom: -5px;
     }
-    
-    .logo:hover::after {
-      width: 80px;
+
+    .logo span:last-child {
+      font-size: 1.4rem;
+      font-weight: 400;
     }
-   
+
     .nav-menu {
       list-style: none;
-      padding: 0;
-      margin: 0;
+      margin-top: 1rem;
     }
-   
+
     .nav-item {
-      margin-bottom: 8px;
-      opacity: 0;
-      transform: translateX(-10px);
-      animation: fadeInLeft 0.5s forwards;
+      margin: 0.75rem 0;
     }
-    
-    .nav-item:nth-child(1) { animation-delay: 0.1s; }
-    .nav-item:nth-child(2) { animation-delay: 0.2s; }
-    .nav-item:nth-child(3) { animation-delay: 0.3s; }
-    .nav-item:nth-child(4) { animation-delay: 0.4s; }
-    .nav-item:nth-child(5) { animation-delay: 0.5s; }
-   
+
     .nav-link {
-      color: var(--text-light);
-      text-decoration: none;
       display: flex;
       align-items: center;
-      padding: 12px 15px;
-      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      border-radius: var(--border-radius);
       transition: var(--transition);
-      font-size: 14px;
-      position: relative;
-      overflow: hidden;
+      font-weight: 500;
     }
-    
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(192, 160, 98, 0.1), transparent);
-      transition: var(--transition);
-    }
-    
-    .nav-link:hover::before {
-      left: 100%;
-    }
-   
-    .nav-link:hover, .nav-link.active {
-      background-color: rgba(192, 160, 98, 0.1);
-      color: var(--accent-gold);
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
       transform: translateX(5px);
     }
-    
+
     .nav-link.active {
-      box-shadow: inset 3px 0 0 var(--accent-gold);
-    }
-   
-    .nav-link i {
-      margin-right: 12px;
-      font-size: 16px;
-      width: 20px;
-      text-align: center;
-      transition: var(--transition);
-    }
-    
-    .nav-link:hover i {
-      transform: scale(1.1);
-    }
-   
-    .main-content {
-      flex: 1;
-      padding: 40px;
-      max-width: 800px;
-      animation: fadeIn 0.8s ease-out;
-    }
-   
-    .btn {
-      padding: 10px 20px;
-      border-radius: 6px;
+      background: rgba(232, 185, 35, 0.15);
+      color: var(--secondary);
       font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      border: none;
-      font-size: 14px;
-      letter-spacing: 0.5px;
+    }
+
+    .nav-link i {
+      margin-right: 0.75rem;
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 2.5rem;
+      flex: 1;
+      background-color: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--secondary);
       position: relative;
-      overflow: hidden;
     }
-    
-    .btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: var(--transition);
-    }
-    
-    .btn:hover::after {
-      left: 100%;
-    }
-   
-    .btn-outline {
-      background-color: transparent;
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-    }
-    
-    .btn-outline:hover {
-      background-color: rgba(192, 160, 98, 0.1);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(192, 160, 98, 0.2);
-    }
-    
-    .fab {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--accent-gold);
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.25rem;
       color: var(--primary-dark);
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+
+
+    .order-section {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      margin-top: 2.5rem;
+    }
+
+    .order-items {
+      margin-bottom: 1.5rem;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .order-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 1rem;
+    }
+
+    .order-item-details {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .quantity-btn {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--secondary) 0%, #d4a41f 100%);
+      color: var(--text-light);
+      border: none;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 6px 20px rgba(192, 160, 98, 0.4);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quantity-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.4s ease;
+    }
+
+    .quantity-btn:hover::before {
+      left: 100%;
+    }
+
+    .quantity-btn:hover {
+      background: linear-gradient(135deg, #d4a41f 0%, var(--secondary) 100%);
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(232, 185, 35, 0.3);
+    }
+
+    .quantity-btn:active {
+      transform: scale(0.95);
+    }
+
+    .quantity-btn i {
+      font-size: 0.9rem;
+    }
+
+    .delete-btn {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent) 0%, #7a1b35 100%);
+      color: var(--text-light);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      margin-left: 1rem;
+    }
+
+    .delete-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.4s ease;
+    }
+
+    .delete-btn:hover::before {
+      left: 100%;
+    }
+
+    .delete-btn:hover {
+      background: linear-gradient(135deg, #7a1b35 0%, var(--accent) 100%);
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(139, 30, 63, 0.3);
+    }
+
+    .delete-btn:active {
+      transform: scale(0.95);
+    }
+
+    .delete-btn i {
+      font-size: 0.9rem;
+    }
+
+    .order-total {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 1rem;
+      text-align: right;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--text-light);
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: #d4a41f;
+      transform: translateY(-2px);
+    }
+
+    .fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      background: var(--accent);
+      color: var(--text-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-lg);
       cursor: pointer;
       transition: var(--transition);
-      z-index: 100;
-      opacity: 0;
-      transform: scale(0.8);
-      animation: fadeInScale 0.5s 1s forwards;
     }
-    
+
     .fab:hover {
-      transform: scale(1.1) translateY(-5px);
-      box-shadow: 0 10px 25px rgba(192, 160, 98, 0.5);
+      transform: scale(1.1);
+      background: #7a1b35;
     }
-    
+
     .modal {
       display: none;
       position: fixed;
@@ -221,104 +341,107 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
       align-items: center;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    .modal-content {
-      background-color: var(--primary-light);
-      padding: 30px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow);
-      transform: translateY(20px);
+      justify-content: center;
+      z-index: 1000;
       opacity: 0;
-      animation: fadeInUp 0.3s 0.1s forwards;
+      transition: opacity 0.3s ease;
     }
-    
+
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.show .modal-content {
+      transform: translateY(0);
+    }
+
     .modal-title {
       font-family: 'Playfair Display', serif;
-      color: var(--accent-gold);
-      margin-bottom: 20px;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.25rem;
     }
-    
+
     .modal-message {
-      margin-bottom: 25px;
-      color: var(--text-gray);
+      margin-bottom: 2rem;
+      color: var(--text-dark);
+      opacity: 0.8;
+      line-height: 1.6;
     }
-    
+
     .modal-buttons {
       display: flex;
+      gap: 1rem;
       justify-content: center;
-      gap: 15px;
     }
-    
+
     .modal-btn {
-      padding: 10px 20px;
-      border-radius: 4px;
+      padding: 0.75rem 1.75rem;
+      border: none;
+      border-radius: 30px;
       cursor: pointer;
+      font-size: 0.95rem;
       font-weight: 600;
       transition: var(--transition);
-      border: none;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .modal-btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: var(--transition);
-    }
-    
-    .modal-btn:hover::after {
-      left: 100%;
-    }
-    
-    .modal-btn-confirm {
-      background-color: var(--accent-gold);
-      color: var(--primary-dark);
-    }
-    
-    .modal-btn-cancel {
-      background-color: transparent;
-      color: var(--text-gray);
-      border: 1px solid var(--border-light);
-    }
-    
-    .modal-btn:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-    
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--accent-gold);
-      color: var(--primary-dark);
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    .modal-btn-confirm {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+
+    .modal-btn-confirm:hover {
+      background: #7a1b35;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(139, 30, 63, 0.2);
+    }
+
+    .modal-btn-cancel {
+      background: var(--bg-light);
+      color: var(--text-dark);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-btn-cancel:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--primary-dark);
+      color: var(--text-light);
+      padding: 0.75rem 1.75rem;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       opacity: 0;
-      transition: var(--transition);
-      box-shadow: var(--shadow);
-      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      box-shadow: var(--shadow-lg);
+      z-index: 1100;
     }
 
     .toast.show {
@@ -326,461 +449,384 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    .toast.success { background: var(--accent-gold); }
+    .toast.success { background: #2e7d32; }
     .toast.error { background: #d32f2f; }
-    
-    /* Orders Section */
-    .orders-section {
-      margin-bottom: 40px;
-    }
+    .toast.warning { background: #ef6c00; }
 
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      color: var(--accent-gold);
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 50px;
-      height: 2px;
-      background: var(--accent-gold);
-    }
-
-    .order-card {
-      background-color: var(--primary-light);
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 15px;
-      transition: var(--transition);
-    }
-
-    .order-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 20px rgba(192, 160, 98, 0.2);
-    }
-
-    .order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .order-id {
-      font-weight: 600;
-      color: var(--text-light);
-    }
-
-    .order-status {
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .status-pending {
-      background: rgba(192, 160, 98, 0.2);
-      color: var(--accent-gold);
-    }
-
-    .order-items {
-      margin-bottom: 15px;
-    }
-
-    .order-item {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-gray);
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .order-total {
-      font-weight: 600;
-      color: var(--text-light);
-      text-align: right;
-      margin-bottom: 15px;
-    }
-
-    .order-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .no-orders {
+    .no-order {
       text-align: center;
-      padding: 20px;
-      background: var(--primary-light);
-      border-radius: 8px;
-      color: var(--text-gray);
+      padding: 3rem;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      margin: 2rem auto;
+      max-width: 600px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes fadeInLeft {
-      from { 
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateX(0);
+    @media (max-width: 1200px) {
+      :root {
+        --sidebar-width: 240px;
       }
     }
-    
-    @keyframes fadeInUp {
-      from { 
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes fadeInScale {
-      from { 
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to { 
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(192, 160, 98, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(192, 160, 98, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(192, 160, 98, 0);
-      }
-    }
-    
+
     @media (max-width: 992px) {
-      .sidebar {
-        position: fixed;
-        left: -240px;
-        height: 100vh;
-      }
-      
-      .sidebar.active {
-        transform: translateX(240px);
-      }
-      
       .main-content {
-        margin-left: 0;
-        padding: 20px;
-      }
-      
-      .menu-toggle {
-        display: block;
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 100;
-        background: var(--accent-gold);
-        color: var(--primary-dark);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        padding: 2rem;
       }
     }
-    
+
     @media (max-width: 768px) {
       .dashboard-container {
         flex-direction: column;
       }
-      
-      .section-title {
-        font-size: 18px;
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1.5rem;
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 1.75rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-content {
+        padding: 1.5rem;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .fab {
+        width: 50px;
+        height: 50px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .order-item img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .quantity-btn, .delete-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+      }
+
+      .delete-btn {
+        margin-left: 0.5rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <div class="logo">Lising Lasing</div>
+      <div class="logo-container">
+        <div class="logo">
+          <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
+          <span>AMORALISE</span>
+        </div>
+      </div>
       <ul class="nav-menu">
         <li class="nav-item">
           <a href="customer-dashboard.html" class="nav-link">
             <i class="fas fa-user"></i>
-            My Account
+            <span>My Account</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="product.html" class="nav-link">
-            <i class="fas fa-box"></i>
-            Product
+            <i class="fas fa-wine-bottle"></i>
+            <span>Products</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="myorder.html" class="nav-link active">
-            <i class="fas fa-shopping-bag"></i>
-            My Orders
+            <i class="fas fa-receipt"></i>
+            <span>My Orders</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="wishlist.html" class="nav-link">
             <i class="fas fa-heart"></i>
-            Wishlist
+            <span>Wishlist</span>
           </a>
         </li>
         <li class="nav-item">
           <button id="logoutBtn" class="nav-link" style="background: none; border: none; width: 100%; text-align: left;">
             <i class="fas fa-sign-out-alt"></i>
-            Logout
+            <span>Logout</span>
           </button>
         </li>
       </ul>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-content">
-      <section class="orders-section">
-        <h2 class="section-title">Your Orders</h2>
-        <div id="ordersContainer"></div>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Orders</h1>
+          <p class="welcome-message">Review and checkout your current order</p>
+        </div>
+      </div>
+
+      <div class="order-section" id="myOrder">
+
+        <div class="order-items" id="orderItems"></div>
+        <p class="order-total" id="orderTotal"></p>
+        <button class="btn-primary" id="proceedToCheckout">Proceed to Checkout</button>
+      </div>
     </main>
-    
+
+    <!-- Floating Action Button -->
     <div class="fab" title="Need help?">
-      <i class="fas fa-question"></i>
+      <i class="fas fa-headset"></i>
     </div>
-  </div>
 
-  <!-- Logout Confirmation Modal -->
-  <div id="logoutModal" class="modal">
-    <div class="modal-content">
-      <h3 class="modal-title">Confirm Logout</h3>
-      <p class="modal-message">Are you sure you want to logout from your account?</p>
-      <div class="modal-buttons">
-        <button id="confirmLogout" class="modal-btn modal-btn-confirm">Yes, Logout</button>
-        <button id="cancelLogout" class="modal-btn modal-btn-cancel">Cancel</button>
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal">
+      <div class="modal-content">
+        <h3 class="modal-title">Confirm Logout</h3>
+        <p class="modal-message">Are you sure you want to logout from your account?</p>
+        <div class="modal-buttons">
+          <button id="confirmLogout" class="modal-btn modal-btn-confirm">
+            <i class="fas fa-sign-out-alt"></i>
+            Yes, Logout
+          </button>
+          <button id="cancelLogout" class="modal-btn modal-btn-cancel">
+            <i class="fas fa-times"></i>
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Approve Order Confirmation Modal -->
-  <div id="approveOrderModal" class="modal">
-    <div class="modal-content">
-      <h3 class="modal-title">Confirm Order Approval</h3>
-      <p class="modal-message">Are you sure you want to approve this order? It will be sent to the cashier for processing.</p>
-      <div class="modal-buttons">
-        <button id="confirmApproveOrder" class="modal-btn modal-btn-confirm">Yes, Approve</button>
-        <button id="cancelApproveOrder" class="modal-btn modal-btn-cancel">Cancel</button>
+    <!-- Checkout Confirmation Modal -->
+    <div id="checkoutModal" class="modal">
+      <div class="modal-content">
+        <h3 class="modal-title">Confirm Purchase</h3>
+        <p class="modal-message" id="checkoutMessage">Are you sure you want to proceed with this purchase?</p>
+        <div class="modal-buttons">
+          <button id="confirmCheckout" class="modal-btn modal-btn-confirm">
+            <i class="fas fa-check"></i>
+            Confirm Purchase
+          </button>
+          <button id="cancelCheckout" class="modal-btn modal-btn-cancel">
+            <i class="fas fa-times"></i>
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast">
-    <i class="fas fa-check-circle"></i>
-    <span id="toastMessage">Action completed!</span>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage"></span>
+    </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Check customer authentication
-      try {
-        const loggedInCustomer = localStorage.getItem('loggedInCustomer');
-        if (!loggedInCustomer) {
-          alert('Please login first');
-          window.location.href = 'index.html';
-          return;
-        }
-      } catch (e) {
-        console.error('Error checking authentication:', e);
-        showToast('Authentication error', 'error');
+      const loggedInCustomer = localStorage.getItem('loggedInCustomer');
+      if (!loggedInCustomer) {
+        showToast('Please login first', 'error');
+        setTimeout(() => {
+          window.location.href = 'front-page.html';
+        }, 1000);
         return;
       }
 
       // DOM Elements
-      const ordersContainer = document.getElementById('ordersContainer');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const logoutModal = document.getElementById('logoutModal');
-      const confirmLogout = document.getElementById('confirmLogout');
-      const cancelLogout = document.getElementById('cancelLogout');
-      const approveOrderModal = document.getElementById('approveOrderModal');
-      const confirmApproveOrder = document.getElementById('confirmApproveOrder');
-      const cancelApproveOrder = document.getElementById('cancelApproveOrder');
+      const orderItems = document.getElementById('orderItems');
+      const orderTotal = document.getElementById('orderTotal');
+      const proceedToCheckout = document.getElementById('proceedToCheckout');
+      const checkoutModal = document.getElementById('checkoutModal');
+      const checkoutMessage = document.getElementById('checkoutMessage');
+      const confirmCheckout = document.getElementById('confirmCheckout');
+      const cancelCheckout = document.getElementById('cancelCheckout');
       const toast = document.getElementById('toast');
       const toastMessage = document.getElementById('toastMessage');
+      const fab = document.querySelector('.fab');
 
-      let selectedOrderId = null;
+      // Data initialization
+      let currentOrder = JSON.parse(localStorage.getItem('currentOrder')) || { items: [], total: 0 };
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      let lastOrderNumber = parseInt(localStorage.getItem('lastOrderNumber')) || 0;
+      const products = JSON.parse(localStorage.getItem('products')) || [];
 
-      // Load pending orders
-      loadPendingOrders();
+      // Event listeners
+      proceedToCheckout.addEventListener('click', function() {
+        if (currentOrder.items.length === 0) {
+          showToast('Your cart is empty!', 'error');
+          return;
+        }
+        checkoutMessage.innerHTML = `Are you sure you want to proceed with this purchase?<br><strong>Total: ₱${currentOrder.total.toFixed(2)}</strong>`;
+        checkoutModal.classList.add('show');
+      });
 
-      // Logout functionality
-      logoutBtn.addEventListener('click', function() {
-        logoutModal.style.display = 'flex';
+      confirmCheckout.addEventListener('click', proceedToCheckoutHandler);
+      cancelCheckout.addEventListener('click', function() {
+        checkoutModal.classList.remove('show');
       });
-      
-      confirmLogout.addEventListener('click', function() {
-        localStorage.removeItem('loggedInCustomer');
-        window.location.href = 'index.html';
+
+      fab.addEventListener('click', function() {
+        showToast('Contact support feature coming soon!', 'warning');
       });
-      
-      cancelLogout.addEventListener('click', function() {
-        logoutModal.style.display = 'none';
-      });
-      
-      // Close logout modal when clicking outside
+
       window.addEventListener('click', function(event) {
-        if (event.target === logoutModal) {
-          logoutModal.style.display = 'none';
-        }
-        if (event.target === approveOrderModal) {
-          approveOrderModal.style.display = 'none';
+        if (event.target === checkoutModal) {
+          checkoutModal.classList.remove('show');
         }
       });
 
-      // Approve order modal handlers
-      confirmApproveOrder.addEventListener('click', function() {
-        approveOrder(selectedOrderId);
-        approveOrderModal.style.display = 'none';
-      });
+      // Render current order
+      function renderOrder() {
+        if (currentOrder.items.length === 0) {
+          orderItems.innerHTML = `
+            <div class="no-order">
+              <i class="fas fa-cart-arrow-down" style="font-size: 3rem; margin-bottom: 15px;"></i>
+              <h3>No items in your order</h3>
+              <p>Add products to your cart from the Products page.</p>
+            </div>
+          `;
+          orderTotal.textContent = '';
+          proceedToCheckout.disabled = true;
+          return;
+        }
 
-      cancelApproveOrder.addEventListener('click', function() {
-        approveOrderModal.style.display = 'none';
-        selectedOrderId = null;
-      });
-
-      // Floating action button click
-      document.querySelector('.fab').addEventListener('click', function() {
-        alert('Contact our support team at support@lisinglasing.com for assistance.');
-      });
-
-      // Responsive menu toggle
-      const menuToggle = document.createElement('div');
-      menuToggle.className = 'menu-toggle';
-      menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      document.body.appendChild(menuToggle);
-      
-      const sidebar = document.querySelector('.sidebar');
-      menuToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-      });
-
-      // Load pending orders for the customer
-      function loadPendingOrders() {
-        try {
-          const customer = JSON.parse(localStorage.getItem('loggedInCustomer'));
-          const customerId = customer ? customer.id : 'guest';
-          const orders = JSON.parse(localStorage.getItem('orders')) || [];
-
-          const pendingOrders = orders.filter(o => o.customerId === customerId && o.status === 'pending');
-
-          if (pendingOrders.length === 0) {
-            ordersContainer.innerHTML = `
-              <div class="no-orders">
-                <i class="fas fa-shopping-bag" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <p>No pending orders found.</p>
-              </div>
-            `;
-            return;
-          }
-
-          ordersContainer.innerHTML = '';
-          pendingOrders.forEach(order => {
-            const orderCard = document.createElement('div');
-            orderCard.className = 'order-card';
-            orderCard.innerHTML = `
-              <div class="order-header">
-                <span class="order-id">Order #${order.id}</span>
-                <span class="order-status status-pending">Pending</span>
-              </div>
-              <div class="order-items">
-                ${order.items.map(item => `
-                  <div class="order-item">
-                    <span>${item.name} (x${item.quantity})</span>
-                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
-                `).join('')}
-              </div>
-              <div class="order-total">
-                Total: ₱${order.total.toFixed(2)}
-              </div>
-              <div class="order-actions">
-                <button class="btn btn-outline approve-order-btn" data-order-id="${order.id}">
-                  Approve Order
+        orderItems.innerHTML = '';
+        currentOrder.items.forEach((item, index) => {
+          const product = products.find(p => p.id === item.id);
+          const imageSrc = product ? (product.image || 'https://via.placeholder.com/40?text=No+Image') : 'https://via.placeholder.com/40?text=No+Image';
+          const div = document.createElement('div');
+          div.className = 'order-item';
+          div.innerHTML = `
+            <img src="${imageSrc}" alt="${item.name}">
+            <div class="order-item-details">
+              <span>${item.name}</span>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="quantity-controls">
+                  <button class="quantity-btn minus" data-index="${index}">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <span>x${item.quantity}</span>
+                  <button class="quantity-btn plus" data-index="${index}">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                <button class="delete-btn" data-index="${index}">
+                  <i class="fas fa-trash"></i>
                 </button>
               </div>
-            `;
-            ordersContainer.appendChild(orderCard);
-          });
+            </div>
+          `;
+          orderItems.appendChild(div);
+        });
 
-          // Add event listeners to approve buttons
-          document.querySelectorAll('.approve-order-btn').forEach(button => {
-            button.addEventListener('click', function() {
-              selectedOrderId = button.dataset.orderId;
-              approveOrderModal.style.display = 'flex';
-            });
+        // Add event listeners for quantity and delete buttons
+        document.querySelectorAll('.quantity-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            const action = this.classList.contains('plus') ? 'increment' : 'decrement';
+            updateQuantity(index, action);
           });
-        } catch (e) {
-          console.error('Error loading orders:', e);
-          showToast('Failed to load orders', 'error');
-        }
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            deleteItem(index);
+          });
+        });
+
+        orderTotal.textContent = `Total: ₱${currentOrder.total.toFixed(2)}`;
+        proceedToCheckout.disabled = false;
       }
 
-      // Approve order and send to cashier
-      function approveOrder(orderId) {
-        try {
-          const orders = JSON.parse(localStorage.getItem('orders')) || [];
-          const order = orders.find(o => o.id === orderId);
-          if (!order) {
-            showToast('Order not found', 'error');
-            return;
-          }
-
-          // Update order status to approved
-          order.status = 'approved';
-          order.approvedTimestamp = new Date().toISOString();
-
-          // Save updated orders
-          localStorage.setItem('orders', JSON.stringify(orders));
-
-          // Add to cashier queue
-          let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
-          cashierQueue.push({
-            ...order,
-            cashierProcessed: false // Flag for cashier to track processing
-          });
-          localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
-
-          // Show success toast and reload orders
-          showToast(`Order #${orderId} approved and sent to cashier!`, 'success');
-          loadPendingOrders();
-        } catch (e) {
-          console.error('Error approving order:', e);
-          showToast('Failed to approve order', 'error');
+      // Update quantity
+      function updateQuantity(index, action) {
+        const item = currentOrder.items[index];
+        if (action === 'increment') {
+          item.quantity += 1;
+        } else if (action === 'decrement' && item.quantity > 1) {
+          item.quantity -= 1;
+        } else if (action === 'decrement' && item.quantity === 1) {
+          showToast('Use the delete button to remove this item', 'warning');
+          return;
         }
+
+        // Update total
+        currentOrder.total = currentOrder.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+        showToast(`${item.name} quantity updated`, 'success');
+        renderOrder();
+      }
+
+      // Delete item
+      function deleteItem(index) {
+        const item = currentOrder.items[index];
+        currentOrder.items.splice(index, 1);
+        currentOrder.total = currentOrder.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+        showToast(`${item.name} removed from order`, 'success');
+        renderOrder();
+      }
+
+      // Proceed to checkout
+      function proceedToCheckoutHandler() {
+        if (currentOrder.items.length === 0) {
+          showToast('Your cart is empty!', 'error');
+          checkoutModal.classList.remove('show');
+          return;
+        }
+        lastOrderNumber++;
+        const formattedNumber = lastOrderNumber.toString().padStart(4, '0');
+        const orderId = `ORD-${formattedNumber}`;
+        orders.push({
+          id: orderId,
+          items: [...currentOrder.items],
+          total: currentOrder.total,
+          status: 'pending'
+        });
+        let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
+        cashierQueue.push({
+          id: orderId,
+          items: [...currentOrder.items],
+          total: currentOrder.total,
+          status: 'approved',
+          cashierProcessed: false
+        });
+        localStorage.setItem('orders', JSON.stringify(orders));
+        localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
+        localStorage.setItem('lastOrderNumber', lastOrderNumber);
+        currentOrder = { items: [], total: 0 };
+        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+        renderOrder();
+        showToast(`Order ${orderId} sent to cashier for processing!`);
+        checkoutModal.classList.remove('show');
       }
 
       // Show toast notification
@@ -788,7 +834,7 @@
         toastMessage.textContent = message;
         toast.className = `toast ${type}`;
         toast.innerHTML = `
-          <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'exclamation-circle'}"></i>
           <span id="toastMessage">${message}</span>
         `;
         toast.classList.add('show');
@@ -796,6 +842,37 @@
           toast.classList.remove('show');
         }, 3000);
       }
+
+      // Logout functionality
+      const logoutBtn = document.getElementById('logoutBtn');
+      const logoutModal = document.getElementById('logoutModal');
+      const confirmLogout = document.getElementById('confirmLogout');
+      const cancelLogout = document.getElementById('cancelLogout');
+
+      logoutBtn.addEventListener('click', function() {
+        logoutModal.classList.add('show');
+      });
+
+      confirmLogout.addEventListener('click', function() {
+        localStorage.removeItem('loggedInCustomer');
+        showToast('Logged out successfully');
+        setTimeout(() => {
+          window.location.href = 'front-page.html';
+        }, 1000);
+      });
+
+      cancelLogout.addEventListener('click', function() {
+        logoutModal.classList.remove('show');
+      });
+
+      window.addEventListener('click', function(event) {
+        if (event.target === logoutModal) {
+          logoutModal.classList.remove('show');
+        }
+      });
+
+      // Initialize
+      renderOrder();
     });
   </script>
 </body>

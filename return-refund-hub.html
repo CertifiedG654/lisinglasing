@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return & Refund Hub | AmoraLise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #1a3c34;
+      --secondary-color: #e8b923;
+      --accent-color: #8b1e3f;
+      --text-color: #333;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .back-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background: #2a5a4e;
+      transform: translateX(-5px);
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+    }
+
+    .return-requests {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .request-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .request-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .request-id {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .request-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .request-details {
+      margin-bottom: 1rem;
+    }
+
+    .request-reason {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .request-items {
+      margin-bottom: 1rem;
+    }
+
+    .request-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .request-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .approve-btn {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .approve-btn:hover {
+      background: #1b5e20;
+    }
+
+    .reject-btn {
+      background: #c62828;
+      color: white;
+    }
+
+    .reject-btn:hover {
+      background: #b71c1c;
+    }
+
+    .no-requests {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .no-requests i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .modal-message {
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .modal-btn-confirm {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .modal-btn-cancel {
+      background: #f1f1f1;
+      color: #666;
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='supervisor-dashboard.html'">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+      <h1 class="page-title">Return & Refund Hub</h1>
+    </div>
+
+    <div id="returnRequestsContainer" class="return-requests">
+      <!-- Return requests will be dynamically added here -->
+    </div>
+  </div>
+
+  <!-- Approval Confirmation Modal -->
+  <div id="approvalModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirm Approval</h3>
+      <p class="modal-message">Are you sure you want to approve this return/refund request?</p>
+      <div class="modal-buttons">
+        <button id="confirmApproval" class="modal-btn modal-btn-confirm">Yes, Approve</button>
+        <button id="cancelApproval" class="modal-btn modal-btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rejection Confirmation Modal -->
+  <div id="rejectionModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirm Rejection</h3>
+      <p class="modal-message">Are you sure you want to reject this return/refund request?</p>
+      <div class="modal-buttons">
+        <button id="confirmRejection" class="modal-btn modal-btn-confirm">Yes, Reject</button>
+        <button id="cancelRejection" class="modal-btn modal-btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    let currentRequestId = null;
+    const approvalModal = document.getElementById('approvalModal');
+    const rejectionModal = document.getElementById('rejectionModal');
+
+    // Function to show approval modal
+    function showApprovalModal(requestId) {
+      currentRequestId = requestId;
+      approvalModal.style.display = 'flex';
+    }
+
+    // Function to show rejection modal
+    function showRejectionModal(requestId) {
+      currentRequestId = requestId;
+      rejectionModal.style.display = 'flex';
+    }
+
+    // Function to approve request
+    function approveRequest(requestId) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const orderIndex = orders.findIndex(o => o.id === requestId);
+      
+      if (orderIndex !== -1) {
+        // Update order status
+        orders[orderIndex].status = 'return_approved';
+        orders[orderIndex].returnApprovedAt = new Date().toISOString();
+        
+        // Add refund details
+        orders[orderIndex].refundDetails = {
+          refundedAt: new Date().toISOString(),
+          refundAmount: orders[orderIndex].total,
+          refundStatus: 'completed'
+        };
+
+        // Update customer's order history
+        const customerId = orders[orderIndex].customerId;
+        const customerOrders = JSON.parse(localStorage.getItem(`customer_${customerId}_orders`)) || [];
+        const customerOrderIndex = customerOrders.findIndex(o => o.id === requestId);
+        
+        if (customerOrderIndex !== -1) {
+          customerOrders[customerOrderIndex] = orders[orderIndex];
+          localStorage.setItem(`customer_${customerId}_orders`, JSON.stringify(customerOrders));
+        }
+
+        // Save updated orders
+        localStorage.setItem('orders', JSON.stringify(orders));
+        
+        // Update the UI
+        loadReturnRequests();
+        
+        // Show success message
+        alert('Return request approved and refund processed successfully');
+      }
+    }
+
+    // Function to reject request
+    function rejectRequest(requestId) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const orderIndex = orders.findIndex(o => o.id === requestId);
+      
+      if (orderIndex !== -1) {
+        // Update order status
+        orders[orderIndex].status = 'return_rejected';
+        orders[orderIndex].returnRejectedAt = new Date().toISOString();
+        orders[orderIndex].rejectionReason = 'Request rejected by supervisor';
+
+        // Update customer's order history
+        const customerId = orders[orderIndex].customerId;
+        const customerOrders = JSON.parse(localStorage.getItem(`customer_${customerId}_orders`)) || [];
+        const customerOrderIndex = customerOrders.findIndex(o => o.id === requestId);
+        
+        if (customerOrderIndex !== -1) {
+          customerOrders[customerOrderIndex] = orders[orderIndex];
+          localStorage.setItem(`customer_${customerId}_orders`, JSON.stringify(customerOrders));
+        }
+
+        // Save updated orders
+        localStorage.setItem('orders', JSON.stringify(orders));
+        
+        // Update the UI
+        loadReturnRequests();
+        
+        // Show success message
+        alert('Return request rejected');
+      }
+    }
+
+    // Function to load return requests
+    function loadReturnRequests() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const returnRequests = orders.filter(order => order.status === 'return_requested');
+      const container = document.getElementById('returnRequestsContainer');
+
+      if (returnRequests.length === 0) {
+        container.innerHTML = `
+          <div class="no-requests">
+            <i class="fas fa-check-circle"></i>
+            <p>No pending return/refund requests</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      returnRequests.forEach(request => {
+        const card = document.createElement('div');
+        card.className = 'request-card';
+        card.innerHTML = `
+          <div class="request-header">
+            <span class="request-id">Order #${request.id}</span>
+            <span class="request-date">${new Date(request.returnRequestedAt).toLocaleDateString()}</span>
+          </div>
+          <div class="request-details">
+            <div class="request-reason">
+              <strong>Reason:</strong> ${request.returnReason || 'No reason provided'}
+            </div>
+            <div class="request-items">
+              ${request.items.map(item => `
+                <div class="request-item">
+                  <img src="${item.image || ''}" alt="${item.name}" onerror="this.src='placeholder.jpg'">
+                  <div>
+                    <div>${item.name}</div>
+                    <div>Quantity: ${item.quantity}</div>
+                    <div>₱${(item.price * item.quantity).toFixed(2)}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <div class="request-total">
+              <strong>Total Amount:</strong> ₱${request.total.toFixed(2)}
+            </div>
+          </div>
+          <div class="request-actions">
+            <button class="action-btn approve-btn" data-request-id="${request.id}">
+              <i class="fas fa-check"></i> Approve
+            </button>
+            <button class="action-btn reject-btn" data-request-id="${request.id}">
+              <i class="fas fa-times"></i> Reject
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Add event listeners to the buttons
+      container.querySelectorAll('.approve-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const requestId = this.getAttribute('data-request-id');
+          showApprovalModal(requestId);
+        });
+      });
+
+      container.querySelectorAll('.reject-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const requestId = this.getAttribute('data-request-id');
+          showRejectionModal(requestId);
+        });
+      });
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // Load initial return requests
+      loadReturnRequests();
+
+      // Modal event handlers
+      document.getElementById('confirmApproval').addEventListener('click', function() {
+        if (currentRequestId) {
+          approveRequest(currentRequestId);
+          approvalModal.style.display = 'none';
+        }
+      });
+
+      document.getElementById('cancelApproval').addEventListener('click', function() {
+        approvalModal.style.display = 'none';
+      });
+
+      document.getElementById('confirmRejection').addEventListener('click', function() {
+        if (currentRequestId) {
+          rejectRequest(currentRequestId);
+          rejectionModal.style.display = 'none';
+        }
+      });
+
+      document.getElementById('cancelRejection').addEventListener('click', function() {
+        rejectionModal.style.display = 'none';
+      });
+
+      // Close modals when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === approvalModal) {
+          approvalModal.style.display = 'none';
+        }
+        if (event.target === rejectionModal) {
+          rejectionModal.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

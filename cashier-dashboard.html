@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cashier Dashboard | Lising Lasing</title>
+  <title>Cashier Dashboard | AmoraLise</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -513,10 +513,9 @@
   <div class="dashboard-container">
     <div class="header">
       <div class="logo">
-        <div class="logo-icon">LL</div>
+      <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
         <div class="logo-text">
-          <span>LISING</span>
-          <span>LASING</span>
+          <span>AMORALISE</span>
         </div>
       </div>
      
@@ -560,12 +559,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Check cashier authentication
-      const currentRole = localStorage.getItem('currentRole');
-      if (currentRole !== 'cashier') {
-        alert('Access denied. Please login with cashier credentials.');
-        window.location.href = 'index.html';
-      }
+ 
 
       // Modal elements
       const logoutModal = document.getElementById('logoutModal');
@@ -611,7 +605,7 @@
           setTimeout(() => {
             localStorage.removeItem('currentRole');
             localStorage.removeItem('authToken');
-            window.location.href = 'index.html';
+            window.location.href = 'front-page.html';
           }, 600);
         }, 300);
       });

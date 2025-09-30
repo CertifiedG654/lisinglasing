@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Supervisor Dashboard | Lising Lasing</title>
+  <title>Supervisor Dashboard | AmoraLise</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -482,6 +482,40 @@
         width: 100%;
       }
     }
+
+    /* Add these styles to your existing CSS */
+    .card-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--accent-gold);
+      color: var(--primary-dark);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+    }
   </style>
 </head>
 <body>
@@ -509,10 +543,9 @@
   <div class="dashboard-container">
     <div class="header">
       <div class="logo">
-        <div class="logo-icon">LL</div>
+      <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
         <div class="logo-text">
-          <span>LISING</span>
-          <span>LASING</span>
+          <span>AMORALISE</span>
         </div>
       </div>
      
@@ -526,16 +559,47 @@
         </button>
       </div>
     </div>
-  </div>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-card" onclick="navigateTo('return-refund-hub.html')">
+        <div class="card-icon">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        <h2 class="card-title">Return & Refund Hub</h2>
+        <p class="card-description">Review and process customer return/refund requests</p>
+        <div class="card-badge" id="returnRequestCount">0</div>
+      </div>
+
+      <div class="dashboard-card" onclick="navigateTo('supervisor-history.html')">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2 class="card-title">History</h2>
+        <p class="card-description">View sales analytics and generate reports</p>
+      </div>
+
+      <div class="dashboard-card" onclick="navigateTo('sales-report-supervisor.html')">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2 class="card-title">Sales Reports</h2>
+        <p class="card-description">View sales analytics and generate reports</p>
+      </div>
 
   <script>
+    // Move navigateTo function outside DOMContentLoaded
+    function navigateTo(url) {
+      const transition = document.getElementById('pageTransition');
+      transition.style.transformOrigin = 'top';
+      transition.style.transform = 'scaleY(1)';
+      
+      setTimeout(() => {
+        window.location.href = url;
+      }, 600);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-      // Check supervisor authentication
-      const currentRole = localStorage.getItem('currentRole');
-      if (currentRole !== 'supervisor') {
-        alert('Access denied. Please login with supervisor credentials.');
-        window.location.href = 'index.html';
-      }
+
 
       // Modal elements
       const logoutModal = document.getElementById('logoutModal');
@@ -581,7 +645,7 @@
           setTimeout(() => {
             localStorage.removeItem('currentRole');
             localStorage.removeItem('authToken');
-            window.location.href = 'index.html';
+            window.location.href = 'front-page.html';
           }, 600);
         }, 300);
       });
@@ -598,6 +662,24 @@
         transition.style.transformOrigin = 'bottom';
         transition.style.transform = 'scaleY(0)';
       };
+
+      // Add this to your existing DOMContentLoaded event listener
+      function updateReturnRequestCount() {
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        const returnRequests = orders.filter(order => order.status === 'return_requested');
+        const badge = document.getElementById('returnRequestCount');
+        badge.textContent = returnRequests.length;
+        
+        // Add animation class if there are pending requests
+        if (returnRequests.length > 0) {
+          badge.style.animation = 'pulse 2s infinite';
+        } else {
+          badge.style.animation = 'none';
+        }
+      }
+
+      // Call this function when the page loads
+      updateReturnRequestCount();
     });
   </script>
 </body>

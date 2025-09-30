@@ -1,788 +1,984 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier View | Lising Lasing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --primary-dark: #1a1a2e;
-            --primary-light: #16213e;
-            --accent-gold: #d4af37;
-            --accent-light: #e6d5b8;
-            --text-light: #f1f1f1;
-            --text-dark: #333;
-            --error-red: #dc3545;
-            --success-green: #28a745;
-            --gradient-bg: linear-gradient(135deg, #f9f5f0 0%, #f0ede5 100%);
-            --shadow: 0 4px 20px rgba(0,0,0,0.1);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cashier View | AmoraLise</title>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <style>
+            :root {
+                --primary-dark: #1a1a2e;
+                --primary-light: #16213e;
+                --accent-gold: #d4af37;
+                --accent-light: #e6d5b8;
+                --text-light: #f1f1f1;
+                --text-dark: #333;
+                --error-red: #dc3545;
+                --success-green: #28a745;
+                --gradient-bg: linear-gradient(135deg, #f9f5f0 0%, #f0ede5 100%);
+                --shadow: 0 4px 20px rgba(0,0,0,0.1);
+                --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--gradient-bg);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--primary-dark), var(--accent-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .back-btn, .logout-btn {
-            background: linear-gradient(45deg, var(--primary-light), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-btn::after, .logout-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: var(--transition);
-        }
-
-        .back-btn:hover::after, .logout-btn:hover::after {
-            left: 100%;
-        }
-
-        .back-btn:hover, .logout-btn:hover {
-            background: var(--accent-gold);
-            color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .section {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .table-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary-dark);
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-gold);
-            font-size: 1.8rem;
-        }
-
-        .order-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 15px;
-        }
-
-        .order-table th {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary-light));
-            color: white;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .order-table td {
-            padding: 16px;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-            background: white;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: var(--transition);
-        }
-
-        .input-field:focus {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
-            outline: none;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            font-size: 14px;
-            box-shadow: var(--shadow);
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: var(--transition);
-        }
-
-        .btn:hover::after {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--accent-gold), #e6c84f);
-            color: var(---simple-dark);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-
-        /* Page transition overlay */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-dark);
-            z-index: 9999;
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-
-        /* Confirmation Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .confirmation-modal, .receipt-modal {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow);
-            transform: translateY(20px) scale(0.95);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .modal-overlay.active .confirmation-modal, .modal-overlay.active .receipt-modal {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--primary-dark);
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            transform: rotate(90deg);
-            color: var(--accent-gold);
-        }
-
-        .modal-body {
-            margin-bottom: 25px;
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: var(--transition);
-        }
-
-        .modal-btn:hover::after {
-            left: 100%;
-        }
-
-        .modal-btn-cancel {
-            background-color: var(--accent-light);
-            color: var(--primary-dark);
-            border: 1px solid var(--primary-dark);
-        }
-
-        .modal-btn-cancel:hover {
-            background-color: #d9c8a0;
-            transform: translateY(-2px);
-            box-shadow:  sixteenpx 12px rgba(0,0,0,0.1);
-        }
-
-        .modal-btn-confirm {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary-light));
-            color: var(--text-light);
-        }
-
-        .modal-btn-confirm:hover {
-            background: var(--accent-gold);
-            color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        /* Receipt Modal Styles */
-        .receipt-modal {
-            max-width: 500px;
-        }
-
-        .receipt-content {
-            font-size: 0.9rem;
-        }
-
-        .receipt-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-
-        .receipt-content th, .receipt-content td {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-        }
-
-        .receipt-content th {
-            background: var(--primary-light);
-            color: white;
-        }
-
-        .receipt-footer {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--accent-gold);
-            color: var(--primary-dark);
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast.success { background: var(--accent-gold); }
-        .toast.error { background: var(--error-red); }
-
-        @media (max-width: 768px) {
-            .container {
+            body {
+                font-family: 'Montserrat', sans-serif;
+                background: var(--gradient-bg);
+                color: var(--text-dark);
+                line-height: 1.6;
+                min-height: 100vh;
                 padding: 20px;
             }
 
+            .container {
+                max-width: 1440px;
+                margin: 0 auto;
+                padding: 30px;
+            }
+
             .header {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 40px;
+                padding: 20px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: var(--shadow);
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                font-family: 'Playfair Display', serif;
+                font-size: 2.2rem;
+                font-weight: 700;
+                background: linear-gradient(45deg, var(--primary-dark), var(--accent-gold));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
 
             .header-buttons {
-                width: 100%;
-                justify-content: space-between;
-                margin-top: 20px;
+                display: flex;
+                gap: 20px;
+                align-items: center;
             }
 
-            .order-table th, .order-table td {
-                padding: 10px;
-                font-size: 0.9rem;
+            .back-btn, .logout-btn {
+                background: linear-gradient(45deg, var(--primary-light), var(--primary-dark));
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: var(--transition);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                box-shadow: var(--shadow);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .back-btn::after, .logout-btn::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: var(--transition);
+            }
+
+            .back-btn:hover::after, .logout-btn:hover::after {
+                left: 100%;
+            }
+
+            .back-btn:hover, .logout-btn:hover {
+                background: var(--accent-gold);
+                color: var(--primary-dark);
+                transform: translateY(-2px);
+            }
+
+            .section {
+                background: white;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: var(--shadow);
+            }
+
+            .table-title {
+                font-family: 'Playfair Display', serif;
+                color: var(--primary-dark);
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid var(--accent-gold);
+                font-size: 1.8rem;
+            }
+
+            .order-table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-top: 15px;
+            }
+
+            .order-table th {
+                background: linear-gradient(45deg, var(--primary-dark), var(--primary-light));
+                color: white;
+                padding: 16px;
+                text-align: left;
+                font-weight: 600;
+            }
+
+            .order-table td {
+                padding: 16px;
+                border-bottom: 1px solid #eee;
+                vertical-align: middle;
+                background: white;
             }
 
             .input-field {
-                padding: 10px;
+                width: 100%;
+                padding: 14px 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: var(--transition);
+            }
+
+            .input-field:focus {
+                border-color: var(--accent-gold);
+                box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+                outline: none;
             }
 
             .btn {
-                padding: 8px 12px;
+                padding: 10px 15px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: var(--transition);
+                font-size: 14px;
+                box-shadow: var(--shadow);
+                border: none;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: var(--transition);
+            }
+
+            .btn:hover::after {
+                left: 100%;
+            }
+
+            .btn-primary {
+                background: linear-gradient(45deg, var(--accent-gold), #e6c84f);
+                color: var(---simple-dark);
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            }
+
+            /* Page transition overlay */
+            .page-transition {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: var(--primary-dark);
+                z-index: 9999;
+                transform: scaleY(0);
+                transform-origin: bottom;
+                transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            }
+
+            /* Confirmation Modal Styles */
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .confirmation-modal, .receipt-modal {
+                background: white;
+                border-radius: 12px;
+                padding: 30px;
+                width: 90%;
+                max-width: 400px;
+                box-shadow: var(--shadow);
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .modal-overlay.active .confirmation-modal, .modal-overlay.active .receipt-modal {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .modal-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.5rem;
+                color: var(--primary-dark);
+            }
+
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--primary-dark);
+                transition: all 0.3s ease;
+            }
+
+            .modal-close:hover {
+                transform: rotate(90deg);
+                color: var(--accent-gold);
+            }
+
+            .modal-body {
+                margin-bottom: 25px;
+                color: var(--text-dark);
+                line-height: 1.6;
+            }
+
+            .modal-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+            }
+
+            .modal-btn {
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: var(--transition);
+                border: none;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .modal-btn::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: var(--transition);
+            }
+
+            .modal-btn:hover::after {
+                left: 100%;
+            }
+
+            .modal-btn-cancel {
+                background-color: var(--accent-light);
+                color: var(--primary-dark);
+                border: 1px solid var(--primary-dark);
+            }
+
+            .modal-btn-cancel:hover {
+                background-color: #d9c8a0;
+                transform: translateY(-2px);
+                box-shadow:  sixteenpx 12px rgba(0,0,0,0.1);
+            }
+
+            .modal-btn-confirm {
+                background: linear-gradient(45deg, var(--primary-dark), var(--primary-light));
+                color: var(--text-light);
+            }
+
+            .modal-btn-confirm:hover {
+                background: var(--accent-gold);
+                color: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            }
+
+            /* Receipt Modal Styles */
+            .receipt-modal {
+                max-width: 500px;
+            }
+
+            .receipt-content {
                 font-size: 0.9rem;
             }
+
+            .receipt-content table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+            }
+
+            .receipt-content th, .receipt-content td {
+                padding: 8px;
+                border-bottom: 1px solid #eee;
+                text-align: left;
+            }
+
+            .receipt-content th {
+                background: var(--primary-light);
+                color: white;
+            }
+
+            .receipt-footer {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            /* Toast Notification */
+            .toast {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: var(--accent-gold);
+                color: var(--primary-dark);
+                padding: 0.75rem 1.5rem;
+                border-radius: 25px;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                opacity: 0;
+                transition: var(--transition);
+                box-shadow: var(--shadow);
+                z-index: 1000;
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .toast.success { background: var(--accent-gold); }
+            .toast.error { background: var(--error-red); }
+
+            /* Cashier Layout */
+            .cashier-container {
+                display: flex;
+                gap: 30px;
+                margin-top: 30px;
+            }
+
+            .orders-section {
+                flex: 2;
+            }
+
+            .payment-section {
+                flex: 1;
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: var(--shadow);
+            }
+
+            .payment-input-container {
+                position: relative;
+                margin-bottom: 20px;
+            }
+
+            .payment-input {
+                width: 100%;
+                padding: 14px 15px;
+                font-size: 1.2rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                text-align: right;
+            }
+
+            .payment-input:focus {
+                border-color: var(--accent-gold);
+                outline: none;
+            }
+
+            .payment-input-label {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+            }
+
+            .numpad {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .numpad-btn {
+                padding: 15px;
+                font-size: 1.2rem;
+                border: none;
+                background: #f5f5f5;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: var(--transition);
+            }
+
+            .numpad-btn:hover {
+                background: #e0e0e0;
+                transform: translateY(-2px);
+            }
+
+            .action-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .clear-btn {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .delete-btn {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .complete-btn {
+                grid-column: span 2;
+                background: linear-gradient(45deg, var(--accent-gold), #e6c84f);
+                color: var(---simple-dark);
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+
+            .order-details {
+                margin-bottom: 20px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 8px;
+            }
+
+            .order-details h3 {
+                margin-bottom: 10px;
+                color: var(--primary-dark);
+            }
+
+            /* Tax Info Styles */
+            .tax-info {
+                font-size: 0.9rem;
+                color: #666;
+                margin-top: 5px;
+            }
+
+            .tax-breakdown {
+                margin-top: 10px;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                font-size: 0.9rem;
+            }
+
+            .tax-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+
+            .tax-label {
+                font-weight: 600;
+            }
+
+            .tax-value {
+                font-weight: 600;
+                color: var(--primary-dark);
+            }
+
+            .subtotal-row {
+                border-top: 1px solid #eee;
+                padding-top: 5px;
+                margin-top: 5px;
+            }
+
+            /* Selected Products Styles */
+            .selected-products {
+                margin-top: 20px;
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid #eee;
+                border-radius: 8px;
+                padding: 10px;
+            }
+
+            .selected-product-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .selected-product-item:last-child {
+                border-bottom: none;
+            }
+
+            .product-name {
+                flex: 2;
+            }
+
+            .product-qty {
+                flex: 1;
+                text-align: center;
+            }
+
+            .product-price {
+                flex: 1;
+                text-align: right;
+            }
+
+            .selected-products-title {
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: var(--primary-dark);
+            }
+
+            .no-products {
+                color: #999;
+                text-align: center;
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 20px;
+                }
+
+                .header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 15px;
+                }
+
+                .header-buttons {
+                    width: 100%;
+                    justify-content: space-between;
+                    margin-top: 20px;
+                }
+
+                .order-table th, .order-table td {
+                    padding: 10px;
+                    font-size: 0.9rem;
+                }
+
+                .input-field {
+                    padding: 10px;
+                }
+
+                .btn {
+                    padding: 8px 12px;
+                    font-size: 0.9rem;
+                }
+
+                .cashier-container {
+                    flex-direction: column;
+                }
+
+                .payment-input {
+                    font-size: 1rem;
+                    padding: 10px;
+                }
+
+                .numpad-btn {
+                    padding: 12px;
+                    font-size: 1rem;
+                }
+
+                .selected-products {
+                    max-height: 200px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Page transition overlay -->
+        <div class="page-transition" id="pageTransition"></div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay" id="logoutModal">
+            <div class="confirmation-modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Confirm Logout</h3>
+                    <button class="modal-close" id="closeModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to end your cashier session?</p>
+                    <p>Make sure all transactions are completed before logging out.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
+                    <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receipt Modal -->
+        <div class="modal-overlay" id="receiptModal">
+            <div class="receipt-modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Transaction Receipt</h3>
+                    <button class="modal-close" id="closeReceiptModal">×</button>
+                </div>
+                <div class="modal-body receipt-content" id="receiptContent">
+                    <!-- Receipt content will be dynamically inserted here -->
+                </div>
+                <div class="modal-footer receipt-footer">
+                    <button class="modal-btn modal-btn-cancel" id="closeReceipt">Close</button>
+                    <button class="modal-btn modal-btn-confirm" id="printReceipt">Print</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <span>AMORALISE</span>
+                </div>
+                <div class="header-buttons">
+                    <button id="backToDashboardBtn" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+                    </button>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cashier View -->
+            <div class="section">
+                <h1 class="table-title">Cashier Payment Processing</h1>
+                
+                <div class="cashier-container">
+                    <!-- Orders Section -->
+                    <div class="orders-section">
+                        <div id="pending-orders">
+                            <h2 class="table-title">Approved Orders</h2>
+                            <table class="order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pending-orders-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Section -->
+                    <div class="payment-section">
+                        <h2 class="table-title">Process Payment</h2>
+                        <div id="payment-details" class="order-details">
+                            <p>No order selected</p>
+                        </div>
+                        
+                        <div class="selected-products" id="selected-products">
+                            <div class="selected-products-title">Selected Products</div>
+                            <div class="no-products">No products selected</div>
+                        </div>
+                        
+                        <div class="tax-breakdown" id="tax-breakdown" style="display: none;">
+                            <div class="tax-row">
+                                <span class="tax-label">Subtotal:</span>
+                                <span class="tax-value" id="subtotal-amount">₱0.00</span>
+                            </div>
+                            <div class="tax-row">
+                                <span class="tax-label">Tax (12%):</span>
+                                <span class="tax-value" id="tax-amount">₱0.00</span>
+                            </div>
+                            <div class="tax-row subtotal-row">
+                                <span class="tax-label">Total:</span>
+                                <span class="tax-value" id="total-amount">₱0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-input-container">
+                            <span class="payment-input-label">Amount Paid:</span>
+                            <input type="text" class="payment-input" id="payment-input" placeholder="0.00" inputmode="decimal">
+                        </div>
+                        
+                        <div class="numpad">
+                            <button class="numpad-btn" data-value="1">1</button>
+                            <button class="numpad-btn" data-value="2">2</button>
+                            <button class="numpad-btn" data-value="3">3</button>
+                            <button class="numpad-btn" data-value="4">4</button>
+                            <button class="numpad-btn" data-value="5">5</button>
+                            <button class="numpad-btn" data-value="6">6</button>
+                            <button class="numpad-btn" data-value="7">7</button>
+                            <button class="numpad-btn" data-value="8">8</button>
+                            <button class="numpad-btn" data-value="9">9</button>
+                            <button class="numpad-btn" data-value="00">00</button>
+                            <button class="numpad-btn" data-value="0">0</button>
+                            <button class="numpad-btn" data-value=".">.</button>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn clear-btn" id="clear-btn">Clear</button>
+                            <button class="btn delete-btn" id="delete-btn">
+                                <i class="fas fa-backspace"></i> Delete
+                            </button>
+                            <button class="btn complete-btn" id="complete-btn">Complete Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+    // Initialize data from localStorage
+    let products = JSON.parse(localStorage.getItem('products')) || [];
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
+    let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+    let selectedOrder = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentRole = localStorage.getItem("currentRole");
+        if (currentRole !== "cashier") {
+            showToast("Access denied. Please login with cashier credentials.", "error");
+            setTimeout(() => {
+                window.location.href = "front-page.html";
+            }, 2000);
+            return;
         }
-    </style>
-</head>
-<body>
-    <!-- Page transition overlay -->
-    <div class="page-transition" id="pageTransition"></div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal-overlay" id="logoutModal">
-        <div class="confirmation-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirm Logout</h3>
-                <button class="modal-close" id="closeModal">×</button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to end your cashier session?</p>
-                <p>Make sure all transactions are completed before logging out.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
-                <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
-            </div>
-        </div>
-    </div>
+        renderApprovedOrders();
 
-    <!-- Receipt Modal -->
-    <div class="modal-overlay" id="receiptModal">
-        <div class="receipt-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Transaction Receipt</h3>
-                <button class="modal-close" id="closeReceiptModal">×</button>
-            </div>
-            <div class="modal-body receipt-content" id="receiptContent">
-                <!-- Receipt content will be dynamically inserted here -->
-            </div>
-            <div class="modal-footer receipt-footer">
-                <button class="modal-btn modal-btn-cancel" id="closeReceipt">Close</button>
-                <button class="modal-btn modal-btn-confirm" id="printReceipt">Print</button>
-            </div>
-        </div>
-    </div>
+        // Elements
+        const receiptModal = document.getElementById("receiptModal");
+        const closeReceiptModal = document.getElementById("closeReceiptModal");
+        const closeReceipt = document.getElementById("closeReceipt");
+        const printReceipt = document.getElementById("printReceipt");
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toastMessage");
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Action completed!</span>
-    </div>
+        const paymentInput = document.getElementById("payment-input");
+        const numpadButtons = document.querySelectorAll(".numpad-btn");
+        const clearBtn = document.getElementById("clear-btn");
+        const deleteBtn = document.getElementById("delete-btn");
+        const completeBtn = document.getElementById("complete-btn");
 
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <span>LISING</span>
-                <span>LASING</span>
-            </div>
-            <div class="header-buttons">
-                <button id="backToDashboardBtn" class="back-btn">
-                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
-                </button>
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-        </div>
+        // Receipt modal close
+        function closeReceiptModalHandler() {
+            receiptModal.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+        closeReceiptModal.addEventListener("click", closeReceiptModalHandler);
+        closeReceipt.addEventListener("click", closeReceiptModalHandler);
+        receiptModal.addEventListener("click", function (e) {
+            if (e.target === receiptModal) closeReceiptModalHandler();
+        });
 
-        <!-- Cashier View -->
-        <div class="section">
-            <h1 class="table-title">Cashier Payment Processing</h1>
-            <div id="pending-orders">
-                <h2 class="table-title">Approved Orders</h2>
-                <table class="order-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Items</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pending-orders-body"></tbody>
-                </table>
-            </div>
-            <div id="payment-section" class="mt-6">
-                <h2 class="table-title">Process Payment</h2>
-                <div id="payment-details"></div>
-                <input id="payment-amount" type="number" step="0.01" placeholder="Enter payment amount" class="input-field mb-4">
-                <button onclick="completePayment()" class="btn btn-primary">Complete Payment</button>
-            </div>
-        </div>
-    </div>
+        // Print receipt
+        printReceipt.addEventListener("click", function () {
+            const receiptContent = document.getElementById("receiptContent").innerHTML;
+            const printWindow = window.open("", "_blank");
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Receipt</title>
+                        <style>
+                            body { font-family: 'Montserrat', sans-serif; padding: 20px; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+                            th { background: #16213e; color: white; }
+                            .text-right { text-align: right; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>AmoraLise Receipt</h2>
+                        ${receiptContent}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        });
 
-    <script>
-        // Initialize data from localStorage
-        let products = JSON.parse(localStorage.getItem('products')) || [];
-        let orders = JSON.parse(localStorage.getItem('orders')) || [];
-        let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
-        let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+        // Toast
+        function showToast(message, type = "success") {
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === "success" ? "check-circle" : "times-circle"}"></i>
+                <span id="toastMessage">${message}</span>
+            `;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
 
-        // Check cashier authentication
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentRole = localStorage.getItem('currentRole');
-            if (currentRole !== 'cashier') {
-                showToast('Access denied. Please login with cashier credentials.', 'error');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
+        // Numpad functionality
+        numpadButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                const value = this.getAttribute("data-value");
+                handleNumpadInput(value);
+            });
+        });
+        clearBtn.addEventListener("click", function () {
+            paymentInput.value = "";
+        });
+        deleteBtn.addEventListener("click", function () {
+            let value = paymentInput.value;
+            paymentInput.value = value.slice(0, -1);
+        });
+
+        // Keyboard support
+        document.addEventListener("keydown", function (e) {
+            if ((e.key >= "0" && e.key <= "9") || e.key === ".") {
                 return;
-            }
-
-            // Render approved orders
-            renderApprovedOrders();
-
-            // Modal elements
-            const logoutModal = document.getElementById('logoutModal');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const backToDashboardBtn = document.getElementById('backToDashboardBtn');
-            const closeModal = document.getElementById('closeModal');
-            const cancelLogout = document.getElementById('cancelLogout');
-            const confirmLogout = document.getElementById('confirmLogout');
-            const receiptModal = document.getElementById('receiptModal');
-            const closeReceiptModal = document.getElementById('closeReceiptModal');
-            const closeReceipt = document.getElementById('closeReceipt');
-            const printReceipt = document.getElementById('printReceipt');
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-
-            // Back to dashboard
-            backToDashboardBtn.addEventListener('click', function() {
-                document.getElementById('pageTransition').style.transform = 'scaleY(1)';
-                setTimeout(() => {
-                    window.location.href = 'cashier-dashboard.html';
-                }, 600);
-            });
-
-            // Show modal when logout button is clicked
-            logoutBtn.addEventListener('click', function() {
-                logoutModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-
-            // Close modal when X is clicked
-            closeModal.addEventListener('click', function() {
-                closeModalHandler();
-            });
-
-            // Close modal when cancel is clicked
-            cancelLogout.addEventListener('click', function() {
-                closeModalHandler();
-            });
-
-            // Close modal when clicking outside
-            logoutModal.addEventListener('click', function(e) {
-                if (e.target === logoutModal) {
-                    closeModalHandler();
-                }
-            });
-
-            // Handle logout confirmation
-            confirmLogout.addEventListener('click', function() {
-                document.getElementById('pageTransition').style.transform = 'scaleY(1)';
-                setTimeout(() => {
-                    logoutModal.classList.remove('active');
-                    document.body.style.overflow = '';
-                    setTimeout(() => {
-                        localStorage.removeItem('currentRole');
-                        localStorage.removeItem('authToken');
-                        window.location.href = 'index.html';
-                    }, 600);
-                }, 300);
-            });
-
-            // Close receipt modal when X is clicked
-            closeReceiptModal.addEventListener('click', function() {
-                closeReceiptModalHandler();
-            });
-
-            // Close receipt modal when Close button is clicked
-            closeReceipt.addEventListener('click', function() {
-                closeReceiptModalHandler();
-            });
-
-            // Close receipt modal when clicking outside
-            receiptModal.addEventListener('click', function(e) {
-                if (e.target === receiptModal) {
-                    closeReceiptModalHandler();
-                }
-            });
-
-            // Print receipt
-            printReceipt.addEventListener('click', function() {
-                const receiptContent = document.getElementById('receiptContent').innerHTML;
-                const printWindow = window.open('', '_blank');
-                printWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Receipt</title>
-                            <style>
-                                body { font-family: 'Montserrat', sans-serif; padding: 20px; }
-                                table { width: 100%; border-collapse: collapse; }
-                                th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
-                                th { background: #16213e; color: white; }
-                                .text-right { text-align: right; }
-                            </style>
-                        </head>
-                        <body>
-                            <h2>Lising Lasing Receipt</h2>
-                            ${receiptContent}
-                        </body>
-                    </html>
-                `);
-                printWindow.document.close();
-                printWindow.print();
-                closeReceiptModalHandler();
-            });
-
-            // Function to handle logout modal closing
-            function closeModalHandler() {
-                logoutModal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            // Function to handle receipt modal closing
-            function closeReceiptModalHandler() {
-                receiptModal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            // Initialize page transition on load
-            const transition = document.getElementById('pageTransition');
-            transition.style.transformOrigin = 'bottom';
-            transition.style.transform = 'scaleY(0)';
-
-            // Show toast notification
-            function showToast(message, type = 'success') {
-                toastMessage.textContent = message;
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
-                    <span id="toastMessage">${message}</span>
-                `;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
+            } else if (e.key === "Backspace") {
+                let value = paymentInput.value;
+                paymentInput.value = value.slice(0, -1);
+            } else if (e.key === "Enter") {
+                completePayment();
+            } else if (e.key === "Delete") {
+                paymentInput.value = "";
+            } else {
+                e.preventDefault();
             }
         });
 
-        // Render approved orders for cashier
-        function renderApprovedOrders() {
-            const pendingOrdersBody = document.getElementById('pending-orders-body');
-            pendingOrdersBody.innerHTML = '';
-            const approvedOrders = cashierQueue.filter(o => o.status === 'approved' && !o.cashierProcessed);
-            if (approvedOrders.length === 0) {
-                pendingOrdersBody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: var(--text-dark);">
-                            No approved orders pending processing.
-                        </td>
-                    </tr>
-                `;
-                return;
+        function handleNumpadInput(value) {
+            const currentValue = paymentInput.value;
+            if (value === "00") {
+                paymentInput.value = currentValue + "00";
+            } else {
+                paymentInput.value = currentValue + value;
             }
-            approvedOrders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order.id}</td>
-                    <td>${order.items.map(i => `${i.name} x${i.quantity}`).join(', ')}</td>
-                    <td>₱${order.total.toFixed(2)}</td>
-                    <td><button onclick="selectOrder('${order.id}')" class="btn btn-primary">Process</button></td>
-                `;
-                pendingOrdersBody.appendChild(row);
-            });
         }
 
-        // Select order for payment
-        let selectedOrder = null;
-        function selectOrder(orderId) {
-            selectedOrder = cashierQueue.find(o => o.id === orderId && !o.cashierProcessed);
-            if (!selectedOrder) {
-                showToast('Order not found or already processed.', 'error');
-                return;
-            }
-            const paymentDetails = document.getElementById('payment-details');
-            paymentDetails.innerHTML = `
-                <h3 class="text-lg font-semibold">Order #${selectedOrder.id}</h3>
-                ${selectedOrder.items.map(i => `<p>${i.name} x${i.quantity} - ₱${(i.price * i.quantity).toFixed(2)}</p>`).join('')}
-                <p class="font-bold">Total: ₱${selectedOrder.total.toFixed(2)}</p>
-            `;
+        function getPaymentAmount() {
+            const value = paymentInput.value.trim();
+            if (value === "") return 0;
+            return parseFloat(value) || 0;
         }
 
-        // Complete payment
+        // Complete payment button
+        completeBtn.addEventListener("click", function () {
+            completePayment();
+        });
+
+        // Complete payment logic
         function completePayment() {
             if (!selectedOrder) {
-                showToast('Please select an order to process!', 'error');
+                showToast("Please select an order to process!", "error");
                 return;
             }
-            const paymentAmount = parseFloat(document.getElementById('payment-amount').value);
-            if (isNaN(paymentAmount) || paymentAmount < selectedOrder.total) {
-                showToast('Invalid payment amount!', 'error');
+
+            const paymentAmount = getPaymentAmount();
+            if (paymentAmount <= 0) {
+                showToast("Please enter a valid payment amount!", "error");
                 return;
             }
+            if (paymentAmount < selectedOrder.total) {
+                showToast("Payment amount must be at least the order total!", "error");
+                return;
+            }
+
             try {
                 // Update inventory
-                selectedOrder.items.forEach(item => {
-                    const product = products.find(p => p.id === item.id);
-                    if (product) {
-                        product.quantity -= item.quantity;
-                    }
+                selectedOrder.items.forEach((item) => {
+                    const product = products.find((p) => p.id === item.id);
+                    if (product) product.quantity -= item.quantity;
                 });
 
-                // Update order status in orders
-                const orderIndex = orders.findIndex(o => o.id === selectedOrder.id);
+                // Update order status
+                const orderIndex = orders.findIndex((o) => o.id === selectedOrder.id);
                 if (orderIndex !== -1) {
-                    orders[orderIndex].status = 'completed';
+                    orders[orderIndex].status = "completed";
                     orders[orderIndex].completedTimestamp = new Date().toISOString();
                 }
 
-                // Mark order as processed in cashierQueue
-                const queueIndex = cashierQueue.findIndex(o => o.id === selectedOrder.id);
+                // Mark order processed
+                const queueIndex = cashierQueue.findIndex((o) => o.id === selectedOrder.id);
                 if (queueIndex !== -1) {
                     cashierQueue[queueIndex].cashierProcessed = true;
                     cashierQueue[queueIndex].completedTimestamp = new Date().toISOString();
                 }
 
-                // Log audit
+                // Audit log
                 auditLog.push({
                     timestamp: new Date().toISOString(),
                     orderId: selectedOrder.id,
-                    items: selectedOrder.items.map(i => `${i.name} x${i.quantity}`).join(', '),
+                    items: selectedOrder.items.map((i) => `${i.name} x${i.quantity}`).join(", "),
                     total: selectedOrder.total,
-                    action: 'payment_completed'
+                    paid: paymentAmount,
+                    change: paymentAmount - selectedOrder.total,
+                    action: "payment_completed",
                 });
 
-                // Save to localStorage
-                localStorage.setItem('products', JSON.stringify(products));
-                localStorage.setItem('orders', JSON.stringify(orders));
-                localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
-                localStorage.setItem('auditLog', JSON.stringify(auditLog));
+                // Save
+                localStorage.setItem("products", JSON.stringify(products));
+                localStorage.setItem("orders", JSON.stringify(orders));
+                localStorage.setItem("cashierQueue", JSON.stringify(cashierQueue));
+                localStorage.setItem("auditLog", JSON.stringify(auditLog));
 
-                // Generate receipt
-                const receiptModal = document.getElementById('receiptModal');
-                const receiptContent = document.getElementById('receiptContent');
+                // Show receipt
+                const receiptContent = document.getElementById("receiptContent");
                 const change = paymentAmount - selectedOrder.total;
                 receiptContent.innerHTML = `
-                    <h3>Lising Lasing</h3>
-                    <p>Order ID: ${selectedOrder.id}</p>
-                    <p>Date: ${new Date().toLocaleString()}</p>
+                    <p><strong>Order ID:</strong> ${selectedOrder.id}</p>
+                    <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th>Total</th>
-                            </tr>
+                            <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
                         </thead>
                         <tbody>
                             ${selectedOrder.items.map(item => `
@@ -792,28 +988,130 @@
                                     <td>₱${item.price.toFixed(2)}</td>
                                     <td>₱${(item.price * item.quantity).toFixed(2)}</td>
                                 </tr>
-                            `).join('')}
+                            `).join("")}
                         </tbody>
                     </table>
-                    <p><strong>Total: ₱${selectedOrder.total.toFixed(2)}</strong></p>
-                    <p>Payment: ₱${paymentAmount.toFixed(2)}</p>
-                    <p>Change: ₱${change.toFixed(2)}</p>
+                    <p><strong>Total:</strong> ₱${selectedOrder.total.toFixed(2)}</p>
+                    <p><strong>Payment:</strong> ₱${paymentAmount.toFixed(2)}</p>
+                    <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
                 `;
-                receiptModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                receiptModal.classList.add("active");
+                document.body.style.overflow = "hidden";
 
-                // Reset payment section
-                document.getElementById('payment-amount').value = '';
-                document.getElementById('payment-details').innerHTML = '';
-                const completedOrderId = selectedOrder.id;
+                // Reset
                 selectedOrder = null;
+                paymentInput.value = "";
+                document.getElementById("payment-details").innerHTML = "<p>No order selected</p>";
+                document.getElementById("selected-products").innerHTML = `
+                    <div class="selected-products-title">Selected Products</div>
+                    <div class="no-products">No products selected</div>
+                `;
                 renderApprovedOrders();
-                showToast(`Order #${completedOrderId} payment completed!`, 'success');
+                showToast("Payment completed!", "success");
             } catch (e) {
-                console.error('Error processing payment:', e);
-                showToast('Failed to process payment.', 'error');
+                console.error("Error processing payment:", e);
+                showToast("Failed to process payment.", "error");
             }
         }
-    </script>
-</body>
-</html>
+    });
+
+    // Render approved orders
+    function renderApprovedOrders() {
+        const pendingOrdersBody = document.getElementById("pending-orders-body");
+        pendingOrdersBody.innerHTML = "";
+        const approvedOrders = cashierQueue.filter((o) => o.status === "approved" && !o.cashierProcessed);
+        if (approvedOrders.length === 0) {
+            pendingOrdersBody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-dark);">
+                        No approved orders pending processing.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        approvedOrders.forEach((order) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}</td>
+                <td>₱${order.total.toFixed(2)}</td>
+                <td><button onclick="selectOrder('${order.id}')" class="btn btn-primary">Process</button></td>
+            `;
+            pendingOrdersBody.appendChild(row);
+        });
+    }
+    
+
+    // Select order
+    function selectOrder(orderId) {
+        selectedOrder = cashierQueue.find((o) => o.id === orderId && !o.cashierProcessed);
+        if (!selectedOrder) {
+            alert("Order not found or already processed.");
+            return;
+        }
+
+        const subtotal = selectedOrder.total / 1.12;
+        const tax = selectedOrder.total - subtotal;
+
+        document.getElementById("payment-details").innerHTML = `
+            <h3>Order #${selectedOrder.id}</h3>
+            <p class="tax-info">Prices include 12% VAT</p>
+        `;
+        document.getElementById("selected-products").innerHTML = `
+            <div class="selected-products-title">Selected Products (${selectedOrder.items.length})</div>
+            ${selectedOrder.items.map(item => `
+                <div class="selected-product-item">
+                    <span class="product-name">${item.name}</span>
+                    <span class="product-qty">x${item.quantity}</span>
+                    <span class="product-price">₱${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join("")}
+        `;
+        document.getElementById("subtotal-amount").textContent = `₱${subtotal.toFixed(2)}`;
+        document.getElementById("tax-amount").textContent = `₱${tax.toFixed(2)}`;
+        document.getElementById("total-amount").textContent = `₱${selectedOrder.total.toFixed(2)}`;
+        document.getElementById("tax-breakdown").style.display = "block";
+    }
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutBtn = document.getElementById("logoutBtn");
+        const logoutModal = document.getElementById("logoutModal");
+        const closeModal = document.getElementById("closeModal");
+        const cancelLogout = document.getElementById("cancelLogout");
+        const confirmLogout = document.getElementById("confirmLogout");
+
+        // Open logout modal
+        logoutBtn.addEventListener("click", function () {
+            logoutModal.classList.add("active");
+        });
+
+        // Close modal (X or Cancel)
+        closeModal.addEventListener("click", function () {
+            logoutModal.classList.remove("active");
+        });
+        cancelLogout.addEventListener("click", function () {
+            logoutModal.classList.remove("active");
+        });
+
+        // Confirm logout → clear session and redirect
+        confirmLogout.addEventListener("click", function () {
+            localStorage.removeItem("currentRole"); // clear cashier role
+            window.location.href = "front-page.html"; // redirect to login/front page
+        });
+    });
+        backToDashboardBtn.addEventListener('click', function() {
+        window.location.href = 'cashier-dashboard.html';
+    });
+    localStorage.setItem("orderCompletedNotification", "true");
+
+// === Update notification count for product.html ===
+let notifCount = parseInt(localStorage.getItem("orderCompletedCount")) || 0;
+notifCount += 1; // dagdagan kapag may bagong payment
+localStorage.setItem("orderCompletedCount", notifCount.toString());
+
+</script>
+
+
+    </body>
+    </html>

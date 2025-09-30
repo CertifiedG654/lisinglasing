@@ -3,243 +3,289 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Dashboard | Lising Lasing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Customer Dashboard | AmoraLise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #1a3c34;
-      --secondary-color: #e8b923;
-      --accent-color: #8b1e3f;
-      --text-color: #333;
-      --bg-color: #f8f9fa;
+      --primary-dark: #1a3c34;
+      --primary-light: #2a5a4e;
+      --secondary: #e8b923;
+      --accent: #8b1e3f;
+      --text-dark: #333;
+      --text-light: #f5f5f5;
+      --bg-light: #f8f9fa;
       --card-bg: #ffffff;
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s ease;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --border-radius: 12px;
+      --sidebar-width: 280px;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
     .dashboard-container {
       display: flex;
       min-height: 100vh;
+      position: relative;
     }
 
     /* Sidebar */
     .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, var(--primary-color) 0%, #2a5a4e 100%);
-      color: #fff;
-      padding: 2rem 1rem;
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      color: var(--text-light);
+      padding: 2rem 1.5rem;
       position: fixed;
       height: 100%;
-      transition: width 0.3s ease;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
     }
 
     .logo {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       text-align: center;
       letter-spacing: 1px;
+      color: var(--secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo span:first-child {
+      font-weight: 700;
+      margin-bottom: -5px;
+    }
+
+    .logo span:last-child {
+      font-size: 1.4rem;
+      font-weight: 400;
     }
 
     .nav-menu {
       list-style: none;
+      margin-top: 1rem;
     }
 
     .nav-item {
-      margin: 0.5rem 0;
+      margin: 0.75rem 0;
     }
 
     .nav-link {
       display: flex;
       align-items: center;
-      padding: 0.75rem 1rem;
-      color: #fff;
+      padding: 0.75rem 1.25rem;
+      color: rgba(255, 255, 255, 0.85);
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       transition: var(--transition);
+      font-weight: 500;
     }
 
-    .nav-link:hover, .nav-link.active {
+    .nav-link:hover {
       background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
       transform: translateX(5px);
+    }
+
+    .nav-link.active {
+      background: rgba(232, 185, 35, 0.15);
+      color: var(--secondary);
+      font-weight: 600;
     }
 
     .nav-link i {
       margin-right: 0.75rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
     }
 
     /* Main Content */
     .main-content {
-      margin-left: 250px;
-      padding: 2rem;
+      margin-left: var(--sidebar-width);
+      padding: 2.5rem;
       flex: 1;
-      background-color: var(--bg-color);
+      background-color: var(--bg-light);
+      min-height: 100vh;
     }
 
     .page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--secondary-color);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--secondary);
+      position: relative;
     }
 
     .page-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--primary-color);
+      font-size: 2.25rem;
+      color: var(--primary-dark);
+      font-weight: 600;
       position: relative;
+      display: inline-block;
     }
 
-    .page-title::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 50px;
-      height: 3px;
-      background: var(--accent-color);
+    .welcome-message {
+      font-size: 1rem;
+      color: var(--text-dark);
+      opacity: 0.8;
     }
 
     /* Account Card */
     .account-card {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2.5rem;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .account-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
     }
 
     .info-grid {
       display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 1rem;
+      grid-template-columns: 160px 1fr;
+      gap: 1.25rem;
       align-items: center;
     }
 
     .info-label {
       font-weight: 600;
-      color: var(--primary-color);
-      font-size: 0.9rem;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+      opacity: 0.9;
     }
 
     .info-value {
-      font-size: 0.9rem;
-      color: var(--text-color);
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
     }
 
-    /* Orders Section */
-    .orders-section {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-
-    .order-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid #eee;
-      transition: var(--transition);
-    }
-
-    .order-item:hover {
-      background: #f9f9f9;
-    }
-
-    .order-item:last-child {
-      border-bottom: none;
-    }
-
-    .order-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .order-number {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--primary-color);
-      margin-bottom: 0.3rem;
-    }
-
-    .order-date {
-      color: #666;
-      font-size: 0.85rem;
-    }
-
-    .order-payment {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    .order-total {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--accent-color);
-      margin-bottom: 0.3rem;
-    }
-
-    .order-status {
-      padding: 0.3rem 0.8rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .status-pending {
-      background: #fff3e0;
-      color: #ef6c00;
-    }
-
-    .status-completed {
-      background: #e6f3e6;
-      color: #2e7d32;
-    }
-
-    .status-cancelled {
-      background: #ffe6e6;
-      color: #d32f2f;
-    }
-
-    /* Buttons */
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: var(--transition);
+    .edit-btn {
+      margin-top: 1.5rem;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--secondary-color);
-      color: #fff;
-      margin-top: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      background: none;
+      border: none;
     }
 
-    .btn:hover {
-      background: #d4a41f;
+    .edit-btn:hover {
+      color: var(--primary-dark);
+      transform: translateX(3px);
+    }
+
+    /* Stats Cards */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(232, 185, 35, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.25rem;
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      opacity: 0.7;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .stat-link {
+      text-decoration: none;
+      color: inherit;
     }
 
     /* Modal */
@@ -251,37 +297,47 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+      opacity: 1;
     }
 
     .modal-content {
-      background: #fff;
+      background: var(--card-bg);
       padding: 2rem;
-      border-radius: 12px;
-      max-width: 400px;
+      border-radius: var(--border-radius);
+      max-width: 450px;
       width: 90%;
       text-align: center;
-      box-shadow: var(--shadow);
-      animation: slideIn 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
     }
 
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    .modal.show .modal-content {
+      transform: translateY(0);
     }
 
     .modal-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: var(--primary-color);
-      margin-bottom: 1rem;
+      font-size: 1.75rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.25rem;
     }
 
     .modal-message {
-      margin-bottom: 1.5rem;
-      color: #666;
+      margin-bottom: 2rem;
+      color: var(--text-dark);
+      opacity: 0.8;
+      line-height: 1.6;
     }
 
     .modal-buttons {
@@ -291,48 +347,90 @@
     }
 
     .modal-btn {
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1.75rem;
       border: none;
-      border-radius: 25px;
+      border-radius: 30px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 600;
       transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .modal-btn-confirm {
-      background: var(--accent-color);
-      color: #fff;
+      background: var(--accent);
+      color: var(--text-light);
     }
 
     .modal-btn-confirm:hover {
       background: #7a1b35;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(139, 30, 63, 0.2);
     }
 
     .modal-btn-cancel {
-      background: #f1f1f1;
-      color: #666;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .modal-btn-cancel:hover {
       background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    /* Edit Profile Modal */
+    .edit-form {
+      display: grid;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.2);
     }
 
     /* Toast */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 30px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: var(--primary-color);
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
+      background: var(--primary-dark);
+      color: var(--text-light);
+      padding: 0.75rem 1.75rem;
+      border-radius: 30px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       opacity: 0;
-      transition: var(--transition);
-      box-shadow: var(--shadow);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      box-shadow: var(--shadow-lg);
+      z-index: 1100;
     }
 
     .toast.show {
@@ -345,21 +443,19 @@
     .toast.warning { background: #ef6c00; }
 
     /* Responsive Design */
-    @media (max-width: 1024px) {
-      .sidebar {
-        width: 80px;
+    @media (max-width: 1200px) {
+      :root {
+        --sidebar-width: 240px;
       }
+    }
 
-      .nav-link span {
-        display: none;
-      }
-
+    @media (max-width: 992px) {
       .main-content {
-        margin-left: 80px;
+        padding: 2rem;
       }
-
-      .logo {
-        font-size: 1.2rem;
+      
+      .info-grid {
+        grid-template-columns: 140px 1fr;
       }
     }
 
@@ -371,32 +467,48 @@
       .sidebar {
         width: 100%;
         height: auto;
-        position: static;
-        padding: 1rem;
+        position: relative;
+        padding: 1.5rem;
+        transform: translateX(0);
       }
 
       .main-content {
         margin-left: 0;
-        padding: 1rem;
+        padding: 1.75rem;
       }
 
       .page-header {
         flex-direction: column;
+        align-items: flex-start;
         gap: 1rem;
       }
 
       .info-grid {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 0.75rem;
       }
 
-      .order-item {
+      .stats-container {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-content {
+        padding: 1.5rem;
       }
 
-      .order-payment {
-        align-items: flex-start;
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .modal-btn {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -405,36 +517,34 @@
   <div class="dashboard-container">
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <div class="logo">Lising Lasing</div>
+      <div class="logo">
+        <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
+        <span>AMORALISE</span>
+
+      </div>
       <ul class="nav-menu">
         <li class="nav-item">
-          <a href="#" class="nav-link active">
+          <a href="customer-dashboard.html" class="nav-link active">
             <i class="fas fa-user"></i>
             <span>My Account</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="product.html" class="nav-link">
-            <i class="fas fa-box"></i>
+            <i class="fas fa-wine-bottle"></i>
             <span>Products</span>
           </a>
         </li>
         <li class="nav-item">
           <a href="myorder.html" class="nav-link">
-            <i class="fas fa-shopping-bag"></i>
+            <i class="fas fa-receipt"></i>
             <span>My Orders</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="wishlist.html" class="nav-link">
             <i class="fas fa-heart"></i>
             <span>Wishlist</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="settings.html" class="nav-link settings-link">
-            <i class="fas fa-cog"></i>
-            <span class="nav-text">Settings</span>
           </a>
         </li>
         <li class="nav-item">
@@ -449,27 +559,59 @@
     <!-- Main Content -->
     <main class="main-content">
       <div class="page-header">
-        <h1 class="page-title">My Account</h1>
+        <div>
+          <h1 class="page-title">My Account</h1>
+          <p class="welcome-message">Welcome back! Here's your account overview</p>
+        </div>
       </div>
 
+      <!-- Stats Cards -->
+      <div class="stats-container">
+        <a href="myorder.html" class="stat-link">
+          <div class="stat-card" id="totalOrdersCard">
+            <div class="stat-icon">
+              <i class="fas fa-receipt"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Total Orders</div>
+              <div class="stat-value" id="totalOrders">0</div>
+            </div>
+          </div>
+        </a>
+        <a href="myorder.html?status=completed" class="stat-link">
+          <div class="stat-card" id="completedOrdersCard">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Completed</div>
+              <div class="stat-value" id="completedOrders">0</div>
+            </div>
+          </div>
+        </a>
+        <a href="wishlist.html" class="stat-link">
+          <div class="stat-card" id="wishlistCard">
+            <div class="stat-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Wishlist</div>
+              <div class="stat-value" id="wishlistCount">0</div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Account Card -->
       <div class="account-card">
         <h2 class="section-title">Account Overview</h2>
         <div class="info-grid" id="accountInfo">
           <!-- Account info will be loaded here -->
         </div>
-      </div>
-
-      <div class="orders-section">
-        <h2 class="section-title">Recent Orders</h2>
-        <div id="orderHistory">
-          <!-- Order history will be loaded here -->
-          <div class="order-item">
-            <div class="order-info">
-              <span class="order-number">No recent orders</span>
-            </div>
-          </div>
-        </div>
-        <button class="btn"><i class="fas fa-eye"></i> View All Recent Orders</button>
+        <button class="edit-btn" id="editProfileBtn">
+          <i class="fas fa-pencil-alt"></i>
+          <span>Edit Profile</span>
+        </button>
       </div>
     </main>
   </div>
@@ -480,8 +622,71 @@
       <h3 class="modal-title">Confirm Logout</h3>
       <p class="modal-message">Are you sure you want to logout from your account?</p>
       <div class="modal-buttons">
-        <button id="confirmLogout" class="modal-btn modal-btn-confirm">Yes, Logout</button>
-        <button id="cancelLogout" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button id="confirmLogout" class="modal-btn modal-btn-confirm">
+          <i class="fas fa-sign-out-alt"></i>
+          Yes, Logout
+        </button>
+        <button id="cancelLogout" class="modal-btn modal-btn-cancel">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="editProfileModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Edit Profile</h3>
+      <form id="editProfileForm" class="edit-form">
+        <div class="form-group">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" id="firstName" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" id="lastName" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="tel" id="phone" class="form-input">
+        </div>
+        <div class="form-group">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" id="address" class="form-input">
+        </div>
+        <div class="modal-buttons">
+          <button type="submit" class="modal-btn modal-btn-confirm">
+            <i class="fas fa-save"></i>
+            Save Changes
+          </button>
+          <button type="button" id="cancelEditProfile" class="modal-btn modal-btn-cancel">
+            <i class="fas fa-times"></i>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Order Confirmation Modal -->
+  <div id="deleteOrderModal" class="modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirm Order Deletion</h3>
+      <p class="modal-message">Are you sure you want to delete this order? This action cannot be undone.</p>
+      <div class="modal-buttons">
+        <button id="confirmDeleteOrder" class="modal-btn modal-btn-confirm">
+          <i class="fas fa-trash"></i>
+          Yes, Delete
+        </button>
+        <button id="cancelDeleteOrder" class="modal-btn modal-btn-cancel">
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
       </div>
     </div>
   </div>
@@ -496,13 +701,25 @@
     document.addEventListener('DOMContentLoaded', function() {
       // DOM Elements
       const accountInfo = document.getElementById('accountInfo');
-      const orderHistory = document.getElementById('orderHistory');
+      const totalOrdersEl = document.getElementById('totalOrders');
+      const completedOrdersEl = document.getElementById('completedOrders');
+      const wishlistCountEl = document.getElementById('wishlistCount');
       const logoutBtn = document.getElementById('logoutBtn');
       const logoutModal = document.getElementById('logoutModal');
       const confirmLogout = document.getElementById('confirmLogout');
       const cancelLogout = document.getElementById('cancelLogout');
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      const editProfileModal = document.getElementById('editProfileModal');
+      const editProfileForm = document.getElementById('editProfileForm');
+      const cancelEditProfile = document.getElementById('cancelEditProfile');
+      const deleteOrderModal = document.getElementById('deleteOrderModal');
+      const confirmDeleteOrder = document.getElementById('confirmDeleteOrder');
+      const cancelDeleteOrder = document.getElementById('cancelDeleteOrder');
       const toast = document.getElementById('toast');
       const toastMessage = document.getElementById('toastMessage');
+      const totalOrdersCard = document.getElementById('totalOrdersCard');
+      const completedOrdersCard = document.getElementById('completedOrdersCard');
+      const wishlistCard = document.getElementById('wishlistCard');
 
       // Check customer authentication
       const loggedInCustomer = localStorage.getItem('loggedInCustomer');
@@ -515,38 +732,37 @@
       }
 
       // Load customer data
-      const customer = JSON.parse(loggedInCustomer);
+      let customer = JSON.parse(loggedInCustomer);
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+      // Calculate order stats
+      const customerOrders = orders.filter(order => order.customerId === customer.id);
+      const pendingOrders = customerOrders.filter(order => order.status === 'pending');
+      const completedOrders = customerOrders.filter(order => order.status === 'completed');
 
       // Display account info
-      accountInfo.innerHTML = `
-        <span class="info-label">Full Name:</span>
-        <span class="info-value">${customer.firstName} ${customer.lastName}</span>
-        <span class="info-label">Email:</span>
-        <span class="info-value">${customer.email}</span>
-        <span class="info-label">Phone:</span>
-        <span class="info-value">${customer.phone}</span>
-        <span class="info-label">Address:</span>
-        <span class="info-value">${customer.address}</span>
-      `;
-
-      // Load recent orders
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      const customerOrders = orders.filter(order => order.customerId === customer.id && order.status !== 'cancelled').slice(0, 3);
-
-      if (customerOrders.length > 0) {
-        orderHistory.innerHTML = customerOrders.map(order => `
-          <div class="order-item">
-            <div class="order-info">
-              <span class="order-number">${order.id}</span>
-              <span class="order-date">${new Date(order.timestamp).toLocaleDateString()}</span>
-            </div>
-            <div class="order-payment">
-              <span class="order-total">₱${order.total.toFixed(2)}</span>
-              <span class="order-status status-${order.status}">${order.status}</span>
-            </div>
-          </div>
-        `).join('');
+      function displayAccountInfo() {
+        accountInfo.innerHTML = `
+          <span class="info-label">Full Name:</span>
+          <span class="info-value">${customer.firstName} ${customer.lastName}</span>
+          <span class="info-label">Email:</span>
+          <span class="info-value">${customer.email}</span>
+          <span class="info-label">Phone:</span>
+          <span class="info-value">${customer.phone || 'Not provided'}</span>
+          <span class="info-label">Address:</span>
+          <span class="info-value">${customer.address || 'Not provided'}</span>
+          <span class="info-label">Member Since:</span>
+          <span class="info-value">${new Date(customer.createdAt || Date.now()).toLocaleDateString()}</span>
+        `;
       }
+
+      displayAccountInfo();
+
+      // Update stats
+      totalOrdersEl.textContent = customerOrders.length;
+      completedOrdersEl.textContent = completedOrders.length;
+      wishlistCountEl.textContent = wishlist.length;
 
       // Show toast notification
       function showToast(message, type = 'success') {
@@ -565,27 +781,134 @@
 
       // Logout functionality
       logoutBtn.addEventListener('click', function() {
-        logoutModal.style.display = 'flex';
+        logoutModal.classList.add('show');
       });
 
       confirmLogout.addEventListener('click', function() {
         localStorage.removeItem('loggedInCustomer');
         showToast('Logged out successfully');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'front-page.html';
         }, 1000);
       });
 
       cancelLogout.addEventListener('click', function() {
-        logoutModal.style.display = 'none';
+        logoutModal.classList.remove('show');
+      });
+
+      // Edit Profile functionality
+      editProfileBtn.addEventListener('click', function() {
+        // Fill form with current customer data
+        document.getElementById('firstName').value = customer.firstName;
+        document.getElementById('lastName').value = customer.lastName;
+        document.getElementById('email').value = customer.email;
+        document.getElementById('phone').value = customer.phone || '';
+        document.getElementById('address').value = customer.address || '';
+        
+        editProfileModal.classList.add('show');
+      });
+
+      cancelEditProfile.addEventListener('click', function() {
+        editProfileModal.classList.remove('show');
+      });
+
+      editProfileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Update customer data
+        customer = {
+          ...customer,
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('loggedInCustomer', JSON.stringify(customer));
+        
+        // Update UI
+        displayAccountInfo();
+        editProfileModal.classList.remove('show');
+        
+        showToast('Profile updated successfully');
+      });
+
+      // Delete order functionality (example for pending orders)
+      function setupOrderDeletion(orderId) {
+        // This would be called from the orders page, but we'll simulate it here
+        selectedOrderId = orderId;
+        deleteOrderModal.classList.add('show');
+      }
+
+      confirmDeleteOrder.addEventListener('click', function() {
+        if (selectedOrderId) {
+          // Remove order from localStorage
+          orders = orders.filter(order => order.id !== selectedOrderId);
+          localStorage.setItem('orders', JSON.stringify(orders));
+          
+          // Update UI
+          const newCustomerOrders = orders.filter(order => order.customerId === customer.id);
+          const newCompletedOrders = newCustomerOrders.filter(order => order.status === 'completed');
+          
+          totalOrdersEl.textContent = newCustomerOrders.length;
+          completedOrdersEl.textContent = newCompletedOrders.length;
+          
+          showToast('Order deleted successfully');
+          deleteOrderModal.classList.remove('show');
+          selectedOrderId = null;
+        }
+      });
+
+      cancelDeleteOrder.addEventListener('click', function() {
+        deleteOrderModal.classList.remove('show');
+        selectedOrderId = null;
+      });
+
+      // Make stats cards clickable
+      totalOrdersCard.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'A') {
+          window.location.href = 'myorder.html';
+        }
+      });
+
+      completedOrdersCard.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'A') {
+          window.location.href = 'myorder.html?status=completed';
+        }
+      });
+
+      wishlistCard.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'A') {
+          window.location.href = 'wishlist.html';
+        }
       });
 
       // Close modal when clicking outside
       window.addEventListener('click', function(event) {
         if (event.target === logoutModal) {
-          logoutModal.style.display = 'none';
+          logoutModal.classList.remove('show');
+        }
+        if (event.target === editProfileModal) {
+          editProfileModal.classList.remove('show');
+        }
+        if (event.target === deleteOrderModal) {
+          deleteOrderModal.classList.remove('show');
+          selectedOrderId = null;
         }
       });
+
+      // Example of how to trigger order deletion (would normally be on orders page)
+      // This is just for demonstration - in a real app, this would be on the orders page
+      function simulateOrderDeletion() {
+        if (pendingOrders.length > 0) {
+          setupOrderDeletion(pendingOrders[0].id);
+        }
+      }
+
+      // Uncomment to test order deletion functionality
+      // setTimeout(simulateOrderDeletion, 3000);
     });
   </script>
 </body>

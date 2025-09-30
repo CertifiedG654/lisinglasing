@@ -1,11 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check admin role
-    const currentRole = localStorage.getItem('currentRole');
-    if (currentRole !== 'admin') {
-        alert('Access denied. Please login as admin.');
-        window.location.href = 'index.html';
-        return;
-    }
+
 
     // DOM Elements
     const inventoryTableBody = document.getElementById('inventoryTableBody');
@@ -310,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle logout
     logoutBtn.addEventListener('click', function() {
         localStorage.removeItem('currentRole');
-        window.location.href = 'index.html';
+        window.location.href = 'front-page.html';
     });
     
     // Handle back to dashboard
@@ -321,4 +315,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial render
     renderInventoryTable();
     renderRecycleBinTable();
+    
 });
