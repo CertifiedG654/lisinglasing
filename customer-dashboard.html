@@ -288,6 +288,22 @@
       color: inherit;
     }
 
+    /* Google User Badge */
+    .google-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #4285f4;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-left: 8px;
+    }
+
+    .google-badge i {
+      margin-right: 4px;
+    }
+
     /* Modal */
     .modal {
       display: none;
@@ -520,7 +536,6 @@
       <div class="logo">
         <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
         <span>AMORALISE</span>
-
       </div>
       <ul class="nav-menu">
         <li class="nav-item">
@@ -561,7 +576,7 @@
       <div class="page-header">
         <div>
           <h1 class="page-title">My Account</h1>
-          <p class="welcome-message">Welcome back! Here's your account overview</p>
+          <p class="welcome-message" id="welcomeMessage">Welcome back! Here's your account overview</p>
         </div>
       </div>
 
@@ -612,6 +627,14 @@
           <i class="fas fa-pencil-alt"></i>
           <span>Edit Profile</span>
         </button>
+      </div>
+
+      <!-- Google Account Info Card -->
+      <div class="account-card" id="googleAccountCard" style="display: none;">
+        <h2 class="section-title">Google Account</h2>
+        <div class="info-grid" id="googleAccountInfo">
+          <!-- Google account info will be loaded here -->
+        </div>
       </div>
     </main>
   </div>
@@ -673,24 +696,6 @@
     </div>
   </div>
 
-  <!-- Delete Order Confirmation Modal -->
-  <div id="deleteOrderModal" class="modal">
-    <div class="modal-content">
-      <h3 class="modal-title">Confirm Order Deletion</h3>
-      <p class="modal-message">Are you sure you want to delete this order? This action cannot be undone.</p>
-      <div class="modal-buttons">
-        <button id="confirmDeleteOrder" class="modal-btn modal-btn-confirm">
-          <i class="fas fa-trash"></i>
-          Yes, Delete
-        </button>
-        <button id="cancelDeleteOrder" class="modal-btn modal-btn-cancel">
-          <i class="fas fa-times"></i>
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast Notification -->
   <div id="toast" class="toast">
     <i class="fas fa-check-circle"></i>
@@ -701,6 +706,9 @@
     document.addEventListener('DOMContentLoaded', function() {
       // DOM Elements
       const accountInfo = document.getElementById('accountInfo');
+      const googleAccountCard = document.getElementById('googleAccountCard');
+      const googleAccountInfo = document.getElementById('googleAccountInfo');
+      const welcomeMessage = document.getElementById('welcomeMessage');
       const totalOrdersEl = document.getElementById('totalOrders');
       const completedOrdersEl = document.getElementById('completedOrders');
       const wishlistCountEl = document.getElementById('wishlistCount');
@@ -712,21 +720,15 @@
       const editProfileModal = document.getElementById('editProfileModal');
       const editProfileForm = document.getElementById('editProfileForm');
       const cancelEditProfile = document.getElementById('cancelEditProfile');
-      const deleteOrderModal = document.getElementById('deleteOrderModal');
-      const confirmDeleteOrder = document.getElementById('confirmDeleteOrder');
-      const cancelDeleteOrder = document.getElementById('cancelDeleteOrder');
       const toast = document.getElementById('toast');
       const toastMessage = document.getElementById('toastMessage');
-      const totalOrdersCard = document.getElementById('totalOrdersCard');
-      const completedOrdersCard = document.getElementById('completedOrdersCard');
-      const wishlistCard = document.getElementById('wishlistCard');
 
       // Check customer authentication
       const loggedInCustomer = localStorage.getItem('loggedInCustomer');
       if (!loggedInCustomer) {
         showToast('Please login first', 'error');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'front-page.html';
         }, 1000);
         return;
       }
@@ -738,23 +740,45 @@
 
       // Calculate order stats
       const customerOrders = orders.filter(order => order.customerId === customer.id);
-      const pendingOrders = customerOrders.filter(order => order.status === 'pending');
       const completedOrders = customerOrders.filter(order => order.status === 'completed');
 
       // Display account info
       function displayAccountInfo() {
+        // Update welcome message
+        welcomeMessage.textContent = `Welcome back, ${customer.firstName}! Here's your account overview`;
+        
+        // Display main account info
         accountInfo.innerHTML = `
           <span class="info-label">Full Name:</span>
-          <span class="info-value">${customer.firstName} ${customer.lastName}</span>
+          <span class="info-value">${customer.firstName} ${customer.lastName} ${customer.authProvider === 'google' ? '<span class="google-badge"><i class="fab fa-google"></i>Google</span>' : ''}</span>
           <span class="info-label">Email:</span>
-          <span class="info-value">${customer.email}</span>
+          <span class="info-value">${customer.email} ${customer.emailVerified ? '<i class="fas fa-check-circle" style="color: #10b981; margin-left: 5px;"></i>' : ''}</span>
           <span class="info-label">Phone:</span>
           <span class="info-value">${customer.phone || 'Not provided'}</span>
           <span class="info-label">Address:</span>
           <span class="info-value">${customer.address || 'Not provided'}</span>
           <span class="info-label">Member Since:</span>
           <span class="info-value">${new Date(customer.createdAt || Date.now()).toLocaleDateString()}</span>
+          <span class="info-label">Last Login:</span>
+          <span class="info-value">${new Date(customer.lastLogin || Date.now()).toLocaleDateString()}</span>
         `;
+
+        // Display Google account info if user signed in with Google
+        if (customer.authProvider === 'google') {
+          googleAccountCard.style.display = 'block';
+          googleAccountInfo.innerHTML = `
+            <span class="info-label">Google ID:</span>
+            <span class="info-value">${customer.googleId || 'N/A'}</span>
+            <span class="info-label">Authentication:</span>
+            <span class="info-value">Google OAuth 2.0</span>
+            <span class="info-label">Email Verified:</span>
+            <span class="info-value">${customer.emailVerified ? 'Yes' : 'No'}</span>
+            <span class="info-label">Profile Picture:</span>
+            <span class="info-value">${customer.picture ? '<img src="' + customer.picture + '" style="width: 40px; height: 40px; border-radius: 50%;">' : 'Not available'}</span>
+          `;
+        } else {
+          googleAccountCard.style.display = 'none';
+        }
       }
 
       displayAccountInfo();
@@ -785,6 +809,11 @@
       });
 
       confirmLogout.addEventListener('click', function() {
+        // Log Google sign-out if user signed in with Google
+        if (customer.authProvider === 'google') {
+          console.log('Google user logged out:', customer.email);
+        }
+        
         localStorage.removeItem('loggedInCustomer');
         showToast('Logged out successfully');
         setTimeout(() => {
@@ -835,56 +864,6 @@
         showToast('Profile updated successfully');
       });
 
-      // Delete order functionality (example for pending orders)
-      function setupOrderDeletion(orderId) {
-        // This would be called from the orders page, but we'll simulate it here
-        selectedOrderId = orderId;
-        deleteOrderModal.classList.add('show');
-      }
-
-      confirmDeleteOrder.addEventListener('click', function() {
-        if (selectedOrderId) {
-          // Remove order from localStorage
-          orders = orders.filter(order => order.id !== selectedOrderId);
-          localStorage.setItem('orders', JSON.stringify(orders));
-          
-          // Update UI
-          const newCustomerOrders = orders.filter(order => order.customerId === customer.id);
-          const newCompletedOrders = newCustomerOrders.filter(order => order.status === 'completed');
-          
-          totalOrdersEl.textContent = newCustomerOrders.length;
-          completedOrdersEl.textContent = newCompletedOrders.length;
-          
-          showToast('Order deleted successfully');
-          deleteOrderModal.classList.remove('show');
-          selectedOrderId = null;
-        }
-      });
-
-      cancelDeleteOrder.addEventListener('click', function() {
-        deleteOrderModal.classList.remove('show');
-        selectedOrderId = null;
-      });
-
-      // Make stats cards clickable
-      totalOrdersCard.addEventListener('click', function(e) {
-        if (e.target.tagName !== 'A') {
-          window.location.href = 'myorder.html';
-        }
-      });
-
-      completedOrdersCard.addEventListener('click', function(e) {
-        if (e.target.tagName !== 'A') {
-          window.location.href = 'myorder.html?status=completed';
-        }
-      });
-
-      wishlistCard.addEventListener('click', function(e) {
-        if (e.target.tagName !== 'A') {
-          window.location.href = 'wishlist.html';
-        }
-      });
-
       // Close modal when clicking outside
       window.addEventListener('click', function(event) {
         if (event.target === logoutModal) {
@@ -893,22 +872,18 @@
         if (event.target === editProfileModal) {
           editProfileModal.classList.remove('show');
         }
-        if (event.target === deleteOrderModal) {
-          deleteOrderModal.classList.remove('show');
-          selectedOrderId = null;
-        }
       });
 
-      // Example of how to trigger order deletion (would normally be on orders page)
-      // This is just for demonstration - in a real app, this would be on the orders page
-      function simulateOrderDeletion() {
-        if (pendingOrders.length > 0) {
-          setupOrderDeletion(pendingOrders[0].id);
-        }
+      // Display login method info
+      console.log('Customer logged in via:', customer.authProvider || 'traditional');
+      if (customer.authProvider === 'google') {
+        console.log('Google user details:', {
+          email: customer.email,
+          googleId: customer.googleId,
+          emailVerified: customer.emailVerified
+        });
       }
 
-      // Uncomment to test order deletion functionality
-      // setTimeout(simulateOrderDeletion, 3000);
     });
   </script>
 </body>

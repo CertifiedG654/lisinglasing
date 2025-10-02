@@ -525,6 +525,69 @@
         transition: opacity 0.1s;
     }
 }
+
+/* 2FA Modal Styles */
+.two-factor-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+}
+
+.two-factor-content {
+    background: #3a2416;
+    border: 1px solid #4a3420;
+    border-radius: 8px;
+    padding: 25px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+.qr-code-container {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    display: inline-block;
+}
+
+.manual-code {
+    background: #2a1a10;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-family: "Roboto Mono", monospace;
+    font-size: 12px;
+    word-break: break-all;
+}
+
+.verification-input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #a18a85;
+    border-radius: 4px;
+    background: #d9c1b0;
+    color: #3a2416;
+    font-family: "Roboto Mono", monospace;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.verification-input:focus {
+    outline: none;
+    border-color: #7a5a52;
+    box-shadow: 0 0 0 2px rgba(122, 90, 82, 0.3);
+}
   </style>
 </head>
 <body>
@@ -551,6 +614,35 @@
     <i class="fas fa-chevron-down text-[10px]"></i>
    </div>
   </header>
+
+  <!-- 2FA Setup Modal -->
+  <div id="twoFactorModal" class="two-factor-modal">
+    <div class="two-factor-content">
+      <h3 class="text-[#d9c1b0] font-serif text-lg mb-4">Set Up Two-Factor Authentication</h3>
+      <p class="text-[#d9c1b0] font-mono-custom text-xs mb-4">Scan this QR code with Google Authenticator app</p>
+      
+      <div class="qr-code-container">
+        <img id="qrCodeImage" src="" alt="QR Code" style="width: 200px; height: 200px;">
+      </div>
+      
+      <p class="text-[#d9c1b0] font-mono-custom text-xs mt-4">Or enter this code manually:</p>
+      <div class="manual-code">
+        <span id="manualCode" class="text-[#3a2416]"></span>
+      </div>
+      
+      <p class="text-[#d9c1b0] font-mono-custom text-xs mt-4">Enter the 6-digit code from Google Authenticator:</p>
+      <input type="text" id="verificationCode" class="verification-input" maxlength="6" placeholder="000000">
+      
+      <div class="flex space-x-3 mt-4">
+        <button id="verify2FABtn" class="flex-1 bg-[#7a5a52] text-[#d9c1b0] font-mono-custom text-xs rounded px-4 py-2 border border-[#a18a85] hover:bg-[#8b6b63] btn-animate">
+          Verify & Complete
+        </button>
+        <button id="skip2FABtn" class="flex-1 bg-[#3a2416] text-[#d9c1b0] font-mono-custom text-xs rounded px-4 py-2 border border-[#a18a85] hover:bg-[#4a3426] btn-animate">
+          Skip for Now
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div id="authModal" class="modal">
    <div class="modal-content">
@@ -702,13 +794,19 @@
 
   <script>
     // Google OAuth Configuration
-    // IMPORTANT: Replace with your actual Google Client ID from Google Cloud Console
-    const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+    // REPLACE THIS WITH YOUR ACTUAL GOOGLE CLIENT ID FROM GOOGLE CLOUD CONSOLE
+  // Google OAuth Configuration
+const GOOGLE_CLIENT_ID = '79718460907-7p8ie4oha5n35htpgjmpsk1j4aib0odl.apps.googleusercontent.com';
+
+    // Google Cloud Database Configuration
+    const GOOGLE_CLOUD_PROJECT_ID = 'your-google-cloud-project-id';
+    const GOOGLE_CLOUD_API_KEY = 'your-google-cloud-api-key';
 
     document.addEventListener('DOMContentLoaded', function() {
+      console.log('Initializing Amoralise authentication system...');
+
       // Toast notification function
       function showToast(message, type = 'success') {
-        // Create toast element if it doesn't exist
         let toast = document.getElementById('toast');
         if (!toast) {
           toast = document.createElement('div');
@@ -730,38 +828,104 @@
       function initializeGoogleSignIn() {
         if (typeof google === 'undefined') {
           console.error('Google Identity Services not loaded');
+          showToast('Google authentication service not available', 'error');
           return;
         }
 
-        google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleGoogleSignIn,
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
+        try {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleSignIn,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+            context: 'use',
+            ux_mode: 'popup'
+          });
 
-        // Add click handlers for Google buttons
-        document.getElementById('googleSignIn').addEventListener('click', function() {
-          google.accounts.id.prompt();
-        });
+          console.log('Google OAuth initialized successfully');
 
-        document.getElementById('googleSignUp').addEventListener('click', function() {
-          google.accounts.id.prompt();
-        });
+          // Add click handlers for Google buttons
+          const googleSignInBtn = document.getElementById('googleSignIn');
+          const googleSignUpBtn = document.getElementById('googleSignUp');
+
+          if (googleSignInBtn) {
+            googleSignInBtn.addEventListener('click', function() {
+              triggerGoogleSignIn();
+            });
+          }
+
+          if (googleSignUpBtn) {
+            googleSignUpBtn.addEventListener('click', function() {
+              triggerGoogleSignIn();
+            });
+          }
+
+        } catch (error) {
+          console.error('Error initializing Google Sign-In:', error);
+          showToast('Failed to initialize Google authentication', 'error');
+        }
+      }
+
+      function triggerGoogleSignIn() {
+        try {
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              // Fallback: render button manually
+              renderGoogleButton();
+            }
+          });
+        } catch (error) {
+          console.error('Error triggering Google Sign-In:', error);
+          showToast('Google sign-in failed. Please try again.', 'error');
+        }
+      }
+
+      function renderGoogleButton() {
+        const googleSignInBtn = document.getElementById('googleSignIn');
+        const googleSignUpBtn = document.getElementById('googleSignUp');
+        
+        if (googleSignInBtn && google.accounts.id.renderButton) {
+          google.accounts.id.renderButton(googleSignInBtn, {
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            width: googleSignInBtn.offsetWidth
+          });
+        }
+        
+        if (googleSignUpBtn && google.accounts.id.renderButton) {
+          google.accounts.id.renderButton(googleSignUpBtn, {
+            theme: 'outline',
+            size: 'large',
+            text: 'signup_with',
+            width: googleSignUpBtn.offsetWidth
+          });
+        }
       }
 
       // Handle Google Sign-In response
       function handleGoogleSignIn(response) {
+        console.log('Google Sign-In response received');
+        
         if (response.credential) {
-          // Decode the JWT token to get user info
-          const userData = parseJwt(response.credential);
+          showLoadingState(true);
           
-          // Process Google user data
-          processGoogleUser(userData);
+          try {
+            const userData = parseJwt(response.credential);
+            console.log('Google user data:', userData);
+            processGoogleUser(userData);
+          } catch (error) {
+            console.error('Error processing Google Sign-In:', error);
+            showToast('Failed to process Google Sign-In. Please try again.', 'error');
+            showLoadingState(false);
+          }
+        } else {
+          console.error('No credential in Google response');
+          showToast('Google Sign-In failed. Please try again.', 'error');
         }
       }
 
-      // Parse JWT token
+      // Parse JWT token from Google
       function parseJwt(token) {
         try {
           const base64Url = token.split('.')[1];
@@ -772,52 +936,122 @@
 
           return JSON.parse(jsonPayload);
         } catch (error) {
-          console.error('Error parsing JWT:', error);
-          return null;
+          throw new Error('Invalid JWT token');
         }
       }
 
-      // Process Google user data and create/update user account
+      // Process Google user data
       function processGoogleUser(googleUser) {
-        showLoading();
+        console.log('Processing Google user:', googleUser);
         
-        // Extract user information from Google response
         const userData = {
-          firstName: googleUser.given_name || '',
-          lastName: googleUser.family_name || '',
+          id: generateUserId(),
+          firstName: googleUser.given_name || 'Google',
+          lastName: googleUser.family_name || 'User',
           email: googleUser.email,
-          phone: '', // Google doesn't provide phone number by default
-          address: '', // Google doesn't provide address by default
+          phone: '',
+          address: '',
           username: generateUsernameFromEmail(googleUser.email),
-          password: generateRandomPassword(), // Generate a random password for local storage
+          password: generateRandomPassword(),
           role: 'customer',
           googleId: googleUser.sub,
           picture: googleUser.picture,
-          emailVerified: googleUser.email_verified,
+          emailVerified: googleUser.email_verified || false,
           authProvider: 'google',
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          twoFactorEnabled: false,
+          twoFactorSecret: null
         };
 
-        // Check if user already exists by email or Google ID
+        // Save user to Google Cloud Database (simulated)
+        saveUserToGoogleCloud(userData);
+
+        // Also save to localStorage for immediate access
+        saveUserToLocalStorage(userData);
+
+        // Log the user in
+        handleLoginSuccess(userData);
+      }
+
+      // Save user to Google Cloud Database (simulated - you'll need backend for real implementation)
+      function saveUserToGoogleCloud(userData) {
+        console.log('Saving user to Google Cloud Database:', userData.email);
+        
+        // In a real implementation, you would make an API call to your backend
+        // which would save the user to Google Cloud SQL or Firebase Firestore
+        
+        // Example API call (commented out since we don't have backend yet)
+        /*
+        fetch('https://your-backend-domain.com/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GOOGLE_CLOUD_API_KEY}`
+          },
+          body: JSON.stringify({
+            projectId: GOOGLE_CLOUD_PROJECT_ID,
+            user: userData
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('User saved to Google Cloud:', data);
+        })
+        .catch(error => {
+          console.error('Error saving to Google Cloud:', error);
+        });
+        */
+        
+        // For now, we'll simulate success
+        setTimeout(() => {
+          console.log('User data would be saved to Google Cloud Database');
+        }, 500);
+      }
+
+      // Save user to localStorage
+      function saveUserToLocalStorage(userData) {
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const customers = JSON.parse(localStorage.getItem('customers')) || [];
         
-        const existingUserByEmail = users.find(user => user.email === userData.email);
-        const existingUserByGoogleId = users.find(user => user.googleId === userData.googleId);
-
-        if (existingUserByEmail || existingUserByGoogleId) {
-          // User exists, log them in
-          const existingUser = existingUserByGoogleId || existingUserByEmail;
-          handleGoogleLoginSuccess(existingUser);
+        // Check if user already exists
+        const existingUserIndex = users.findIndex(user => 
+          user.googleId === userData.googleId || user.email === userData.email
+        );
+        
+        if (existingUserIndex !== -1) {
+          // Update existing user
+          users[existingUserIndex] = { ...users[existingUserIndex], ...userData, lastLogin: new Date().toISOString() };
+          
+          const existingCustomerIndex = customers.findIndex(customer => 
+            customer.googleId === userData.googleId || customer.email === userData.email
+          );
+          if (existingCustomerIndex !== -1) {
+            customers[existingCustomerIndex] = users[existingUserIndex];
+          } else {
+            customers.push(users[existingUserIndex]);
+          }
         } else {
-          // New user, create account
-          createUserWithGoogleData(userData);
+          // Add new user
+          users.push(userData);
+          customers.push(userData);
         }
+        
+        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('customers', JSON.stringify(customers));
+        localStorage.setItem('googleUsers', JSON.stringify([...JSON.parse(localStorage.getItem('googleUsers') || '[]'), userData]));
+        
+        console.log('User saved to localStorage:', userData.email);
+      }
+
+      // Generate unique user ID
+      function generateUserId() {
+        return 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
       }
 
       // Generate username from email
       function generateUsernameFromEmail(email) {
-        return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+        return email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '') + '_google';
       }
 
       // Generate random password for local storage
@@ -825,67 +1059,59 @@
         return Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
       }
 
-      // Create new user with Google data
-      function createUserWithGoogleData(userData) {
-        // Get existing data
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const customers = JSON.parse(localStorage.getItem('customers')) || [];
-
-        // Check if username already exists and modify if necessary
-        let finalUsername = userData.username;
-        let counter = 1;
-        while (users.some(user => user.username === finalUsername)) {
-          finalUsername = `${userData.username}${counter}`;
-          counter++;
-        }
-        userData.username = finalUsername;
-
-        // Add to both storage locations for compatibility
-        users.push(userData);
-        customers.push(userData);
-
-        // Save to localStorage
-        localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('customers', JSON.stringify(customers));
-        localStorage.setItem('googleUsers', JSON.stringify([...JSON.parse(localStorage.getItem('googleUsers') || '[]'), userData]));
-
-        // Log the user in
-        handleGoogleLoginSuccess(userData);
-      }
-
-      // Handle successful Google login
-      function handleGoogleLoginSuccess(user) {
-        hideLoading();
+      // Handle successful login
+      function handleLoginSuccess(user) {
+        showLoadingState(false);
         
+        console.log('Login successful for user:', user.email);
+        showToast(`Welcome ${user.firstName}! Redirecting...`, 'success');
+
+        // Store user session
         if (user.role === 'customer') {
           localStorage.setItem('loggedInCustomer', JSON.stringify(user));
-          showToast('Google sign-in successful!', 'success');
-          
-          setTimeout(() => {
-            window.location.href = 'customer-dashboard.html';
-          }, 1000);
         } else {
           localStorage.setItem('currentRole', user.role);
-          let dashboard;
-          switch(user.role) {
-            case 'admin': dashboard = 'admin-dashboard.html'; break;
-            case 'audit': dashboard = 'audit.html'; break;
-            case 'supervisor': dashboard = 'supervisor-dashboard.html'; break;
-            case 'cashier': dashboard = 'cashier-dashboard.html'; break;
-            default: dashboard = 'front-page.html';
-          }
-          
-          showToast('Google sign-in successful!', 'success');
-          setTimeout(() => {
-            window.location.href = dashboard;
-          }, 1000);
+          localStorage.setItem('currentUser', JSON.stringify(user));
         }
+
+        localStorage.setItem('lastLogin', new Date().toISOString());
+
+        // Redirect to customer dashboard
+        setTimeout(() => {
+          window.location.href = 'customer-dashboard.html';
+        }, 1500);
         
         // Close modal
         authModal.style.display = 'none';
       }
 
-      // Your existing carousel and modal logic
+      // Show/hide loading state
+      function showLoadingState(show) {
+        const loginButton = document.getElementById('loginButton');
+        const googleButtons = document.querySelectorAll('.google-signin-btn');
+        
+        if (loginButton) {
+          if (show) {
+            loginButton.classList.add('loading');
+            loginButton.disabled = true;
+          } else {
+            loginButton.classList.remove('loading');
+            loginButton.disabled = false;
+          }
+        }
+        
+        googleButtons.forEach(btn => {
+          if (show) {
+            btn.classList.add('loading');
+            btn.disabled = true;
+          } else {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+          }
+        });
+      }
+
+      // Your existing carousel and modal logic (keep all your existing code below)
       const carouselInner = document.getElementById("carousel-inner");
       const prevBtn = document.getElementById("prevBtn");
       const nextBtn = document.getElementById("nextBtn");
@@ -972,22 +1198,6 @@
         modalSignupErrorMsg.style.display = 'none';
       }
 
-      // Function to show loading state on login button
-      function showLoading() {
-        loginButton.classList.add('loading');
-        loginButton.disabled = true;
-        loginButton.dataset.originalText = loginButton.textContent;
-        loginButton.textContent = '';
-      }
-
-      // Function to hide loading state on login button
-      function hideLoading() {
-        loginButton.classList.remove('loading');
-        loginButton.disabled = false;
-        loginButton.textContent = loginButton.dataset.originalText || 'Login';
-        delete loginButton.dataset.originalText;
-      }
-
       loginLink.addEventListener('click', (e) => {
         e.preventDefault();
         loginFormContainer.style.display = 'block';
@@ -1006,7 +1216,7 @@
         signupForm.reset();
         hideModalErrors();
         loginFormContainer.classList.remove('shake');
-        hideLoading();
+        showLoadingState(false);
       });
 
       authModal.addEventListener('click', (e) => {
@@ -1016,7 +1226,7 @@
           signupForm.reset();
           hideModalErrors();
           loginFormContainer.classList.remove('shake');
-          hideLoading();
+          showLoadingState(false);
         }
       });
 
@@ -1077,7 +1287,7 @@
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        showLoading();
+        showLoadingState(true);
 
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
@@ -1094,7 +1304,7 @@
         if (staff) {
           localStorage.setItem('currentRole', staff.role);
           setTimeout(() => {
-            hideLoading();
+            showLoadingState(false);
             window.location.href = staff.dashboard;
           }, 500);
           return;
@@ -1113,7 +1323,7 @@
           if (user.role === 'customer') {
             localStorage.setItem('loggedInCustomer', JSON.stringify(user));
             setTimeout(() => {
-              hideLoading();
+              showLoadingState(false);
               window.location.href = 'customer-dashboard.html';
             }, 500);
           } else {
@@ -1127,7 +1337,7 @@
               default: dashboard = 'front-page.html';
             }
             setTimeout(() => {
-              hideLoading();
+              showLoadingState(false);
               window.location.href = dashboard;
             }, 500);
           }
@@ -1135,7 +1345,7 @@
         }
 
         // If neither matches
-        hideLoading();
+        showLoadingState(false);
         showModalError('login', 'Invalid username or password');
         document.getElementById('loginPassword').value = '';
         loginFormContainer.classList.add('shake');
@@ -1156,7 +1366,8 @@
           password: document.getElementById('signupPassword').value,
           confirmPassword: document.getElementById('signupConfirmPassword').value,
           role: 'customer',
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          authProvider: 'traditional'
         };
 
         hideModalErrors();
@@ -1213,6 +1424,9 @@
 
         // Remove confirmPassword before saving
         delete userData.confirmPassword;
+
+        // Add ID
+        userData.id = generateUserId();
 
         // Add to both storage locations for compatibility
         users.push(userData);
@@ -1294,41 +1508,6 @@
         languageOptions.classList.add('hidden');
       });
 
-      const translations = {
-        en: {
-          notification: "Notif/Shipping Info",
-          guide: "Guide for Users",
-          inquiries: "Inquiries",
-          login: "Login",
-          aboutUs: "About Us",
-          categories: "C A T E G O R I E S",
-          searchPlaceholder: "Search Anything",
-          searchButton: "Search",
-          bannerText1: "至福の一杯を味わいましょう",
-          bannerText2: "MAG LASING ANG WILLING",
-          bannerText3: "행복한 한 잔으로 자신을 대接하세요",
-          loginModalTitle: "Login to AmoraLise",
-          signupModalTitle: "Sign Up for AmoraLise",
-          loginUsernameLabel: "Username or Email",
-          loginPasswordLabel: "Password",
-          signupFirstNameLabel: "First Name",
-          signupLastNameLabel: "Last Name",
-          signupPhoneLabel: "Phone Number",
-          signupEmailLabel: "Email",
-          signupAddressLabel: "Address",
-          signupUsernameLabel: "Username",
-          signupPasswordLabel: "Password",
-          signupConfirmPasswordLabel: "Confirm Password",
-          loginButtonText: "Login",
-          signupButtonText: "Sign Up",
-          noAccountText: "Don't have an account?",
-          haveAccountText: "Already have an account?",
-          signupLinkText: "Sign Up",
-          loginLinkText: "Login"
-        },
-        // ... rest of translation objects remain the same
-      };
-
       // Auto-slide logic
       let autoSlideInterval;
 
@@ -1349,6 +1528,8 @@
       // Pause auto-slide when hovering carousel
       document.getElementById("carousel").addEventListener("mouseenter", stopAutoSlide);
       document.getElementById("carousel").addEventListener("mouseleave", startAutoSlide);
+
+      console.log('Amoralise authentication system initialized successfully');
 
     }); // End DOMContentLoaded wrapper
   </script>
