@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    // Process any pending inventory updates
+    processPendingInventoryUpdates();
 
     // DOM Elements
     const inventoryTableBody = document.getElementById('inventoryTableBody');
@@ -37,6 +38,78 @@ document.addEventListener('DOMContentLoaded', function() {
     let products = JSON.parse(localStorage.getItem('products')) || [];
     let deletedProducts = JSON.parse(localStorage.getItem('deletedProducts')) || [];
     let discrepancyRemarks = JSON.parse(localStorage.getItem('discrepancyRemarks')) || {};
+
+    // Function to update inventory when orders are completed
+    function updateInventoryForCompletedOrder(order) {
+        try {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            
+            order.items.forEach(orderItem => {
+                const productIndex = products.findIndex(p => p.id === orderItem.id);
+                
+                if (productIndex !== -1) {
+                    // Deduct the quantity from inventory
+                    products[productIndex].quantity -= orderItem.quantity;
+                    
+                    // Ensure quantity doesn't go below 0
+                    if (products[productIndex].quantity < 0) {
+                        products[productIndex].quantity = 0;
+                    }
+                    
+                    // Update low stock status
+                    if (products[productIndex].quantity <= products[productIndex].lowStockThreshold) {
+                        products[productIndex].lowStock = true;
+                    } else {
+                        products[productIndex].lowStock = false;
+                    }
+                    
+                    console.log(`Deducted ${orderItem.quantity} ${orderItem.name} from inventory. Remaining: ${products[productIndex].quantity}`);
+                } else {
+                    console.warn(`Product ${orderItem.name} not found in inventory`);
+                }
+            });
+            
+            // Save updated products back to localStorage
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // Refresh the inventory display if we're on the inventory page
+            if (typeof renderInventoryTable === 'function') {
+                renderInventoryTable();
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Error updating inventory:', error);
+            return false;
+        }
+    }
+
+    // Function to process all pending inventory updates
+    function processPendingInventoryUpdates() {
+        try {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const inventoryUpdates = JSON.parse(localStorage.getItem('pendingInventoryUpdates')) || [];
+            
+            // Process orders that are completed but inventory not updated
+            const completedOrders = orders.filter(order => 
+                order.status === 'completed' && 
+                !inventoryUpdates.includes(order.id)
+            );
+            
+            completedOrders.forEach(order => {
+                if (updateInventoryForCompletedOrder(order)) {
+                    inventoryUpdates.push(order.id);
+                    console.log(`Inventory updated for order ${order.id}`);
+                }
+            });
+            
+            // Save the processed updates
+            localStorage.setItem('pendingInventoryUpdates', JSON.stringify(inventoryUpdates));
+            
+        } catch (error) {
+            console.error('Error processing inventory updates:', error);
+        }
+    }
 
     // Render inventory table with discrepancy tracking
     function renderInventoryTable(filter = '') {
@@ -315,5 +388,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial render
     renderInventoryTable();
     renderRecycleBinTable();
-    
 });

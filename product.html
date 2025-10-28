@@ -274,7 +274,7 @@
       opacity: 0.8;
       margin-bottom: 1rem;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-amp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
       flex-grow: 1;
@@ -872,7 +872,15 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-
+      // Check customer authentication
+      const loggedInCustomer = localStorage.getItem('loggedInCustomer');
+      if (!loggedInCustomer) {
+        showToast('Please login first', 'error');
+        setTimeout(() => {
+          window.location.href = 'front-page.html';
+        }, 1000);
+        return;
+      }
 
       // DOM Elements
       const productsContainer = document.getElementById('productsContainer');
@@ -890,6 +898,127 @@
       let currentOrder = JSON.parse(localStorage.getItem('currentOrder')) || { items: [], total: 0 };
       const productsPerPage = 8;
       let currentPage = 1;
+
+      // Function to check product availability
+      function checkProductAvailability(productId, quantityToAdd = 1) {
+        try {
+          const products = JSON.parse(localStorage.getItem('products')) || [];
+          const product = products.find(p => p.id === productId);
+          
+          if (!product) {
+            showToast('Product not found', 'error');
+            return false;
+          }
+          
+          if (product.quantity <= 0) {
+            showToast(`${product.name} is out of stock`, 'error');
+            return false;
+          }
+          
+          if (product.quantity < quantityToAdd) {
+            showToast(`Only ${product.quantity} ${product.name}(s) available`, 'error');
+            return false;
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Error checking product availability:', error);
+          return false;
+        }
+      }
+
+      // Function to get real-time stock information
+      function getProductStock(productId) {
+        try {
+          const products = JSON.parse(localStorage.getItem('products')) || [];
+          const product = products.find(p => p.id === productId);
+          return product ? product.quantity : 0;
+        } catch (error) {
+          console.error('Error getting product stock:', error);
+          return 0;
+        }
+      }
+
+      // Enhanced addToCart function with inventory check
+      function addToCart(e) {
+        const productId = e.target.dataset.id;
+        const product = allProducts.find(p => p.id === productId);
+
+        if (!product) return;
+
+        // Check inventory before adding to cart
+        if (!checkProductAvailability(productId, 1)) {
+          return false;
+        }
+
+        const item = currentOrder.items.find(i => i.id === productId);
+        if (item) {
+          // Check if adding this quantity would exceed available stock
+          const newTotalQuantity = item.quantity + 1;
+          if (!checkProductAvailability(productId, newTotalQuantity)) {
+            return false;
+          }
+          item.quantity++;
+          currentOrder.total += product.price;
+          showToast(`${product.name} quantity updated in cart`);
+        } else {
+          currentOrder.items.push({
+            id: productId,
+            name: product.name,
+            price: product.price,
+            quantity: 1
+          });
+          currentOrder.total += product.price;
+          showToast(`${product.name} added to cart`);
+        }
+
+        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+
+        e.target.innerHTML = `<i class="fas fa-check"></i> Added!`;
+        e.target.disabled = true;
+        setTimeout(() => {
+          e.target.innerHTML = `<i class="fas fa-cart-plus"></i> Add to Cart`;
+          e.target.disabled = product.quantity === 0;
+        }, 2000);
+        
+        return true;
+      }
+
+      // Function to update product display with stock information
+      function updateProductDisplay() {
+        const productCards = document.querySelectorAll('.product-card');
+        
+        productCards.forEach(card => {
+          const productId = card.getAttribute('data-product-id');
+          const stock = getProductStock(productId);
+          const stockElement = card.querySelector('.product-stock');
+          const addButton = card.querySelector('.add-to-cart');
+          
+          if (stockElement) {
+            let stockStatus = 'in-stock';
+            let stockText = `${stock} in stock`;
+            
+            if (stock <= 0) {
+              stockStatus = 'out-of-stock';
+              stockText = 'Out of stock';
+            } else if (stock <= 5) {
+              stockStatus = 'low-stock';
+              stockText = `Only ${stock} left`;
+            }
+            
+            stockElement.textContent = stockText;
+            stockElement.className = `product-stock ${stockStatus}`;
+            
+            // Update add to cart button
+            if (addButton) {
+              addButton.disabled = stock <= 0;
+              addButton.innerHTML = stock <= 0 ? 
+                `<i class="fas fa-cart-plus"></i> Out of Stock` : 
+                `<i class="fas fa-cart-plus"></i> Add to Cart`;
+            }
+          }
+        });
+      }
 
       // Event listeners
       searchInput.addEventListener('input', filterProducts);
@@ -920,13 +1049,27 @@
             if (Math.random() > 0.7) badges.push({ type: 'new', text: 'New' });
             if (Math.random() > 0.8) badges.push({ type: 'limited', text: 'Limited' });
             const rating = (Math.random() * 1 + 4).toFixed(1);
-            const categories = ['whiskey', 'vodka', 'rum', 'tequila', 'gin', 'brandy', 'wine', 'beer'];
+            const categories = ['Whiskey', 'Vodka', 'Rum', 'Tequila', 'Gin', 'Brandy', 'Wine', 'Beer'];
             const category = product.category || categories[Math.floor(Math.random() * categories.length)];
+            
+            // Set stock status based on actual quantity
+            let stockStatus = 'in-stock';
+            let stockText = `${product.quantity} in stock`;
+            if (product.quantity === 0) {
+              stockStatus = 'out-of-stock';
+              stockText = 'Out of stock';
+            } else if (product.quantity < 10) {
+              stockStatus = 'low-stock';
+              stockText = `Only ${product.quantity} left`;
+            }
+            
             return {
               ...product,
               badges,
               rating,
               category,
+              stockStatus,
+              stockText,
               addedToWishlist: false
             };
           });
@@ -934,6 +1077,9 @@
           filteredProducts = [...allProducts];
           renderProducts();
           renderPagination();
+          
+          // Update product display with current stock
+          updateProductDisplay();
         }, 800);
       }
 
@@ -955,13 +1101,13 @@
             filteredProducts.sort((a, b) => a.price - b.price);
             break;
           case 'price-desc':
-            filteredProducts.sort((a, b) => b.price - b.price);
+            filteredProducts.sort((a, b) => b.price - a.price);
             break;
           case 'name-asc':
             filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             break;
           case 'name-desc':
-            filteredProducts.sort((a, b) => b.name.localeCompare(b.name));
+            filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
             break;
           case 'newest':
             filteredProducts.sort((a, b) => new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0));
@@ -998,16 +1144,7 @@
         productsToShow.forEach(product => {
           const productCard = document.createElement('div');
           productCard.className = 'product-card';
-
-          let stockStatus = 'in-stock';
-          let stockText = `${product.quantity} in stock`;
-          if (product.quantity === 0) {
-            stockStatus = 'out-of-stock';
-            stockText = 'Out of stock';
-          } else if (product.quantity < 10) {
-            stockStatus = 'low-stock';
-            stockText = `Only ${product.quantity} left`;
-          }
+          productCard.setAttribute('data-product-id', product.id);
 
           productCard.innerHTML = `
             <div class="product-image-container">
@@ -1021,13 +1158,13 @@
               </div>
             </div>
             <div class="product-details">
-              <h3 class="product-name">${product.name}</h3 metaname
+              <h3 class="product-name">${product.name}</h3>
               <p class="product-description">${product.description || 'No description available'}</p>
               <div class="product-meta">
                 <div class="price-container">
                   <span class="product-price">₱${product.price.toFixed(2)}</span>
                 </div>
-                <span class="product-stock ${stockStatus}">${stockText}</span>
+                <span class="product-stock ${product.stockStatus}">${product.stockText}</span>
               </div>
               <div class="product-actions">
                 <button class="wishlist-btn ${product.addedToWishlist ? 'active' : ''}" data-id="${product.id}">
@@ -1113,44 +1250,6 @@
         });
       }
 
-      // Add to cart
-      function addToCart(e) {
-        const productId = e.target.dataset.id;
-        const product = allProducts.find(p => p.id === productId);
-
-        if (!product) return;
-
-        const item = currentOrder.items.find(i => i.id === productId);
-        if (item) {
-          if (item.quantity < product.quantity) {
-            item.quantity++;
-            currentOrder.total += product.price;
-            showToast(`${product.name} quantity updated in cart`);
-          } else {
-            showToast(`Cannot add more ${product.name}. Only ${product.quantity} in stock.`, 'error');
-            return;
-          }
-        } else {
-          currentOrder.items.push({
-            id: productId,
-            name: product.name,
-            price: product.price,
-            quantity: 1
-          });
-          currentOrder.total += product.price;
-          showToast(`${product.name} added to cart`);
-        }
-
-        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
-
-        e.target.innerHTML = `<i class="fas fa-check"></i> Added!`;
-        e.target.disabled = true;
-        setTimeout(() => {
-          e.target.innerHTML = `<i class="fas fa-cart-plus"></i> Add to Cart`;
-          e.target.disabled = product.quantity === 0;
-        }, 2000);
-      }
-
       // Toggle wishlist
       function toggleWishlist(e) {
         const productId = e.target.closest('.wishlist-btn').dataset.id;
@@ -1218,53 +1317,47 @@
         }
       });
 
-      // Initialize
-      loadProducts();
-    });
-        document.addEventListener('DOMContentLoaded', function() {
-      /* --- your existing JS (unchanged) --- */
-
-
+      // Refresh stock information every 30 seconds
+      setInterval(updateProductDisplay, 30000);
 
       // Initialize
       loadProducts();
     });
+
     const categoryFilter = document.getElementById('categoryFilter');
 
-categoryFilter.addEventListener('change', function() {
-    const filterValue = this.value;
-    renderProductTable(filterValue);
-});
+    categoryFilter.addEventListener('change', function() {
+        const filterValue = this.value;
+        renderProductTable(filterValue);
+    });
 
-
-// FOR NOTIFICATIONS
-const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-document.getElementById('notificationCount').textContent = notifications.length || 0;
-document.addEventListener("DOMContentLoaded", function () {
-    const badge = document.getElementById("notificationCount");
-    const count = parseInt(localStorage.getItem("orderCompletedCount")) || 0;
-    badge.textContent = count;
-});
-function renderNotificationDropdown() {
-    const notificationList = document.querySelector('#notificationDropdown ul');
+    // FOR NOTIFICATIONS
     const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-    notificationList.innerHTML = '';
+    document.getElementById('notificationCount').textContent = notifications.length || 0;
+    document.addEventListener("DOMContentLoaded", function () {
+        const badge = document.getElementById("notificationCount");
+        const count = parseInt(localStorage.getItem("orderCompletedCount")) || 0;
+        badge.textContent = count;
+    });
+    
+    function renderNotificationDropdown() {
+        const notificationList = document.querySelector('#notificationDropdown ul');
+        const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        notificationList.innerHTML = '';
 
-    if (notifications.length === 0) {
-        notificationList.innerHTML = '<li>No completed orders</li>';
-    } else {
-        notifications.forEach(order => {
-            const li = document.createElement('li');
-            li.textContent = `Order #${order.orderId} by ${order.customerName} is completed`;
-            notificationList.appendChild(li);
-        });
+        if (notifications.length === 0) {
+            notificationList.innerHTML = '<li>No completed orders</li>';
+        } else {
+            notifications.forEach(order => {
+                const li = document.createElement('li');
+                li.textContent = `Order #${order.orderId} by ${order.customerName} is completed`;
+                notificationList.appendChild(li);
+            });
+        }
+
+        // Update badge
+        document.getElementById('notificationCount').textContent = notifications.length;
     }
-
-    // Update badge
-    document.getElementById('notificationCount').textContent = notifications.length;
-}
-
-
   </script>
 </body>
 </html>
