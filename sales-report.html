@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="data-initializer.js"></script>
     <style>
         :root {
             --primary-dark: #1a1a2e;
@@ -318,40 +319,46 @@
             };
         });
 
-        // Process data for charts
-        function prepareChartData(logs) {
-            const salesByDate = {};
-            logs.forEach(log => {
-                const date = new Date(log.timestamp).toISOString().split('T')[0];
-                if (!salesByDate[date]) {
-                    salesByDate[date] = { total: 0, orders: 0, items: 0 };
-                }
-                salesByDate[date].total += log.total;
-                salesByDate[date].orders += 1;
-                salesByDate[date].items += log.totalItems;
-            });
-
-            const dates = Object.keys(salesByDate).sort();
-            const totalSalesData = dates.map(date => salesByDate[date].total.toFixed(2));
-            const totalOrdersData = dates.map(date => salesByDate[date].orders);
-            const totalItemsData = dates.map(date => salesByDate[date].items);
-
-            const totalSales = logs.reduce((sum, log) => sum + log.total, 0).toFixed(2);
-            const totalOrders = logs.length;
-            const avgOrderValue = totalOrders > 0 ? (totalSales / totalOrders).toFixed(2) : '0.00';
-            const totalItemsSold = logs.reduce((sum, log) => sum + log.totalItems, 0);
-
-            return {
-                dates,
-                totalSalesData,
-                totalOrdersData,
-                totalItemsData,
-                totalSales,
-                totalOrders,
-                avgOrderValue,
-                totalItemsSold
-            };
+        // Process data for charts - UPDATED VERSION
+function prepareChartData(logs) {
+    // Filter both order_created and payment_completed actions
+    const salesData = logs.filter(log => 
+        log.action === 'payment_completed' || 
+        (log.action === 'order_created' && log.paymentStatus === 'completed')
+    );
+    
+    const salesByDate = {};
+    salesData.forEach(log => {
+        const date = new Date(log.timestamp).toISOString().split('T')[0];
+        if (!salesByDate[date]) {
+            salesByDate[date] = { total: 0, orders: 0, items: 0 };
         }
+        salesByDate[date].total += log.total;
+        salesByDate[date].orders += 1;
+        salesByDate[date].items += log.totalItems || 0;
+    });
+
+    const dates = Object.keys(salesByDate).sort();
+    const totalSalesData = dates.map(date => salesByDate[date].total.toFixed(2));
+    const totalOrdersData = dates.map(date => salesByDate[date].orders);
+    const totalItemsData = dates.map(date => salesByDate[date].items);
+
+    const totalSales = salesData.reduce((sum, log) => sum + log.total, 0).toFixed(2);
+    const totalOrders = salesData.length;
+    const avgOrderValue = totalOrders > 0 ? (totalSales / totalOrders).toFixed(2) : '0.00';
+    const totalItemsSold = salesData.reduce((sum, log) => sum + (log.totalItems || 0), 0);
+
+    return {
+        dates,
+        totalSalesData,
+        totalOrdersData,
+        totalItemsData,
+        totalSales,
+        totalOrders,
+        avgOrderValue,
+        totalItemsSold
+    };
+}
 
         // Render charts
         function renderCharts(logs) {

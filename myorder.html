@@ -795,40 +795,71 @@
         renderOrder();
       }
 
-      // Proceed to checkout
-      function proceedToCheckoutHandler() {
-        if (currentOrder.items.length === 0) {
-          showToast('Your cart is empty!', 'error');
-          checkoutModal.classList.remove('show');
-          return;
-        }
-        lastOrderNumber++;
-        const formattedNumber = lastOrderNumber.toString().padStart(4, '0');
-        const orderId = `ORD-${formattedNumber}`;
-        orders.push({
-          id: orderId,
-          items: [...currentOrder.items],
-          total: currentOrder.total,
-          status: 'pending'
-        });
-        let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
-        cashierQueue.push({
-          id: orderId,
-          items: [...currentOrder.items],
-          total: currentOrder.total,
-          status: 'approved',
-          cashierProcessed: false
-        });
-        localStorage.setItem('orders', JSON.stringify(orders));
-        localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
-        localStorage.setItem('lastOrderNumber', lastOrderNumber);
-        currentOrder = { items: [], total: 0 };
-        localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
-        renderOrder();
-        showToast(`Order ${orderId} sent to cashier for processing!`);
+      // Proceed to checkout - UPDATED VERSION
+function proceedToCheckoutHandler() {
+    if (currentOrder.items.length === 0) {
+        showToast('Your cart is empty!', 'error');
         checkoutModal.classList.remove('show');
-      }
+        return;
+    }
 
+    const customer = JSON.parse(localStorage.getItem('loggedInCustomer'));
+    lastOrderNumber++;
+    const formattedNumber = lastOrderNumber.toString().padStart(4, '0');
+    const orderId = `ORD-${formattedNumber}`;
+    
+    // Create order object with proper payment status
+    const newOrder = {
+        id: orderId,
+        customerId: customer.id,
+        customerName: `${customer.firstName} ${customer.lastName}`,
+        items: [...currentOrder.items],
+        total: currentOrder.total,
+        status: 'pending_payment', // Changed from 'approved'
+        paymentStatus: 'pending',
+        timestamp: new Date().toISOString()
+    };
+
+    // Add to orders
+    orders.push(newOrder);
+    
+    // Add to cashier queue with proper status
+    let cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
+    cashierQueue.push({
+        ...newOrder,
+        status: 'pending_payment',
+        cashierProcessed: false,
+        paymentStatus: 'pending'
+    });
+
+    // Add to audit log with proper action for sales reporting
+    let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+    auditLog.push({
+        timestamp: new Date().toISOString(),
+        orderId: orderId,
+        customerId: customer.id,
+        customerName: `${customer.firstName} ${customer.lastName}`,
+        items: newOrder.items.map(item => `${item.name} x${item.quantity}`).join(', '),
+        total: newOrder.total,
+        totalItems: newOrder.items.reduce((sum, item) => sum + item.quantity, 0),
+        action: 'order_created', // This will be updated to 'payment_completed' when cashier processes payment
+        paymentStatus: 'pending'
+    });
+
+    // Save all data
+    localStorage.setItem('orders', JSON.stringify(orders));
+    localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
+    localStorage.setItem('auditLog', JSON.stringify(auditLog));
+    localStorage.setItem('lastOrderNumber', lastOrderNumber.toString());
+    
+    // Clear current order
+    currentOrder = { items: [], total: 0 };
+    localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+    
+    renderOrder();
+    showToast(`Order ${orderId} placed successfully! Ready for cashier processing.`);
+    checkoutModal.classList.remove('show');
+}
       // Show toast notification
       function showToast(message, type = 'success') {
         toastMessage.textContent = message;
