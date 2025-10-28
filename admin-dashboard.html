@@ -1,695 +1,828 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard | AmoraLise</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <script src="data-initializer.js"></script>
-  <style>
-    :root {
-      --primary-light: #d7ccc8;
-      --primary-medium: #a1887f;
-      --primary-dark: #5d4037;
-      --accent-gold: #ffd54f;
-      --accent-light: #efebe9;
-      --text-light: #f8f5f2;
-      --text-dark: #3e2723;
-      --shadow-dark: rgba(0, 0, 0, 0.1);
-      --shadow-light: rgba(255, 215, 128, 0.1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Open Sans', sans-serif;
-      background-color: var(--primary-light);
-      color: var(--text-dark);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .dashboard-container {
-      max-width: 1400px;
-      margin: auto;
-      padding: 50px 30px;
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--primary-medium);
-      margin-bottom: 30px;
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: slideDownFadeIn 0.8s ease-out 0.2s forwards;
-    }
-
-    @keyframes slideDownFadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard | AmoraLise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="data-initializer.js"></script>
+    <style>
+      :root {
+        --primary-light: #d7ccc8;
+        --primary-medium: #a1887f;
+        --primary-dark: #5d4037;
+        --accent-gold: #ffd54f;
+        --accent-light: #efebe9;
+        --text-light: #f8f5f2;
+        --text-dark: #3e2723;
+        --shadow-dark: rgba(0, 0, 0, 0.1);
+        --shadow-light: rgba(255, 215, 128, 0.1);
       }
-    }
 
-    .logo {
-      font-size: 2.2rem;
-      font-family: 'Playfair Display', serif;
-      letter-spacing: 2px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--primary-dark);
-      transition: all 0.3s ease;
-    }
 
-    .logo:hover {
-      transform: scale(1.02);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .logo-icon {
-      width: 50px;
-      height: 50px;
-      background: var(--accent-gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary-dark);
-      font-weight: bold;
-      font-size: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .logo:hover .logo-icon {
-      transform: rotate(15deg);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-    .user-controls {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--primary-dark);
-      transition: all 0.3s ease;
-    }
-
-    .user-info:hover {
-      transform: translateX(5px);
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary-medium);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: var(--text-light);
-      transition: all 0.3s ease;
-    }
-
-    .user-info:hover .user-avatar {
-      transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .logout-btn {
-      background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .logout-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: 0.5s;
-    }
-
-    .logout-btn:hover {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    }
-
-    .logout-btn:hover::before {
-      left: 100%;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-      perspective: 1000px;
-    }
-
-    .reports-section {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .dashboard-card {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(5px);
-      border-radius: 20px;
-      padding: 35px;
-      box-shadow: 0 8px 32px var(--shadow-dark);
-      text-align: center;
-      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-      border: 1px solid var(--shadow-light);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transform-style: preserve-3d;
-      opacity: 0;
-      transform: translateY(30px) rotateX(15deg);
-    }
-
-    .dashboard-grid .dashboard-card:nth-child(1) {
-      animation: cardEntrance 0.8s ease-out 0.2s forwards;
-    }
-    .dashboard-grid .dashboard-card:nth-child(2) {
-      animation: cardEntrance 0.8s ease-out 0.4s forwards;
-    }
-    .dashboard-grid .dashboard-card:nth-child(3) {
-      animation: cardEntrance 0.8s ease-out 0.6s forwards;
-    }
-    .dashboard-grid .dashboard-card:nth-child(4) {
-      animation: cardEntrance 0.8s ease-out 0.8s forwards;
-    }
-    .reports-section .dashboard-card {
-      animation: cardEntrance 0.8s ease-out 1.0s forwards;
-      max-width: 400px;
-    }
-
-    @keyframes cardEntrance {
-      to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-    }
 
-    .dashboard-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(255,213,79,0.1), transparent);
-      transform: translateY(100%);
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      z-index: 0;
-    }
 
-    .dashboard-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-      background: rgba(255, 255, 255, 1);
-    }
-
-    .dashboard-card:hover::before {
-      transform: translateY(0);
-    }
-
-    .card-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 25px;
-      background: rgba(255, 213, 79, 0.15);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-      position: relative;
-      z-index: 1;
-    }
-
-    .dashboard-card:hover .card-icon {
-      background: rgba(255, 213, 79, 0.25);
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    .card-icon img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-      transition: all 0.3s ease;
-    }
-
-    .dashboard-card:hover .card-icon img {
-      transform: scale(1.1);
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
-    }
-
-    .card-title {
-      font-size: 1.6rem;
-      margin: 15px 0;
-      font-family: 'Playfair Display', serif;
-      color: var(--primary-dark);
-      position: relative;
-      display: inline-block;
-      transition: all 0.3s ease;
-    }
-
-    .card-title::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 2px;
-      background: var(--primary-medium);
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    .dashboard-card:hover .card-title {
-      letter-spacing: 0.5px;
-    }
-
-    .dashboard-card:hover .card-title::after {
-      width: 80px;
-      height: 3px;
-      background: var(--accent-gold);
-    }
-
-    .card-description {
-      font-size: 1rem;
-      color: var(--primary-dark);
-      opacity: 0.85;
-      line-height: 1.6;
-      margin-bottom: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .dashboard-card:hover .card-description {
-      opacity: 1;
-      transform: translateY(-3px);
-    }
-
-    .card-badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--accent-gold);
-      color: var(--primary-dark);
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-
-    .dashboard-card:hover .card-badge {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .ripple-effect {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transform: scale(0);
-      animation: ripple 0.6s linear;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans', sans-serif;
+        background-color: var(--primary-light);
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
       }
-    }
 
-    .page-transition {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--primary-dark);
-      z-index: 9999;
-      transform: scaleY(0);
-      transform-origin: bottom;
-      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-    }
 
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
+      .dashboard-container {
+        max-width: 1400px;
+        margin: auto;
+        padding: 50px 30px;
+        animation: fadeIn 0.8s ease-out;
+      }
 
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
 
-    .confirmation-modal {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      transform: translateY(20px) scale(0.95);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .modal-overlay.active .confirmation-modal {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      color: var(--primary-dark);
-      font-family: 'Playfair Display', serif;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--primary-medium);
-      transition: all 0.3s ease;
-    }
-
-    .modal-close:hover {
-      transform: rotate(90deg);
-      color: var(--primary-dark);
-    }
-
-    .modal-body {
-      margin-bottom: 25px;
-      color: var(--text-dark);
-      line-height: 1.6;
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-    }
-
-    .modal-btn {
-      padding: 10px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .modal-btn-cancel {
-      background: var(--accent-light);
-      color: var(--primary-dark);
-    }
-
-    .modal-btn-cancel:hover {
-      background: #e0d8d5;
-      transform: translateY(-2px);
-    }
-
-    .modal-btn-confirm {
-      background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
-      color: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .modal-btn-confirm:hover {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    }
-
-    @media (max-width: 768px) {
       .header {
-        flex-direction: column;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 40px;
+        border-bottom: 1px solid var(--primary-medium);
+        margin-bottom: 30px;
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: slideDownFadeIn 0.8s ease-out 0.2s forwards;
+      }
+
+
+      @keyframes slideDownFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+
+      .logo {
+        font-size: 2.2rem;
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--primary-dark);
+        transition: all 0.3s ease;
+      }
+
+
+      .logo:hover {
+        transform: scale(1.02);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+
+      .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--accent-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-dark);
+        font-weight: bold;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+      }
+
+
+      .logo:hover .logo-icon {
+        transform: rotate(15deg);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+
+
+      .user-controls {
+        display: flex;
+        align-items: center;
         gap: 20px;
       }
 
-      .logo {
-        font-size: 2rem;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--primary-dark);
+        transition: all 0.3s ease;
       }
 
-      .user-controls {
-        width: 100%;
-        justify-content: space-between;
+
+      .user-info:hover {
+        transform: translateX(5px);
       }
+
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary-medium);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-light);
+        transition: all 0.3s ease;
+      }
+
+
+      .user-info:hover .user-avatar {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+
+
+      .logout-btn {
+        background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+
+      .logout-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+      }
+
+
+      .logout-btn:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      }
+
+
+      .logout-btn:hover::before {
+        left: 100%;
+      }
+
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+        perspective: 1000px;
+      }
+
+
+      .reports-section {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+      }
+
 
       .dashboard-card {
-        padding: 25px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 8px 32px var(--shadow-dark);
+        text-align: center;
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border: 1px solid var(--shadow-light);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        opacity: 0;
+        transform: translateY(30px) rotateX(15deg);
       }
 
-      .reports-section .dashboard-card {
-        max-width: 100%;
+
+      .dashboard-grid .dashboard-card:nth-child(1) {
+        animation: cardEntrance 0.8s ease-out 0.2s forwards;
       }
+      .dashboard-grid .dashboard-card:nth-child(2) {
+        animation: cardEntrance 0.8s ease-out 0.4s forwards;
+      }
+      .dashboard-grid .dashboard-card:nth-child(3) {
+        animation: cardEntrance 0.8s ease-out 0.6s forwards;
+      }
+      .dashboard-grid .dashboard-card:nth-child(4) {
+        animation: cardEntrance 0.8s ease-out 0.8s forwards;
+      }
+      .reports-section .dashboard-card {
+        animation: cardEntrance 0.8s ease-out 1.0s forwards;
+        max-width: 400px;
+      }
+
+
+      @keyframes cardEntrance {
+        to {
+          opacity: 1;
+          transform: translateY(0) rotateX(0);
+        }
+      }
+
+
+      .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255,213,79,0.1), transparent);
+        transform: translateY(100%);
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 0;
+      }
+
+
+      .dashboard-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        background: rgba(255, 255, 255, 1);
+      }
+
+
+      .dashboard-card:hover::before {
+        transform: translateY(0);
+      }
+
+
+      .card-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 25px;
+        background: rgba(255, 213, 79, 0.15);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        z-index: 1;
+      }
+
+
+      .dashboard-card:hover .card-icon {
+        background: rgba(255, 213, 79, 0.25);
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+
+      .card-icon img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        transition: all 0.3s ease;
+      }
+
+
+      .dashboard-card:hover .card-icon img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+      }
+
+
+      .card-title {
+        font-size: 1.6rem;
+        margin: 15px 0;
+        font-family: 'Playfair Display', serif;
+        color: var(--primary-dark);
+        position: relative;
+        display: inline-block;
+        transition: all 0.3s ease;
+      }
+
+
+      .card-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        background: var(--primary-medium);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+
+      .dashboard-card:hover .card-title {
+        letter-spacing: 0.5px;
+      }
+
+
+      .dashboard-card:hover .card-title::after {
+        width: 80px;
+        height: 3px;
+        background: var(--accent-gold);
+      }
+
+
+      .card-description {
+        font-size: 1rem;
+        color: var(--primary-dark);
+        opacity: 0.85;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+      }
+
+
+      .dashboard-card:hover .card-description {
+        opacity: 1;
+        transform: translateY(-3px);
+      }
+
+
+      .card-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--accent-gold);
+        color: var(--primary-dark);
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+      }
+
+
+      .dashboard-card:hover .card-badge {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+
+      .ripple-effect {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+
+      .page-transition {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-dark);
+        z-index: 9999;
+        transform: scaleY(0);
+        transform-origin: bottom;
+        transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
 
       .confirmation-modal {
-        padding: 20px;
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(20px) scale(0.95);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-    }
-  </style>
-</head>
-<body>
-  <!-- Page transition overlay -->
-  <div class="page-transition" id="pageTransition"></div>
 
-  <!-- Confirmation Modal -->
-  <div class="modal-overlay" id="logoutModal">
-    <div class="confirmation-modal">
-      <div class="modal-header">
-        <h3 class="modal-title">Confirm Logout</h3>
-        <button class="modal-close" id="closeModal">×</button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to logout from the admin dashboard?</p>
-      </div>
-      <div class="modal-footer">
-        <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
-        <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
-      </div>
-    </div>
-  </div>
 
-  <div class="dashboard-container">
-    <div class="header">
-      <div class="logo">
-        <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
-        <div class="logo-text">
-          <span>AMORALISE</span>
-        </div>
-      </div>
+      .modal-overlay.active .confirmation-modal {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
 
-      <div class="user-controls">
-        <div class="user-info">
-          <div class="user-avatar">AD</div>
-          <span>Admin Dashboard</span>
-        </div>
-        <button id="logoutBtn" class="logout-btn">
-          <i class="fas fa-sign-out-alt"></i> LOGOUT
-        </button>
-      </div>
-    </div>
 
-    <div class="dashboard-grid">
-      <div class="dashboard-card" onclick="navigateTo('inventory-management.html')">
-        <div class="card-icon">
-          <img src="Pictures/INVENTORY.png" alt="Inventory Icon">
-        </div>
-        <h2 class="card-title">Inventory</h2>
-        <p class="card-description">Manage stock levels, track products, and monitor inventory movements</p>
-      </div>
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-      <div class="dashboard-card" onclick="navigateTo('user-management.html')">
-        <div class="card-icon">
-          <img src="Pictures/user.png" alt="User Management Icon">
-        </div>
-        <h2 class="card-title">User Accounts</h2>
-        <p class="card-description">Manage staff permissions, customer accounts, and access levels</p>
-      </div>
 
-      <div class="dashboard-card" onclick="navigateTo('product-management.html')">
-        <div class="card-icon">
-          <img src="Pictures/product.png" alt="Product Management Icon">
-        </div>
-        <h2 class="card-title">Products</h2>
-        <p class="card-description">Add new liquors, update pricing, and manage product categories</p>
-      </div>
+      .modal-title {
+        font-size: 1.5rem;
+        color: var(--primary-dark);
+        font-family: 'Playfair Display', serif;
+      }
 
-      <div class="dashboard-card" onclick="navigateTo('History.html')">
-        <div class="card-icon">
-          <img src="Pictures/sales.png" alt="Analytics Icon">
-        </div>
-        <h2 class="card-title">History</h2>
-        <p class="card-description">View sales analytics, inventory reports, and business insights</p>
-      </div>
-    </div>
 
-    <div class="reports-section">
-      <div class="dashboard-card" onclick="navigateTo('sales-report.html')">
-        <div class="card-icon">
-          <img src="Pictures/sales.png" alt="Analytics Icon">
-        </div>
-        <h2 class="card-title">Reports</h2>
-        <p class="card-description">View sales analytics, inventory reports, and business insights</p>
-      </div>
-    </div>
-  </div>
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--primary-medium);
+        transition: all 0.3s ease;
+      }
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Modal elements
-      const logoutModal = document.getElementById('logoutModal');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const closeModal = document.getElementById('closeModal');
-      const cancelLogout = document.getElementById('cancelLogout');
-      const confirmLogout = document.getElementById('confirmLogout');
 
-      // Show modal when logout button is clicked
-      logoutBtn.addEventListener('click', function() {
-        logoutModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
+      .modal-close:hover {
+        transform: rotate(90deg);
+        color: var(--primary-dark);
+      }
 
-      // Close modal when X is clicked
-      closeModal.addEventListener('click', function() {
-        closeModalHandler();
-      });
 
-      // Close modal when cancel is clicked
-      cancelLogout.addEventListener('click', function() {
-        closeModalHandler();
-      });
+      .modal-body {
+        margin-bottom: 25px;
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
 
-      // Close modal when clicking outside
-      logoutModal.addEventListener('click', function(e) {
-        if (e.target === logoutModal) {
-          closeModalHandler();
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+      }
+
+
+      .modal-btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+
+      .modal-btn-cancel {
+        background: var(--accent-light);
+        color: var(--primary-dark);
+      }
+
+
+      .modal-btn-cancel:hover {
+        background: #e0d8d5;
+        transform: translateY(-2px);
+      }
+
+
+      .modal-btn-confirm {
+        background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
+        color: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      }
+
+
+      .modal-btn-confirm:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      }
+
+
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          gap: 20px;
         }
-      });
 
-      // Handle logout confirmation
-      confirmLogout.addEventListener('click', function() {
-        document.getElementById('pageTransition').style.transform = 'scaleY(1)';
-        setTimeout(() => {
+
+        .logo {
+          font-size: 2rem;
+        }
+
+
+        .user-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+
+        .dashboard-card {
+          padding: 25px;
+        }
+
+
+        .reports-section .dashboard-card {
+          max-width: 100%;
+        }
+
+
+        .confirmation-modal {
+          padding: 20px;
+        }
+      }
+      .reports-section,
+.dashboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* centers cards horizontally */
+  gap: 30px; /* even spacing between cards */
+  margin-top: 40px;
+}
+
+
+.dashboard-card {
+  flex: 1 1 240px; /* responsive sizing */
+  max-width: 260px; /* limits card width */
+  min-width: 220px;
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+
+.card-icon img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+}
+
+
+    </style>
+  </head>
+  <body>
+    <!-- Page transition overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="logoutModal">
+      <div class="confirmation-modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Confirm Logout</h3>
+          <button class="modal-close" id="closeModal">×</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to logout from the admin dashboard?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-btn modal-btn-cancel" id="cancelLogout">Cancel</button>
+          <button class="modal-btn modal-btn-confirm" id="confirmLogout">Logout</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="dashboard-container">
+      <div class="header">
+        <div class="logo">
+          <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
+          <div class="logo-text">
+            <span>AMORALISE</span>
+          </div>
+        </div>
+
+
+        <div class="user-controls">
+          <div class="user-info">
+            <div class="user-avatar">AD</div>
+            <span>Admin Dashboard</span>
+          </div>
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> LOGOUT
+          </button>
+        </div>
+      </div>
+
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card" onclick="navigateTo('inventory-management.html')">
+          <div class="card-icon">
+            <img src="Pictures/INVENTORY.png" alt="Inventory Icon">
+          </div>
+          <h2 class="card-title">Inventory</h2>
+          <p class="card-description">Manage stock levels, track products, and monitor inventory movements</p>
+        </div>
+
+
+        <div class="dashboard-card" onclick="navigateTo('user-management.html')">
+          <div class="card-icon">
+            <img src="Pictures/user.png" alt="User Management Icon">
+          </div>
+          <h2 class="card-title">User Accounts</h2>
+          <p class="card-description">Manage staff permissions, customer accounts, and access levels</p>
+        </div>
+
+
+        <div class="dashboard-card" onclick="navigateTo('product-management.html')">
+          <div class="card-icon">
+            <img src="Pictures/product.png" alt="Product Management Icon">
+          </div>
+          <h2 class="card-title">Products</h2>
+          <p class="card-description">Add new liquors, update pricing, and manage product categories</p>
+        </div>
+
+
+        <div class="dashboard-card" onclick="navigateTo('History.html')">
+          <div class="card-icon">
+            <img src="Pictures/sales.png" alt="Analytics Icon">
+          </div>
+          <h2 class="card-title">History</h2>
+          <p class="card-description">View sales analytics, inventory reports, and business insights</p>
+        </div>
+      </div>
+
+
+<div class="reports-section">
+  <div class="dashboard-card" onclick="navigateTo('sales-report.html')">
+    <div class="card-icon">
+      <img src="Pictures/sales.png" alt="Analytics Icon">
+    </div>
+    <h2 class="card-title">Reports</h2>
+    <p class="card-description">View sales analytics, inventory reports, and business insights</p>
+  </div>
+
+
+  <!-- ✅ Message Card moved directly after Reports -->
+  <div class="dashboard-card" onclick="navigateTo('messages.html')">
+    <div class="card-icon">
+      <img src="Pictures/message.jpg" alt="Messages Icon">
+    </div>
+    <h2 class="card-title">Message</h2>
+    <p class="card-description">Check and manage customer inquiries and staff communications</p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Modal elements
+        const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+
+
+        // Show modal when logout button is clicked
+        logoutBtn.addEventListener('click', function() {
+          logoutModal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+
+
+        // Close modal when X is clicked
+        closeModal.addEventListener('click', function() {
+          closeModalHandler();
+        });
+
+
+        // Close modal when cancel is clicked
+        cancelLogout.addEventListener('click', function() {
+          closeModalHandler();
+        });
+
+
+        // Close modal when clicking outside
+        logoutModal.addEventListener('click', function(e) {
+          if (e.target === logoutModal) {
+            closeModalHandler();
+          }
+        });
+
+
+        // Handle logout confirmation
+        confirmLogout.addEventListener('click', function() {
+          document.getElementById('pageTransition').style.transform = 'scaleY(1)';
+          setTimeout(() => {
+            logoutModal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+              localStorage.removeItem('currentRole');
+              localStorage.removeItem('authToken');
+              window.location.href = 'front-page.html';
+            }, 600);
+          }, 300);
+        });
+
+
+        // Function to handle modal closing
+        function closeModalHandler() {
           logoutModal.classList.remove('active');
           document.body.style.overflow = '';
-          setTimeout(() => {
-            localStorage.removeItem('currentRole');
-            localStorage.removeItem('authToken');
-            window.location.href = 'front-page.html';
-          }, 600);
-        }, 300);
-      });
+        }
 
-      // Function to handle modal closing
-      function closeModalHandler() {
-        logoutModal.classList.remove('active');
-        document.body.style.overflow = '';
-      }
 
-      // Add ripple effect to all dashboard cards
-      const cards = document.querySelectorAll('.dashboard-card');
-      cards.forEach(card => {
-        card.addEventListener('click', function(e) {
-          const ripple = document.createElement('span');
-          ripple.className = 'ripple-effect';
-          ripple.style.left = `${e.clientX - card.getBoundingClientRect().left}px`;
-          ripple.style.top = `${e.clientY - card.getBoundingClientRect().top}px`;
-          card.appendChild(ripple);
-          setTimeout(() => {
-            ripple.remove();
-          }, 600);
+        // Add ripple effect to all dashboard cards
+        const cards = document.querySelectorAll('.dashboard-card');
+        cards.forEach(card => {
+          card.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple-effect';
+            ripple.style.left = `${e.clientX - card.getBoundingClientRect().left}px`;
+            ripple.style.top = `${e.clientY - card.getBoundingClientRect().top}px`;
+            card.appendChild(ripple);
+            setTimeout(() => {
+              ripple.remove();
+            }, 600);
+          });
         });
       });
-    });
 
-    // Enhanced navigation with transition
-    function navigateTo(url) {
-      const transition = document.getElementById('pageTransition');
-      transition.style.transformOrigin = 'top';
-      transition.style.transform = 'scaleY(1)';
-      setTimeout(() => {
-        window.location.href = url;
-      }, 600);
-    }
 
-    // Initialize page transition on load
-    window.onload = function() {
-      const transition = document.getElementById('pageTransition');
-      transition.style.transformOrigin = 'bottom';
-      transition.style.transform = 'scaleY(0)';
-    };
-  </script>
-</body>
-</html>
+      // Enhanced navigation with transition
+      function navigateTo(url) {
+        const transition = document.getElementById('pageTransition');
+        transition.style.transformOrigin = 'top';
+        transition.style.transform = 'scaleY(1)';
+        setTimeout(() => {
+          window.location.href = url;
+        }, 600);
+      }
+
+
+      // Initialize page transition on load
+      window.onload = function() {
+        const transition = document.getElementById('pageTransition');
+        transition.style.transformOrigin = 'bottom';
+        transition.style.transform = 'scaleY(0)';
+      };
+    </script>
+  </body>
+  </html>
+

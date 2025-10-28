@@ -721,7 +721,7 @@
             }
         }
 
-        // Enhanced complete payment function with inventory deduction
+        // UPDATED: Complete payment function with review system integration
         function completePayment() {
             if (!selectedOrder) {
                 showToast('Please select an order to process', 'error');
@@ -747,7 +747,7 @@
                     return;
                 }
 
-                // Then update cashier queue and orders
+                // Update cashier queue and orders
                 const cashierQueue = JSON.parse(localStorage.getItem('cashierQueue')) || [];
                 const orderIndex = cashierQueue.findIndex(order => order.id === selectedOrder.id);
                 
@@ -757,6 +757,8 @@
                     cashierQueue[orderIndex].completedPaymentTime = new Date().toISOString();
                     cashierQueue[orderIndex].paymentReceived = paymentAmount;
                     cashierQueue[orderIndex].changeGiven = paymentAmount - selectedOrder.total;
+                    cashierQueue[orderIndex].status = 'completed';
+                    cashierQueue[orderIndex].canReview = true; // NEW: Enable review capability
                     
                     localStorage.setItem('cashierQueue', JSON.stringify(cashierQueue));
                 }
@@ -768,8 +770,13 @@
                 if (mainOrderIndex !== -1) {
                     orders[mainOrderIndex].paymentStatus = 'completed';
                     orders[mainOrderIndex].status = 'completed';
+                    orders[mainOrderIndex].canReview = true; // NEW: Enable review capability
                     localStorage.setItem('orders', JSON.stringify(orders));
                 }
+
+                // NEW: Initialize product reviews if not exists
+                let productReviews = JSON.parse(localStorage.getItem('productReviews')) || [];
+                localStorage.setItem('productReviews', JSON.stringify(productReviews));
 
                 // Add to audit log
                 let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
@@ -787,9 +794,9 @@
                 });
                 localStorage.setItem('auditLog', JSON.stringify(auditLog));
 
-                // Show success message
+                // Show success message with review information
                 const change = paymentAmount - selectedOrder.total;
-                showToast(`Payment completed! Change: ₱${change.toFixed(2)}`);
+                showToast(`Payment completed! Change: ₱${change.toFixed(2)} - Customer can now review products`);
 
                 // Reset UI
                 setTimeout(() => {

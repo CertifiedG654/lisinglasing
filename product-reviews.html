@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Reviews | AmoraLise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="data-initializer.js"></script>
+  <style>
+    :root {
+      --primary-dark: #1a3c34;
+      --primary-light: #2a5a4e;
+      --secondary: #e8b923;
+      --accent: #8b1e3f;
+      --text-dark: #333;
+      --text-light: #f5f5f5;
+      --bg-light: #f8f9fa;
+      --card-bg: #ffffff;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --border-radius: 12px;
+      --sidebar-width: 280px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+      color: var(--text-light);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100%;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      text-align: center;
+      letter-spacing: 1px;
+      color: var(--secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nav-menu {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .nav-item {
+      margin: 0.75rem 0;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      transform: translateX(5px);
+    }
+
+    .nav-link.active {
+      background: rgba(232, 185, 35, 0.15);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .nav-link i {
+      margin-right: 0.75rem;
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 2.5rem;
+      flex: 1;
+      background-color: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--secondary);
+      position: relative;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.25rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+
+    .welcome-message {
+      font-size: 1rem;
+      color: var(--text-dark);
+      opacity: 0.8;
+    }
+
+    .back-btn {
+      background: var(--primary-light);
+      color: var(--text-light);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .back-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Product Info Section */
+    .product-info {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2.5rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .product-info:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--secondary);
+    }
+
+    .product-details {
+      flex: 1;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .average-rating {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 0.2rem;
+    }
+
+    .star {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+
+    .rating-count {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2.5rem;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .reviews-section:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .review-item {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .review-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .reviewer-name {
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
+    }
+
+    .review-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .review-stars {
+      color: var(--secondary);
+      font-size: 1rem;
+    }
+
+    .review-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .review-text {
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .review-divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.1);
+      margin: 1.5rem 0;
+    }
+
+    .no-reviews {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .no-reviews i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      opacity: 0.5;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--primary-dark);
+      color: var(--text-light);
+      padding: 0.75rem 1.75rem;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      box-shadow: var(--shadow-lg);
+      z-index: 1100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { background: #2e7d32; }
+    .toast.error { background: #d32f2f; }
+    .toast.warning { background: #ef6c00; }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      :root {
+        --sidebar-width: 240px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .main-content {
+        padding: 2rem;
+      }
+      
+      .product-info {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .rating-summary {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1.5rem;
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 1.75rem;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .product-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-content {
+        padding: 1.5rem;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .product-name {
+        font-size: 1.5rem;
+      }
+
+      .average-rating {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <div class="logo">
+          <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
+          <span>AMORALISE</span>
+        </div>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="customer-dashboard.html" class="nav-link">
+            <i class="fas fa-user"></i>
+            <span>My Account</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="product.html" class="nav-link">
+            <i class="fas fa-wine-bottle"></i>
+            <span>Products</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="myorder.html" class="nav-link">
+            <i class="fas fa-receipt"></i>
+            <span>My Orders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="wishlist.html" class="nav-link">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="review-products.html" class="nav-link">
+            <i class="fas fa-star"></i>
+            <span>Review Products</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <button id="logoutBtn" class="nav-link" style="background: none; border: none; width: 100%; text-align: left;">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="pageTitle">Product Reviews</h1>
+          <p class="welcome-message">See what customers are saying about this product</p>
+        </div>
+        <button class="back-btn" onclick="goBack()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Products
+        </button>
+      </div>
+
+      <!-- Product Information -->
+      <div class="product-info" id="productInfo">
+        <!-- Product info will be loaded here -->
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="reviews-section">
+        <h2 class="section-title">Customer Reviews</h2>
+        <div id="reviewsContainer">
+          <!-- Reviews will be loaded here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check customer authentication
+      const loggedInCustomer = localStorage.getItem('loggedInCustomer');
+      if (!loggedInCustomer) {
+        showToast('Please login first', 'error');
+        setTimeout(() => {
+          window.location.href = 'front-page.html';
+        }, 1000);
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('productId');
+      
+      if (!productId) {
+        document.getElementById('reviewsContainer').innerHTML = '<div class="no-reviews"><p>No product specified</p></div>';
+        showToast('No product specified', 'error');
+        return;
+      }
+
+      loadProductReviews(productId);
+      
+      // Logout functionality
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+          localStorage.removeItem('loggedInCustomer');
+          showToast('Logged out successfully');
+          setTimeout(() => {
+            window.location.href = 'front-page.html';
+          }, 1000);
+        }
+      });
+    });
+
+    function loadProductReviews(productId) {
+      try {
+        const reviews = JSON.parse(localStorage.getItem('productReviews')) || [];
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        
+        const product = products.find(p => p.id === productId);
+        const productReviews = reviews.filter(review => review.productId === productId);
+
+        // Update page title
+        if (product) {
+          document.getElementById('pageTitle').textContent = `Reviews for ${product.name}`;
+        }
+
+        // Display product information
+        const productInfo = document.getElementById('productInfo');
+        if (product) {
+          // Calculate average rating
+          const averageRating = productReviews.length > 0 
+            ? (productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length).toFixed(1)
+            : 0;
+          
+          // Generate star rating display
+          const fullStars = Math.floor(averageRating);
+          const starDisplay = Array.from({length: 5}, (_, i) => 
+            `<span class="star">${i < fullStars ? '★' : '☆'}</span>`
+          ).join('');
+          
+          productInfo.innerHTML = `
+            <img src="${product.image || 'Pictures/default-product.jpg'}" alt="${product.name}" class="product-image" onerror="this.src='Pictures/default-product.jpg'">
+            <div class="product-details">
+              <h2 class="product-name">${product.name}</h2>
+              <div class="product-meta">
+                <span>Category: ${product.category || 'Not specified'}</span>
+                <span>Price: ₱${product.price ? product.price.toFixed(2) : '0.00'}</span>
+              </div>
+              <p>${product.description || 'No description available.'}</p>
+              <div class="rating-summary">
+                <div class="average-rating">${averageRating}</div>
+                <div class="rating-stars">
+                  ${starDisplay}
+                </div>
+                <div class="rating-count">Based on ${productReviews.length} review${productReviews.length !== 1 ? 's' : ''}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          productInfo.innerHTML = '<p>Product information not available.</p>';
+        }
+
+        // Display reviews
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        
+        if (productReviews.length === 0) {
+          reviewsContainer.innerHTML = `
+            <div class="no-reviews">
+              <i class="fas fa-comment-slash"></i>
+              <h3>No reviews yet</h3>
+              <p>This product hasn't been reviewed yet. Be the first to share your experience!</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Sort reviews by date (newest first)
+        productReviews.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        reviewsContainer.innerHTML = productReviews.map((review, index) => {
+          // Generate star rating for this review
+          const reviewStars = Array.from({length: 5}, (_, i) => 
+            `<span class="review-stars">${i < review.rating ? '★' : '☆'}</span>`
+          ).join('');
+          
+          return `
+            <div class="review-item">
+              <div class="review-header">
+                <div class="reviewer-name">${review.customerName}</div>
+                <div class="review-rating">
+                  <div class="review-stars">${reviewStars}</div>
+                  <span class="review-date">${new Date(review.timestamp).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}</span>
+                </div>
+              </div>
+              <p class="review-text">${review.review}</p>
+              ${index < productReviews.length - 1 ? '<div class="review-divider"></div>' : ''}
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading product reviews:', error);
+        showToast('Error loading reviews', 'error');
+      }
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      
+      toastMessage.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'exclamation-circle'}"></i>
+        <span id="toastMessage">${message}</span>
+      `;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

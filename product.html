@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer View |AmoraLise</title>
+  <title>Customer View | AmoraLise</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="data-initializer.js"></script>
@@ -194,7 +194,7 @@
       border: 1px solid rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
-      min-height: 450px;
+      min-height: 500px;
     }
 
     .product-card:hover {
@@ -258,7 +258,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-height: 230px;
+      min-height: 280px;
     }
 
     .product-name {
@@ -274,10 +274,38 @@
       opacity: 0.8;
       margin-bottom: 1rem;
       display: -webkit-box;
-      -webkit-line-amp: 3;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
       flex-grow: 1;
+    }
+
+    /* Rating Display Styles */
+    .product-rating-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .rating-stars-small {
+      display: flex;
+      gap: 0.2rem;
+    }
+
+    .star-small {
+      color: #ddd;
+      font-size: 1rem;
+    }
+
+    .star-small.active {
+      color: var(--secondary);
+    }
+
+    .rating-text {
+      color: #666;
+      font-size: 0.85rem;
     }
 
     .product-meta {
@@ -318,6 +346,7 @@
     .product-actions {
       display: flex;
       gap: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .wishlist-btn, .add-to-cart {
@@ -359,6 +388,23 @@
     .add-to-cart:disabled {
       background: #ccc;
       cursor: not-allowed;
+    }
+
+    .view-reviews-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background: var(--primary-light);
+      color: var(--text-light);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      margin-top: 0.5rem;
+    }
+
+    .view-reviews-btn:hover {
+      background: var(--primary-dark);
     }
 
     .pagination {
@@ -565,6 +611,73 @@
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
+    /* Notification Button */
+    .notification-btn {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .notification-btn:hover {
+      background: var(--secondary);
+      color: var(--text-light);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--accent);
+      color: var(--text-light);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    .notification-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 55px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      width: 250px;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .notification-dropdown ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .notification-dropdown li {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+
+    .notification-dropdown li:last-child {
+      border-bottom: none;
+    }
+
+    .notification-btn.active + .notification-dropdown {
+      display: block;
+    }
+
     @media (max-width: 1200px) {
       :root {
         --sidebar-width: 240px;
@@ -666,78 +779,12 @@
       }
 
       .product-card {
-        min-height: 400px;
+        min-height: 450px;
       }
 
       .product-image-container {
         height: 200px;
       }
-    }
-        /* Notification Button */
-    .notification-btn {
-      position: relative;
-      background: var(--card-bg);
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-    }
-
-    .notification-btn:hover {
-      background: var(--secondary);
-      color: var(--text-light);
-    }
-
-    .notification-badge {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: var(--accent);
-      color: var(--text-light);
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 50%;
-    }
-
-    .notification-dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 55px;
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-lg);
-      width: 250px;
-      z-index: 999;
-      overflow: hidden;
-    }
-
-    .notification-dropdown ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .notification-dropdown li {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      font-size: 0.9rem;
-      color: var(--text-dark);
-    }
-
-    .notification-dropdown li:last-child {
-      border-bottom: none;
-    }
-
-    .notification-btn.active + .notification-dropdown {
-      display: block;
     }
   </style>
 </head>
@@ -747,7 +794,7 @@
     <aside class="sidebar">
       <div class="logo-container">
         <div class="logo">
-        <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
+          <img alt="Amoralise LOGO" class="w-10 h-10" height="40" src="Pictures/Amoraliselogo.png" width="40"/>
           <span>AMORALISE</span>
         </div>
       </div>
@@ -774,6 +821,12 @@
           <a href="wishlist.html" class="nav-link">
             <i class="fas fa-heart"></i>
             <span>Wishlist</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="review-products.html" class="nav-link">
+            <i class="fas fa-star"></i>
+            <span>Review Products</span>
           </a>
         </li>
         <li class="nav-item">
@@ -812,9 +865,10 @@
             <option value="name-asc">Name: A-Z</option>
             <option value="name-desc">Name: Z-A</option>
             <option value="newest">Newest</option>
+            <option value="rating-desc">Highest Rated</option>
           </select>
 
-          <!-- 🔔 Notification Button -->
+          <!-- Notification Button -->
           <div class="notification-wrapper" style="position: relative;">
             <button class="notification-btn" id="notificationBtn">
               <i class="fas fa-bell"></i>
@@ -823,7 +877,7 @@
             
             <div class="notification-dropdown" id="notificationDropdown">
               <ul>
-
+                <!-- Notifications will be loaded here -->
               </ul>
             </div>
           </div>
@@ -1032,6 +1086,7 @@
       function loadProducts() {
         setTimeout(() => {
           const products = JSON.parse(localStorage.getItem('products')) || [];
+          const reviews = JSON.parse(localStorage.getItem('productReviews')) || [];
           
           if (products.length === 0) {
             productsContainer.innerHTML = `
@@ -1052,6 +1107,12 @@
             const categories = ['Whiskey', 'Vodka', 'Rum', 'Tequila', 'Gin', 'Brandy', 'Wine', 'Beer'];
             const category = product.category || categories[Math.floor(Math.random() * categories.length)];
             
+            // Calculate average rating from reviews
+            const productReviews = reviews.filter(review => review.productId === product.id);
+            const averageRating = productReviews.length > 0 
+              ? (productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length).toFixed(1)
+              : null;
+            
             // Set stock status based on actual quantity
             let stockStatus = 'in-stock';
             let stockText = `${product.quantity} in stock`;
@@ -1070,6 +1131,8 @@
               category,
               stockStatus,
               stockText,
+              averageRating,
+              reviewCount: productReviews.length,
               addedToWishlist: false
             };
           });
@@ -1112,6 +1175,9 @@
           case 'newest':
             filteredProducts.sort((a, b) => new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0));
             break;
+          case 'rating-desc':
+            filteredProducts.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
+            break;
           default:
             break;
         }
@@ -1146,20 +1212,39 @@
           productCard.className = 'product-card';
           productCard.setAttribute('data-product-id', product.id);
 
+          // Generate star rating display
+          const ratingStars = product.averageRating ? 
+            Array.from({length: 5}, (_, i) => 
+              `<span class="star-small ${i < Math.floor(product.averageRating) ? 'active' : ''}">★</span>`
+            ).join('') : '';
+
           productCard.innerHTML = `
             <div class="product-image-container">
-              <img src="${product.image || 'https://via.placeholder.com/300x225?text=No+Image'}" alt="${product.name || 'Product'}" class="product-image">
+              <img src="${product.image || 'Pictures/default-product.jpg'}" alt="${product.name || 'Product'}" class="product-image" onerror="this.src='Pictures/default-product.jpg'">
               ${product.badges.map(badge => `
                 <span class="product-badge badge-${badge.type}">${badge.text}</span>
               `).join('')}
               <div class="product-rating">
                 <i class="fas fa-star"></i>
-                <span>${product.rating}</span>
+                <span>${product.averageRating || product.rating}</span>
               </div>
             </div>
             <div class="product-details">
               <h3 class="product-name">${product.name}</h3>
               <p class="product-description">${product.description || 'No description available'}</p>
+              
+              <!-- Rating Display Section -->
+              <div class="product-rating-display">
+                ${product.averageRating ? `
+                  <div class="rating-stars-small">
+                    ${ratingStars}
+                  </div>
+                  <span class="rating-text">${product.averageRating} (${product.reviewCount || 0} reviews)</span>
+                ` : `
+                  <span class="rating-text">No reviews yet</span>
+                `}
+              </div>
+              
               <div class="product-meta">
                 <div class="price-container">
                   <span class="product-price">₱${product.price.toFixed(2)}</span>
@@ -1174,18 +1259,31 @@
                   <i class="fas fa-cart-plus"></i> ${product.quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
                 </button>
               </div>
+              
+              <!-- View Reviews Button -->
+              <button class="view-reviews-btn" data-id="${product.id}">
+                <i class="fas fa-comment"></i> View Reviews
+              </button>
             </div>
           `;
 
           productsContainer.appendChild(productCard);
         });
 
+        // Add event listeners for buttons
         document.querySelectorAll('.add-to-cart').forEach(button => {
           button.addEventListener('click', addToCart);
         });
 
         document.querySelectorAll('.wishlist-btn').forEach(button => {
           button.addEventListener('click', toggleWishlist);
+        });
+
+        document.querySelectorAll('.view-reviews-btn').forEach(button => {
+          button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            window.location.href = `product-reviews.html?productId=${productId}`;
+          });
         });
       }
 
@@ -1322,13 +1420,6 @@
 
       // Initialize
       loadProducts();
-    });
-
-    const categoryFilter = document.getElementById('categoryFilter');
-
-    categoryFilter.addEventListener('change', function() {
-        const filterValue = this.value;
-        renderProductTable(filterValue);
     });
 
     // FOR NOTIFICATIONS

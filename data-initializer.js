@@ -27,6 +27,11 @@ function initializeAppData() {
         localStorage.setItem('products', JSON.stringify([]));
         console.log('Initialized products');
     }
+
+    if (!localStorage.getItem('productReviews')) {
+    localStorage.setItem('productReviews', JSON.stringify([]));
+    console.log('Initialized productReviews');
+}
     
     // Initialize staff credentials if they don't exist
     if (!localStorage.getItem('staffCredentials')) {
